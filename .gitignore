@@ -1,0 +1,7 @@
+nbproject
+cache/*
+log/*
+web/uploads/*
+config/databases.yml
+data/sql/*
+web/*Plugin
