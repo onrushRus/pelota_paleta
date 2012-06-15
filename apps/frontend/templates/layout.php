@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="container-fluid">
-      <?php echo $sf_content ?>
+      <?php echo "<h1 align=center>Bienvenido al proyecto pelota paleta</h1>";?>
       <hr>
       <footer>
         <p>&copy; Company 2012</p>
