@@ -29,7 +29,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Pelota Paleta</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">menu 1</a></li>
@@ -49,8 +49,8 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid">
-      <?php echo "<h1 align=center>Bienvenido al proyecto pelota paleta</h1>";?>
+    <div class="container-fluid"> 
+        <?php echo $sf_content ?>
       <hr>
       <footer>
         <p>&copy; Company 2012</p>
