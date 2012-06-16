@@ -1,0 +1,89 @@
+propel:
+  _attributes:
+    package: lib.model
+    defaultIdMethod: native
+  cuerpo_pedido:
+    _attributes: { phpName: CuerpoPedido, idMethod: native }
+    encabezado_pedido_id: { phpName: EncabezadoPedidoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: encabezado_pedido, foreignReference: id }
+    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: producto, foreignReference: id }
+    cantidad: { phpName: Cantidad, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    _indexes: { fk_CUERPO_PEDIDO_PRODUCTO1: [producto_id], fk_CUERPO_PEDIDO_ENCABEZADO_PEDIDO1: [encabezado_pedido_id] }
+  direccion:
+    _attributes: { phpName: Direccion, idMethod: native }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc }
+    calle: { phpName: Calle, type: VARCHAR, size: '45', primaryKey: true, required: true, defaultValue: 'Sin Nombre' }
+    numero: { phpName: Numero, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0' }
+    monoblock_edif: { phpName: MonoblockEdif, type: VARCHAR, size: '5', required: false, defaultValue: S/N }
+    piso: { phpName: Piso, type: VARCHAR, size: '3', required: false, defaultValue: S/N }
+    dpto: { phpName: Dpto, type: VARCHAR, size: '3', required: false, defaultValue: S/N }
+    _indexes: { fk_direccion_persona1: [persona_nro_doc] }
+  encabezado_pedido:
+    _attributes: { phpName: EncabezadoPedido, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    proveedor_id: { phpName: ProveedorId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: proveedor, foreignReference: id }
+    _indexes: { fk_ENCABEZADO_PEDIDO_PROVEEDOR1: [proveedor_id] }
+  localidad:
+    _attributes: { phpName: Localidad, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    nombre_loc: { phpName: NombreLoc, type: VARCHAR, size: '40', required: true }
+    cod_postal: { phpName: CodPostal, type: VARCHAR, size: '10', required: true }
+    provincia_id: { phpName: ProvinciaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: provincia, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { fk_LOCALIDAD_PROVINCIA: [provincia_id] }
+  persona:
+    _attributes: { phpName: Persona, idMethod: native }
+    nro_doc: { phpName: NroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0' }
+    nom_apellido: { phpName: NomApellido, type: VARCHAR, size: '45', required: true }
+    fecha_nacimiento: { phpName: FechaNacimiento, type: DATE, required: true }
+    e_mail: { phpName: EMail, type: VARCHAR, size: '30', required: true }
+    localidad_id: { phpName: LocalidadId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: localidad, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { fk_PERS_LOCALIDAD: [localidad_id] }
+  producto:
+    _attributes: { phpName: Producto, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    descripcion_prod: { phpName: DescripcionProd, type: VARCHAR, size: '45', required: true }
+    precio: { phpName: Precio, type: DECIMAL, size: '6', scale: '2', sqlType: 'decimal(6,2) unsigned', required: true }
+  proveedor:
+    _attributes: { phpName: Proveedor, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    nombre_proveedor: { phpName: NombreProveedor, type: VARCHAR, size: '45', required: true }
+    dom_calle: { phpName: DomCalle, type: VARCHAR, size: '45', required: false }
+    dom_nro: { phpName: DomNro, type: VARCHAR, size: '10', required: false }
+    dom_piso: { phpName: DomPiso, type: VARCHAR, size: '10', required: false }
+    dom_dpto: { phpName: DomDpto, type: VARCHAR, size: '10', required: false }
+    telefono: { phpName: Telefono, type: VARCHAR, size: '20', required: true }
+  provincia:
+    _attributes: { phpName: Provincia, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    nombre_prov: { phpName: NombreProv, type: VARCHAR, size: '40', required: true }
+  reserva:
+    _attributes: { phpName: Reserva, idMethod: native }
+    socio_nro_doc: { phpName: SocioNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: socio, foreignReference: persona_nro_doc }
+    tipo_reserva_id: { phpName: TipoReservaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: tipo_reserva, foreignReference: id }
+    dia_comienzo_reserva: { phpName: DiaComienzoReserva, type: DATE, primaryKey: true, required: true, defaultValue: '0000-00-00' }
+    hora_comienzo_reserva: { phpName: HoraComienzoReserva, type: TIME, primaryKey: true, required: true, defaultValue: '00:00:00' }
+    dia_fin_reserva: { phpName: DiaFinReserva, type: DATE, required: false }
+    hora_fin_reserva: { phpName: HoraFinReserva, type: TIME, required: false }
+    cantidad_turnos: { phpName: CantidadTurnos, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '1' }
+    _indexes: { fk_reserva_socio: [socio_nro_doc], fk_reserva_tipo_reserva: [tipo_reserva_id] }
+  socio:
+    _attributes: { phpName: Socio, idMethod: native }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: persona, foreignReference: nro_doc }
+    fecha_alta: { phpName: FechaAlta, type: TIMESTAMP, required: true }
+    vitalicio: { phpName: Vitalicio, type: BOOLEAN, size: '1', required: true, defaultValue: false }
+    activo: { phpName: Activo, type: BOOLEAN, size: '1', required: true, defaultValue: false }
+    _indexes: { fk_socio_persona: [persona_nro_doc] }
+  stock:
+    _attributes: { phpName: Stock, idMethod: native }
+    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id }
+    cantidad_actual: { phpName: CantidadActual, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    cantidad_minima: { phpName: CantidadMinima, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+  telefono:
+    _attributes: { phpName: Telefono, idMethod: native }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc }
+    telefono_nro: { phpName: TelefonoNro, type: VARCHAR, size: '20', primaryKey: true, required: true, defaultValue: S/N }
+    _indexes: { fk_telefono_persona1: [persona_nro_doc] }
+  tipo_reserva:
+    _attributes: { phpName: TipoReserva, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    descirpcion_reserva: { phpName: DescirpcionReserva, type: VARCHAR, size: '45', required: true }
+    tiempo_reserva: { phpName: TiempoReserva, type: DECIMAL, scale: '0', required: true }

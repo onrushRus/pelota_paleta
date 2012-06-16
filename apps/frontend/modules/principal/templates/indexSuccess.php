@@ -25,8 +25,8 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="<?php echo url_for('ventas/index');?>">Ventas</a></li>
-                  <li><a href="<?php echo url_for('productos/index');?>">ABM Productos</a></li>
-                  <li><a href="<?php echo url_for('stock_buffet/index');?>">ABM Stock</a></li>
+                  <li><a href="<?php echo url_for('producto_abm/index');?>">ABM Productos</a></li>
+                  <li><a href="<?php echo url_for('stock_abm/index');?>">ABM Stock</a></li>
                 </ul>
               </li>
               <li class="dropdown">
