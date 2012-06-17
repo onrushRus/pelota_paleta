@@ -2,6 +2,8 @@ Esto es para saber si anda
 seba ok
 estoy en la movida, gabriel
 
+hola
+
 notas
 
 Alias /canchitarwsymfony/sf C:/xampp/htdocs/canchitarwsymfony/lib/vendor/symfony/data/web/sf
