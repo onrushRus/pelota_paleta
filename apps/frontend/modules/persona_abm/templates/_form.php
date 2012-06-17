@@ -21,6 +21,13 @@
     <tbody>
       <?php echo $form->renderGlobalErrors() ?>
       <tr>
+        <th><?php echo $form['nro_doc']->renderLabel() ?></th>
+        <td>
+          <?php echo $form['nro_doc']->renderError() ?>
+          <?php echo $form['nro_doc'] ?>
+        </td>
+      </tr>
+      <tr>
         <th><?php echo $form['nom_apellido']->renderLabel() ?></th>
         <td>
           <?php echo $form['nom_apellido']->renderError() ?>

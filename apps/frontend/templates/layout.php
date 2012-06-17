@@ -54,6 +54,8 @@
       <hr>
       <footer>
         <p>&copy; Company 2012</p>
+          <br><br>
+<a href="<?php echo url_for('principal/index');?>">Index</a>
       </footer>
     </div> <!-- /container -->
     <!-- include base js files from plugin -->

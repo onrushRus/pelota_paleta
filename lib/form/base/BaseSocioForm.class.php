@@ -14,14 +14,15 @@ abstract class BaseSocioForm extends BaseFormPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'persona_nro_doc' => new sfWidgetFormInputHidden(),
+      'persona_nro_doc' => new sfWidgetFormInputText(),
       'fecha_alta'      => new sfWidgetFormDateTime(),
       'vitalicio'       => new sfWidgetFormInputCheckbox(),
       'activo'          => new sfWidgetFormInputCheckbox(),
     ));
 
     $this->setValidators(array(
-      'persona_nro_doc' => new sfValidatorPropelChoice(array('model' => 'Persona', 'column' => 'nro_doc', 'required' => false)),
+      'persona_nro_doc' => new sfValidatorInteger(),
+      //'persona_nro_doc' => new sfValidatorPropelChoice(array('model' => 'Persona', 'column' => 'nro_doc', 'required' => false)),
       'fecha_alta'      => new sfValidatorDateTime(),
       'vitalicio'       => new sfValidatorBoolean(),
       'activo'          => new sfValidatorBoolean(),

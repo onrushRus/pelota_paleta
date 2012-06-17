@@ -4,8 +4,8 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   ABM socios <b class="caret"></b>
                 </a>
-
-                  <a href="<?php echo url_for('persona_abm/index');?>">Socio ABM</a>
+					<a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a>
+                  <a href="<?php echo url_for('persona_abm/index');?>">Persona ABM</a>
 
               </li>
               <li class="dropdown">
@@ -49,3 +49,5 @@
               </li>
             </ul>
           </div> <!--/.nav-collapse -->
+  <br><br>
+<a href="<?php echo url_for('principal/index');?>">Index</a>

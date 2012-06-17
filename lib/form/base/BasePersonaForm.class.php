@@ -14,7 +14,7 @@ abstract class BasePersonaForm extends BaseFormPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'nro_doc'          => new sfWidgetFormInputHidden(),
+      'nro_doc'          => new sfWidgetFormInputText(),
       'nom_apellido'     => new sfWidgetFormInputText(),
       'fecha_nacimiento' => new sfWidgetFormDate(),
       'e_mail'           => new sfWidgetFormInputText(),
@@ -22,7 +22,8 @@ abstract class BasePersonaForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'nro_doc'          => new sfValidatorChoice(array('choices' => array($this->getObject()->getNroDoc()), 'empty_value' => $this->getObject()->getNroDoc(), 'required' => false)),
+		'nro_doc'          => new sfValidatorInteger(),
+      //'nro_doc'          => new sfValidatorChoice(array('choices' => array($this->getObject()->getNroDoc()), 'empty_value' => $this->getObject()->getNroDoc(), 'required' => false)),
       'nom_apellido'     => new sfValidatorString(array('max_length' => 45)),
       'fecha_nacimiento' => new sfValidatorDate(),
       'e_mail'           => new sfValidatorString(array('max_length' => 30)),

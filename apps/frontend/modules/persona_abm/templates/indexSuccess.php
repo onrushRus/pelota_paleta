@@ -24,5 +24,3 @@
 </table>
 
   <a href="<?php echo url_for('persona_abm/new') ?>">New</a>
-  <br><br>
- <a href="<?php echo url_for('principal/index');?>">Index</a>
