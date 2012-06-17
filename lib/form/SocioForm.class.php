@@ -11,5 +11,6 @@ class SocioForm extends BaseSocioForm
 {
   public function configure()
   {
+      $this->validatorSchema['fecha_alta']->setOption('required', false);
   }
 }
