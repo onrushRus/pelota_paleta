@@ -20,3 +20,5 @@
 </table>
 
   <a href="<?php echo url_for('producto_abm/new') ?>">New</a>
+  <br><br>
+<a href="<?php echo url_for('principal/index');?>">Index</a>
