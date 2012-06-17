@@ -16,7 +16,7 @@ abstract class BasePersonaForm extends BaseFormPropel
     $this->setWidgets(array(
       'nro_doc'          => new sfWidgetFormInputText(),
       'nom_apellido'     => new sfWidgetFormInputText(),
-      'fecha_nacimiento' => new sfWidgetFormDate(),
+      'fecha_nacimiento' => new sfWidgetFormInputText(),
       'e_mail'           => new sfWidgetFormInputText(),
       'localidad_id'     => new sfWidgetFormPropelChoice(array('model' => 'Localidad', 'add_empty' => false)),
     ));
