@@ -14,13 +14,14 @@ abstract class BaseStockForm extends BaseFormPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'producto_id'     => new sfWidgetFormInputHidden(),
+      'producto_id'     => new sfWidgetFormInputText(),
       'cantidad_actual' => new sfWidgetFormInputText(),
       'cantidad_minima' => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'producto_id'     => new sfValidatorPropelChoice(array('model' => 'Producto', 'column' => 'id', 'required' => false)),
+      'producto_id'     => new sfValidatorInteger(),
+      //'producto_id'     => new sfValidatorPropelChoice(array('model' => 'Producto', 'column' => 'id', 'required' => false)),
       'cantidad_actual' => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
       'cantidad_minima' => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
     ));

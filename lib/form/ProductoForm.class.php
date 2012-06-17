@@ -11,5 +11,6 @@ class ProductoForm extends BaseProductoForm
 {
   public function configure()
   {
+      $this->widgetSchema['descripcion_prod']->setDefault("caca");
   }
 }
