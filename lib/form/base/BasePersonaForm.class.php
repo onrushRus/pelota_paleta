@@ -14,19 +14,18 @@ abstract class BasePersonaForm extends BaseFormPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'nro_doc'          => new sfWidgetFormInputText(),
+      'nro_doc'          => new sfWidgetFormInputHidden(),
       'nom_apellido'     => new sfWidgetFormInputText(),
-      'fecha_nacimiento' => new sfWidgetFormInputText(),
+      'fecha_nacimiento' => new sfWidgetFormDate(),
       'e_mail'           => new sfWidgetFormInputText(),
       'localidad_id'     => new sfWidgetFormPropelChoice(array('model' => 'Localidad', 'add_empty' => false)),
     ));
 
     $this->setValidators(array(
-		'nro_doc'          => new sfValidatorInteger(),
-      //'nro_doc'          => new sfValidatorChoice(array('choices' => array($this->getObject()->getNroDoc()), 'empty_value' => $this->getObject()->getNroDoc(), 'required' => false)),
+      'nro_doc'          => new sfValidatorChoice(array('choices' => array($this->getObject()->getNroDoc()), 'empty_value' => $this->getObject()->getNroDoc(), 'required' => false)),
       'nom_apellido'     => new sfValidatorString(array('max_length' => 45)),
       'fecha_nacimiento' => new sfValidatorDate(),
-      'e_mail'           => new sfValidatorEmail(array('max_length' => 30)),
+      'e_mail'           => new sfValidatorString(array('max_length' => 30)),
       'localidad_id'     => new sfValidatorPropelChoice(array('model' => 'Localidad', 'column' => 'id')),
     ));
 
