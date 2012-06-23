@@ -22,6 +22,12 @@ class canchaActions extends sfActions
   
     public function executeReserva(sfWebRequest $request)
   {
+      if($request->isMethod(sfWebRequest::POST))
+      {
+          $this->reserva = new Reserva();
+          $this->reserva->setSocioNroDoc('dni_socio');
+      }
+          
 
   }
  
