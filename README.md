@@ -2,6 +2,8 @@ Esto es para saber si anda
 seba ok
 estoy en la movida, gabriel
 
+hola
+
 notas
 
 Alias /canchitarwsymfony/sf C:/xampp/htdocs/canchitarwsymfony/lib/vendor/symfony/data/web/sf
@@ -35,7 +37,7 @@ $this->forward('default', 'module');
 
 ./symfony generate:module frontend Empleado
 ./symfony propel:build-forms
-./symfony propel:generate-module frontend empleado Empleado
+./symfony propel:generate-module --non-verbose-templates frontend empleado Empleado
 
 //if('es' === sfContext::getInstance()->getUser()->getCulture())
 comentar esta linea en el archivo mpformpropel.class.php en la carpeta plugins

@@ -1203,11 +1203,11 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'descripcion_prod' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(ProductoPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getDescripcionProd();
 	}
 
 	/**

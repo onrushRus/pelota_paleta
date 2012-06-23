@@ -40,6 +40,7 @@ class ProductoTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('DESCRIPCION_PROD', 'DescripcionProd', 'VARCHAR', true, 45, null);
+		$this->getColumn('DESCRIPCION_PROD', false)->setPrimaryString(true);
 		$this->addColumn('PRECIO', 'Precio', 'DECIMAL', true, 6, null);
 		// validators
 	} // initialize()

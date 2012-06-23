@@ -39,7 +39,7 @@ class SocioTableMap extends TableMap
 		$this->setUseIdGenerator(false);
 		// columns
 		$this->addForeignPrimaryKey('PERSONA_NRO_DOC', 'PersonaNroDoc', 'INTEGER' , 'persona', 'NRO_DOC', true, 10, 0);
-		$this->addColumn('FECHA_ALTA', 'FechaAlta', 'TIMESTAMP', true, null, null);
+		$this->addColumn('FECHA_ALTA', 'FechaAlta', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
 		$this->addColumn('VITALICIO', 'Vitalicio', 'BOOLEAN', true, 1, false);
 		$this->addColumn('ACTIVO', 'Activo', 'BOOLEAN', true, 1, false);
 		// validators

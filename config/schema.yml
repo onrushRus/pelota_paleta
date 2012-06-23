@@ -2,6 +2,16 @@ propel:
   _attributes:
     package: lib.model
     defaultIdMethod: native
+  categoria:
+    _attributes: { phpName: Categoria, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    descripcion_categoria: { phpName: DescripcionCategoria, type: VARCHAR, size: '40', required: true }
+    edad_min: { phpName: EdadMin, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    edad_max: { phpName: EdadMax, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+  club:
+    _attributes: { phpName: Club, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    nombre_club: { phpName: NombreClub, type: VARCHAR, size: '45', required: true }
   cuerpo_pedido:
     _attributes: { phpName: CuerpoPedido, idMethod: native }
     encabezado_pedido_id: { phpName: EncabezadoPedidoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: encabezado_pedido, foreignReference: id }
@@ -22,6 +32,15 @@ propel:
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     proveedor_id: { phpName: ProveedorId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: proveedor, foreignReference: id }
     _indexes: { fk_ENCABEZADO_PEDIDO_PROVEEDOR1: [proveedor_id] }
+  inscripto:
+    _attributes: { phpName: Inscripto, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: ranking, foreignReference: pelotari_nro_doc }
+    torneo_cat_id: { phpName: TorneoCatId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: torneo_categoria, foreignReference: id_torneo_categoria }
+    nro_equipo: { phpName: NroEquipo, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '0' }
+    club_representado: { phpName: ClubRepresentado, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: club, foreignReference: id }
+    _indexes: { fk_inscripto_Club1: [club_representado], fk_inscripto_torneo_categoria1: [torneo_cat_id], fk_inscripto_persona1: [persona_nro_doc] }
+    _uniques: { torneo_cat_id_UNIQUE: [torneo_cat_id, persona_nro_doc] }
   localidad:
     _attributes: { phpName: Localidad, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
@@ -55,6 +74,17 @@ propel:
     _attributes: { phpName: Provincia, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     nombre_prov: { phpName: NombreProv, type: VARCHAR, size: '40', required: true }
+  puntos_puesto:
+    _attributes: { phpName: PuntosPuesto, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    puntos_por_puesto: { phpName: PuntosPorPuesto, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+  ranking:
+    _attributes: { phpName: Ranking, idMethod: native }
+    pelotari_nro_doc: { phpName: PelotariNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    tipo_ranking: { phpName: TipoRanking, type: BOOLEAN, size: '1', primaryKey: true, required: true, defaultValue: false }
+    categoria_id: { phpName: CategoriaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: categoria, foreignReference: id }
+    pelotari_puntos: { phpName: PelotariPuntos, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    _indexes: { fk_ranking_categoria1: [categoria_id] }
   reserva:
     _attributes: { phpName: Reserva, idMethod: native }
     socio_nro_doc: { phpName: SocioNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: socio, foreignReference: persona_nro_doc }
@@ -65,10 +95,17 @@ propel:
     hora_fin_reserva: { phpName: HoraFinReserva, type: TIME, required: false }
     cantidad_turnos: { phpName: CantidadTurnos, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '1' }
     _indexes: { fk_reserva_socio: [socio_nro_doc], fk_reserva_tipo_reserva: [tipo_reserva_id] }
+  resultado_torneo:
+    _attributes: { phpName: ResultadoTorneo, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    puesto_id: { phpName: PuestoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: puntos_puesto, foreignReference: id }
+    torneo_cat_id: { phpName: TorneoCatId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: torneo_categoria, foreignReference: id_torneo_categoria }
+    pelotari_nro_doc: { phpName: PelotariNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: inscripto, foreignReference: persona_nro_doc }
+    _indexes: { fk_Resultado_torneo_inscripto1: [pelotari_nro_doc], fk_Resultado_torneo_torneo_categoria1: [torneo_cat_id], fk_Resultado_torneo_puntos_puesto1: [puesto_id] }
   socio:
     _attributes: { phpName: Socio, idMethod: native }
     persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: persona, foreignReference: nro_doc }
-    fecha_alta: { phpName: FechaAlta, type: TIMESTAMP, required: true }
+    fecha_alta: { phpName: FechaAlta, type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
     vitalicio: { phpName: Vitalicio, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     activo: { phpName: Activo, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     _indexes: { fk_socio_persona: [persona_nro_doc] }
@@ -77,6 +114,7 @@ propel:
     producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id }
     cantidad_actual: { phpName: CantidadActual, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
     cantidad_minima: { phpName: CantidadMinima, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    _indexes: { fk_STOCK_PRODUCTO1: [producto_id] }
   telefono:
     _attributes: { phpName: Telefono, idMethod: native }
     persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc }
@@ -87,3 +125,15 @@ propel:
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     descirpcion_reserva: { phpName: DescirpcionReserva, type: VARCHAR, size: '45', required: true }
     tiempo_reserva: { phpName: TiempoReserva, type: DECIMAL, scale: '0', required: true }
+  torneo:
+    _attributes: { phpName: Torneo, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    anio: { phpName: Anio, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    nombre: { phpName: Nombre, type: VARCHAR, size: '45', required: true }
+    tipo_torneo: { phpName: TipoTorneo, type: BOOLEAN, size: '1', required: true }
+  torneo_categoria:
+    _attributes: { phpName: TorneoCategoria, idMethod: native }
+    id_torneo_categoria: { phpName: IdTorneoCategoria, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    torneo_id: { phpName: TorneoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: torneo, foreignReference: id }
+    categoria_id: { phpName: CategoriaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: categoria, foreignReference: id }
+    _indexes: { fk_torneo_categoria_torneo1: [torneo_id], fk_torneo_categoria_CATEGORIA1: [categoria_id] }
