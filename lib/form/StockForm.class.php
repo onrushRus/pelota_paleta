@@ -11,6 +11,6 @@ class StockForm extends BaseStockForm
 {
   public function configure()
   {
-	  $this->widgetSchema['producto_id']= new sfWidgetFormPropelChoice(array('model' => 'Producto', 'add_empty' => false));
+	 $this->widgetSchema['producto_id']= new sfWidgetFormPropelChoice(array('model' => 'Producto', 'add_empty' => false));
   }
 }

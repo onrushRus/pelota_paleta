@@ -15,8 +15,15 @@
           <?php endif; ?>
           <input type="submit" value="Save" />
         </td>
+         
+      </tr>
+      <tr>
+        <td>
+        <td><a href="<?php echo url_for('stock_abm/new');?>">Cargar Stock</a></td>
+		</td>
       </tr>
     </tfoot>
+    
     <tbody>
       <?php echo $form ?>
     </tbody>
