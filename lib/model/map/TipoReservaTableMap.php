@@ -40,6 +40,7 @@ class TipoReservaTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('DESCIRPCION_RESERVA', 'DescirpcionReserva', 'VARCHAR', true, 45, null);
+		$this->getColumn('DESCIRPCION_RESERVA', false)->setPrimaryString(true);
 		$this->addColumn('TIEMPO_RESERVA', 'TiempoReserva', 'DECIMAL', true, null, null);
 		// validators
 	} // initialize()

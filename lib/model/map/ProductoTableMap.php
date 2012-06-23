@@ -50,7 +50,7 @@ class ProductoTableMap extends TableMap
 	public function buildRelations()
 	{
 		$this->addRelation('CuerpoPedido', 'CuerpoPedido', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'CuerpoPedidos');
-		$this->addRelation('Stock', 'Stock', RelationMap::ONE_TO_ONE, array('id' => 'producto_id', ), null, null);
+		$this->addRelation('Stock', 'Stock', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'Stocks');
 	} // buildRelations()
 
 	/**

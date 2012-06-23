@@ -39,6 +39,7 @@ abstract class BaseSocio extends BaseObject  implements Persistent
 
 	/**
 	 * The value for the fecha_alta field.
+	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
 	 * @var        string
 	 */
 	protected $fecha_alta;

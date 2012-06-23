@@ -2,3 +2,9 @@ propel:
   _attributes:
     package: lib.model
     defaultIdMethod: native
+    
+  localidad:
+    nombre_loc: { primaryString: true }
+    
+  tipo_reserva:
+    descirpcion_reserva: { primaryString: true }

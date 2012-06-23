@@ -49,6 +49,12 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	protected $cantidad_minima;
 
 	/**
+	 * The value for the id field.
+	 * @var        int
+	 */
+	protected $id;
+
+	/**
 	 * @var        Producto
 	 */
 	protected $aProducto;
@@ -95,6 +101,16 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	public function getCantidadMinima()
 	{
 		return $this->cantidad_minima;
+	}
+
+	/**
+	 * Get the [id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getId()
+	{
+		return $this->id;
 	}
 
 	/**
@@ -162,6 +178,26 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	} // setCantidadMinima()
 
 	/**
+	 * Set the value of [id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Stock The current object (for fluent API support)
+	 */
+	public function setId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->id !== $v) {
+			$this->id = $v;
+			$this->modifiedColumns[] = StockPeer::ID;
+		}
+
+		return $this;
+	} // setId()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -196,6 +232,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			$this->producto_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->cantidad_actual = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->cantidad_minima = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -204,7 +241,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 3; // 3 = StockPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 4; // 4 = StockPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Stock object", $e);
@@ -454,6 +491,10 @@ abstract class BaseStock extends BaseObject  implements Persistent
 		$modifiedColumns = array();
 		$index = 0;
 
+		$this->modifiedColumns[] = StockPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . StockPeer::ID . ')');
+		}
 
 		 // check the columns in natural order for more readable SQL queries
 		if ($this->isColumnModified(StockPeer::PRODUCTO_ID)) {
@@ -464,6 +505,9 @@ abstract class BaseStock extends BaseObject  implements Persistent
 		}
 		if ($this->isColumnModified(StockPeer::CANTIDAD_MINIMA)) {
 			$modifiedColumns[':p' . $index++]  = '`CANTIDAD_MINIMA`';
+		}
+		if ($this->isColumnModified(StockPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
 		}
 
 		$sql = sprintf(
@@ -485,6 +529,9 @@ abstract class BaseStock extends BaseObject  implements Persistent
 					case '`CANTIDAD_MINIMA`':
 						$stmt->bindValue($identifier, $this->cantidad_minima, PDO::PARAM_INT);
 						break;
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
 				}
 			}
 			$stmt->execute();
@@ -492,6 +539,13 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			Propel::log($e->getMessage(), Propel::LOG_ERR);
 			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
 		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
 
 		$this->setNew(false);
 	}
@@ -629,6 +683,9 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			case 2:
 				return $this->getCantidadMinima();
 				break;
+			case 3:
+				return $this->getId();
+				break;
 			default:
 				return null;
 				break;
@@ -661,6 +718,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			$keys[0] => $this->getProductoId(),
 			$keys[1] => $this->getCantidadActual(),
 			$keys[2] => $this->getCantidadMinima(),
+			$keys[3] => $this->getId(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aProducto) {
@@ -706,6 +764,9 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			case 2:
 				$this->setCantidadMinima($value);
 				break;
+			case 3:
+				$this->setId($value);
+				break;
 		} // switch()
 	}
 
@@ -733,6 +794,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setProductoId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setCantidadActual($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setCantidadMinima($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setId($arr[$keys[3]]);
 	}
 
 	/**
@@ -747,6 +809,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 		if ($this->isColumnModified(StockPeer::PRODUCTO_ID)) $criteria->add(StockPeer::PRODUCTO_ID, $this->producto_id);
 		if ($this->isColumnModified(StockPeer::CANTIDAD_ACTUAL)) $criteria->add(StockPeer::CANTIDAD_ACTUAL, $this->cantidad_actual);
 		if ($this->isColumnModified(StockPeer::CANTIDAD_MINIMA)) $criteria->add(StockPeer::CANTIDAD_MINIMA, $this->cantidad_minima);
+		if ($this->isColumnModified(StockPeer::ID)) $criteria->add(StockPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -762,7 +825,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(StockPeer::DATABASE_NAME);
-		$criteria->add(StockPeer::PRODUCTO_ID, $this->producto_id);
+		$criteria->add(StockPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -773,18 +836,18 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getProductoId();
+		return $this->getId();
 	}
 
 	/**
-	 * Generic method to set the primary key (producto_id column).
+	 * Generic method to set the primary key (id column).
 	 *
 	 * @param      int $key Primary key.
 	 * @return     void
 	 */
 	public function setPrimaryKey($key)
 	{
-		$this->setProductoId($key);
+		$this->setId($key);
 	}
 
 	/**
@@ -793,7 +856,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	 */
 	public function isPrimaryKeyNull()
 	{
-		return null === $this->getProductoId();
+		return null === $this->getId();
 	}
 
 	/**
@@ -809,6 +872,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	 */
 	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
+		$copyObj->setProductoId($this->getProductoId());
 		$copyObj->setCantidadActual($this->getCantidadActual());
 		$copyObj->setCantidadMinima($this->getCantidadMinima());
 
@@ -819,18 +883,13 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			// store object hash to prevent cycle
 			$this->startCopy = true;
 
-			$relObj = $this->getProducto();
-			if ($relObj) {
-				$copyObj->setProducto($relObj->copy($deepCopy));
-			}
-
 			//unflag object copy
 			$this->startCopy = false;
 		} // if ($deepCopy)
 
 		if ($makeNew) {
 			$copyObj->setNew(true);
-			$copyObj->setProductoId(NULL); // this is a auto-increment column, so set to default value
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
 		}
 	}
 
@@ -889,9 +948,10 @@ abstract class BaseStock extends BaseObject  implements Persistent
 
 		$this->aProducto = $v;
 
-		// Add binding for other direction of this 1:1 relationship.
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Producto object, it will not be re-added.
 		if ($v !== null) {
-			$v->setStock($this);
+			$v->addStock($this);
 		}
 
 		return $this;
@@ -909,8 +969,13 @@ abstract class BaseStock extends BaseObject  implements Persistent
 	{
 		if ($this->aProducto === null && ($this->producto_id !== null)) {
 			$this->aProducto = ProductoQuery::create()->findPk($this->producto_id, $con);
-			// Because this foreign key represents a one-to-one relationship, we will create a bi-directional association.
-			$this->aProducto->setStock($this);
+			/* The following can be used additionally to
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aProducto->addStocks($this);
+			 */
 		}
 		return $this->aProducto;
 	}
@@ -923,6 +988,7 @@ abstract class BaseStock extends BaseObject  implements Persistent
 		$this->producto_id = null;
 		$this->cantidad_actual = null;
 		$this->cantidad_minima = null;
+		$this->id = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

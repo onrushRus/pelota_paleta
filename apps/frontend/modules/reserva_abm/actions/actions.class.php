@@ -32,10 +32,10 @@ class reserva_abmActions extends sfActions
 
   public function executeEdit(sfWebRequest $request)
   {
-    $Reserva = ReservaQuery::create()->findPk($request->getParameter('socio_nro_doc'),
+    $Reserva = ReservaQuery::create()->findPk(array($request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),
-                             $request->getParameter('hora_comienzo_reserva'));
+                             $request->getParameter('hora_comienzo_reserva')));
     $this->forward404Unless($Reserva, sprintf('Object Reserva does not exist (%s).', $request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),
@@ -46,10 +46,10 @@ class reserva_abmActions extends sfActions
   public function executeUpdate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $Reserva = ReservaQuery::create()->findPk($request->getParameter('socio_nro_doc'),
+    $Reserva = ReservaQuery::create()->findPk(array($request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),
-                             $request->getParameter('hora_comienzo_reserva'));
+                             $request->getParameter('hora_comienzo_reserva')));
     $this->forward404Unless($Reserva, sprintf('Object Reserva does not exist (%s).', $request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),
@@ -65,10 +65,10 @@ class reserva_abmActions extends sfActions
   {
     $request->checkCSRFProtection();
 
-    $Reserva = ReservaQuery::create()->findPk($request->getParameter('socio_nro_doc'),
+    $Reserva = ReservaQuery::create()->findPk(array($request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),
-                             $request->getParameter('hora_comienzo_reserva'));
+                             $request->getParameter('hora_comienzo_reserva')));
     $this->forward404Unless($Reserva, sprintf('Object Reserva does not exist (%s).', $request->getParameter('socio_nro_doc'),
                              $request->getParameter('tipo_reserva_id'),
                              $request->getParameter('dia_comienzo_reserva'),

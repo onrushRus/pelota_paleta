@@ -36,11 +36,12 @@ class StockTableMap extends TableMap
 		$this->setPhpName('Stock');
 		$this->setClassname('Stock');
 		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(false);
+		$this->setUseIdGenerator(true);
 		// columns
-		$this->addForeignPrimaryKey('PRODUCTO_ID', 'ProductoId', 'INTEGER' , 'producto', 'ID', true, 10, null);
+		$this->addForeignKey('PRODUCTO_ID', 'ProductoId', 'INTEGER', 'producto', 'ID', true, 10, null);
 		$this->addColumn('CANTIDAD_ACTUAL', 'CantidadActual', 'INTEGER', true, 10, null);
 		$this->addColumn('CANTIDAD_MINIMA', 'CantidadMinima', 'INTEGER', true, 10, null);
+		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		// validators
 	} // initialize()
 
