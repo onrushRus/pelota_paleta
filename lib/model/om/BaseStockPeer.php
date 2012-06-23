@@ -23,13 +23,13 @@ abstract class BaseStockPeer {
 	const TM_CLASS = 'StockTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 4;
+	const NUM_COLUMNS = 3;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 4;
+	const NUM_HYDRATE_COLUMNS = 3;
 
 	/** the column name for the PRODUCTO_ID field */
 	const PRODUCTO_ID = 'stock.PRODUCTO_ID';
@@ -39,9 +39,6 @@ abstract class BaseStockPeer {
 
 	/** the column name for the CANTIDAD_MINIMA field */
 	const CANTIDAD_MINIMA = 'stock.CANTIDAD_MINIMA';
-
-	/** the column name for the ID field */
-	const ID = 'stock.ID';
 
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
@@ -62,12 +59,12 @@ abstract class BaseStockPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('ProductoId', 'CantidadActual', 'CantidadMinima', 'Id', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('productoId', 'cantidadActual', 'cantidadMinima', 'id', ),
-		BasePeer::TYPE_COLNAME => array (self::PRODUCTO_ID, self::CANTIDAD_ACTUAL, self::CANTIDAD_MINIMA, self::ID, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('PRODUCTO_ID', 'CANTIDAD_ACTUAL', 'CANTIDAD_MINIMA', 'ID', ),
-		BasePeer::TYPE_FIELDNAME => array ('producto_id', 'cantidad_actual', 'cantidad_minima', 'id', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('ProductoId', 'CantidadActual', 'CantidadMinima', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('productoId', 'cantidadActual', 'cantidadMinima', ),
+		BasePeer::TYPE_COLNAME => array (self::PRODUCTO_ID, self::CANTIDAD_ACTUAL, self::CANTIDAD_MINIMA, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('PRODUCTO_ID', 'CANTIDAD_ACTUAL', 'CANTIDAD_MINIMA', ),
+		BasePeer::TYPE_FIELDNAME => array ('producto_id', 'cantidad_actual', 'cantidad_minima', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -77,12 +74,12 @@ abstract class BaseStockPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('ProductoId' => 0, 'CantidadActual' => 1, 'CantidadMinima' => 2, 'Id' => 3, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('productoId' => 0, 'cantidadActual' => 1, 'cantidadMinima' => 2, 'id' => 3, ),
-		BasePeer::TYPE_COLNAME => array (self::PRODUCTO_ID => 0, self::CANTIDAD_ACTUAL => 1, self::CANTIDAD_MINIMA => 2, self::ID => 3, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('PRODUCTO_ID' => 0, 'CANTIDAD_ACTUAL' => 1, 'CANTIDAD_MINIMA' => 2, 'ID' => 3, ),
-		BasePeer::TYPE_FIELDNAME => array ('producto_id' => 0, 'cantidad_actual' => 1, 'cantidad_minima' => 2, 'id' => 3, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('ProductoId' => 0, 'CantidadActual' => 1, 'CantidadMinima' => 2, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('productoId' => 0, 'cantidadActual' => 1, 'cantidadMinima' => 2, ),
+		BasePeer::TYPE_COLNAME => array (self::PRODUCTO_ID => 0, self::CANTIDAD_ACTUAL => 1, self::CANTIDAD_MINIMA => 2, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('PRODUCTO_ID' => 0, 'CANTIDAD_ACTUAL' => 1, 'CANTIDAD_MINIMA' => 2, ),
+		BasePeer::TYPE_FIELDNAME => array ('producto_id' => 0, 'cantidad_actual' => 1, 'cantidad_minima' => 2, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -157,12 +154,10 @@ abstract class BaseStockPeer {
 			$criteria->addSelectColumn(StockPeer::PRODUCTO_ID);
 			$criteria->addSelectColumn(StockPeer::CANTIDAD_ACTUAL);
 			$criteria->addSelectColumn(StockPeer::CANTIDAD_MINIMA);
-			$criteria->addSelectColumn(StockPeer::ID);
 		} else {
 			$criteria->addSelectColumn($alias . '.PRODUCTO_ID');
 			$criteria->addSelectColumn($alias . '.CANTIDAD_ACTUAL');
 			$criteria->addSelectColumn($alias . '.CANTIDAD_MINIMA');
-			$criteria->addSelectColumn($alias . '.ID');
 		}
 	}
 
@@ -299,7 +294,7 @@ abstract class BaseStockPeer {
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = (string) $obj->getId();
+				$key = (string) $obj->getProductoId();
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -319,7 +314,7 @@ abstract class BaseStockPeer {
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
 			if (is_object($value) && $value instanceof Stock) {
-				$key = (string) $value->getId();
+				$key = (string) $value->getProductoId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
@@ -383,10 +378,10 @@ abstract class BaseStockPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 3] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 3];
+		return (string) $row[$startcol];
 	}
 
 	/**
@@ -400,7 +395,7 @@ abstract class BaseStockPeer {
 	 */
 	public static function getPrimaryKeyFromRow($row, $startcol = 0)
 	{
-		return (int) $row[$startcol + 3];
+		return (int) $row[$startcol];
 	}
 	
 	/**
@@ -578,7 +573,8 @@ abstract class BaseStockPeer {
 				} // if obj2 already loaded
 
 				// Add the $obj1 (Stock) to $obj2 (Producto)
-				$obj2->addStock($obj1);
+				// one to one relationship
+				$obj1->setProducto($obj2);
 
 			} // if joined row was not null
 
@@ -709,7 +705,7 @@ abstract class BaseStockPeer {
 				} // if obj2 loaded
 
 				// Add the $obj1 (Stock) to the collection in $obj2 (Producto)
-				$obj2->addStock($obj1);
+				$obj1->setProducto($obj2);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -774,10 +770,6 @@ abstract class BaseStockPeer {
 			$criteria = $values->buildCriteria(); // build Criteria from Stock object
 		}
 
-		if ($criteria->containsKey(StockPeer::ID) && $criteria->keyContainsValue(StockPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.StockPeer::ID.')');
-		}
-
 
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
@@ -816,10 +808,10 @@ abstract class BaseStockPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(StockPeer::ID);
-			$value = $criteria->remove(StockPeer::ID);
+			$comparison = $criteria->getComparison(StockPeer::PRODUCTO_ID);
+			$value = $criteria->remove(StockPeer::PRODUCTO_ID);
 			if ($value) {
-				$selectCriteria->add(StockPeer::ID, $value, $comparison);
+				$selectCriteria->add(StockPeer::PRODUCTO_ID, $value, $comparison);
 			} else {
 				$selectCriteria->setPrimaryTableName(StockPeer::TABLE_NAME);
 			}
@@ -896,7 +888,7 @@ abstract class BaseStockPeer {
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(StockPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(StockPeer::PRODUCTO_ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
 				StockPeer::removeInstanceFromPool($singleval);
@@ -979,7 +971,7 @@ abstract class BaseStockPeer {
 		}
 
 		$criteria = new Criteria(StockPeer::DATABASE_NAME);
-		$criteria->add(StockPeer::ID, $pk);
+		$criteria->add(StockPeer::PRODUCTO_ID, $pk);
 
 		$v = StockPeer::doSelect($criteria, $con);
 
@@ -1005,7 +997,7 @@ abstract class BaseStockPeer {
 			$objs = array();
 		} else {
 			$criteria = new Criteria(StockPeer::DATABASE_NAME);
-			$criteria->add(StockPeer::ID, $pks, Criteria::IN);
+			$criteria->add(StockPeer::PRODUCTO_ID, $pks, Criteria::IN);
 			$objs = StockPeer::doSelect($criteria, $con);
 		}
 		return $objs;

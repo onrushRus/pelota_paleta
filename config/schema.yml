@@ -111,7 +111,7 @@ propel:
     _indexes: { fk_socio_persona: [persona_nro_doc] }
   stock:
     _attributes: { phpName: Stock, idMethod: native }
-    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: producto, foreignReference: id }
+    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id }
     cantidad_actual: { phpName: CantidadActual, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
     cantidad_minima: { phpName: CantidadMinima, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
     _indexes: { fk_STOCK_PRODUCTO1: [producto_id] }

@@ -8,3 +8,6 @@ propel:
     
   tipo_reserva:
     descirpcion_reserva: { primaryString: true }
+    
+  producto:
+    descripcion_prod: { primaryString: true }

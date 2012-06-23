@@ -40,6 +40,7 @@ class ProductoTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('DESCRIPCION_PROD', 'DescripcionProd', 'VARCHAR', true, 45, null);
+		$this->getColumn('DESCRIPCION_PROD', false)->setPrimaryString(true);
 		$this->addColumn('PRECIO', 'Precio', 'DECIMAL', true, 6, null);
 		// validators
 	} // initialize()
@@ -50,7 +51,7 @@ class ProductoTableMap extends TableMap
 	public function buildRelations()
 	{
 		$this->addRelation('CuerpoPedido', 'CuerpoPedido', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'CuerpoPedidos');
-		$this->addRelation('Stock', 'Stock', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'Stocks');
+		$this->addRelation('Stock', 'Stock', RelationMap::ONE_TO_ONE, array('id' => 'producto_id', ), null, null);
 	} // buildRelations()
 
 	/**

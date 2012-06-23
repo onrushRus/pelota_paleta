@@ -9,12 +9,10 @@
  * @method     StockQuery orderByProductoId($order = Criteria::ASC) Order by the producto_id column
  * @method     StockQuery orderByCantidadActual($order = Criteria::ASC) Order by the cantidad_actual column
  * @method     StockQuery orderByCantidadMinima($order = Criteria::ASC) Order by the cantidad_minima column
- * @method     StockQuery orderById($order = Criteria::ASC) Order by the id column
  *
  * @method     StockQuery groupByProductoId() Group by the producto_id column
  * @method     StockQuery groupByCantidadActual() Group by the cantidad_actual column
  * @method     StockQuery groupByCantidadMinima() Group by the cantidad_minima column
- * @method     StockQuery groupById() Group by the id column
  *
  * @method     StockQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     StockQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -30,12 +28,10 @@
  * @method     Stock findOneByProductoId(int $producto_id) Return the first Stock filtered by the producto_id column
  * @method     Stock findOneByCantidadActual(int $cantidad_actual) Return the first Stock filtered by the cantidad_actual column
  * @method     Stock findOneByCantidadMinima(int $cantidad_minima) Return the first Stock filtered by the cantidad_minima column
- * @method     Stock findOneById(int $id) Return the first Stock filtered by the id column
  *
  * @method     array findByProductoId(int $producto_id) Return Stock objects filtered by the producto_id column
  * @method     array findByCantidadActual(int $cantidad_actual) Return Stock objects filtered by the cantidad_actual column
  * @method     array findByCantidadMinima(int $cantidad_minima) Return Stock objects filtered by the cantidad_minima column
- * @method     array findById(int $id) Return Stock objects filtered by the id column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -124,7 +120,7 @@ abstract class BaseStockQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `PRODUCTO_ID`, `CANTIDAD_ACTUAL`, `CANTIDAD_MINIMA`, `ID` FROM `stock` WHERE `ID` = :p0';
+		$sql = 'SELECT `PRODUCTO_ID`, `CANTIDAD_ACTUAL`, `CANTIDAD_MINIMA` FROM `stock` WHERE `PRODUCTO_ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -194,7 +190,7 @@ abstract class BaseStockQuery extends ModelCriteria
 	 */
 	public function filterByPrimaryKey($key)
 	{
-		return $this->addUsingAlias(StockPeer::ID, $key, Criteria::EQUAL);
+		return $this->addUsingAlias(StockPeer::PRODUCTO_ID, $key, Criteria::EQUAL);
 	}
 
 	/**
@@ -206,7 +202,7 @@ abstract class BaseStockQuery extends ModelCriteria
 	 */
 	public function filterByPrimaryKeys($keys)
 	{
-		return $this->addUsingAlias(StockPeer::ID, $keys, Criteria::IN);
+		return $this->addUsingAlias(StockPeer::PRODUCTO_ID, $keys, Criteria::IN);
 	}
 
 	/**
@@ -231,22 +227,8 @@ abstract class BaseStockQuery extends ModelCriteria
 	 */
 	public function filterByProductoId($productoId = null, $comparison = null)
 	{
-		if (is_array($productoId)) {
-			$useMinMax = false;
-			if (isset($productoId['min'])) {
-				$this->addUsingAlias(StockPeer::PRODUCTO_ID, $productoId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($productoId['max'])) {
-				$this->addUsingAlias(StockPeer::PRODUCTO_ID, $productoId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
+		if (is_array($productoId) && null === $comparison) {
+			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(StockPeer::PRODUCTO_ID, $productoId, $comparison);
 	}
@@ -329,32 +311,6 @@ abstract class BaseStockQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(StockPeer::CANTIDAD_MINIMA, $cantidadMinima, $comparison);
-	}
-
-	/**
-	 * Filter the query on the id column
-	 *
-	 * Example usage:
-	 * <code>
-	 * $query->filterById(1234); // WHERE id = 1234
-	 * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-	 * $query->filterById(array('min' => 12)); // WHERE id > 12
-	 * </code>
-	 *
-	 * @param     mixed $id The value to use as filter.
-	 *              Use scalar values for equality.
-	 *              Use array values for in_array() equivalent.
-	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    StockQuery The current query, for fluid interface
-	 */
-	public function filterById($id = null, $comparison = null)
-	{
-		if (is_array($id) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(StockPeer::ID, $id, $comparison);
 	}
 
 	/**
@@ -441,7 +397,7 @@ abstract class BaseStockQuery extends ModelCriteria
 	public function prune($stock = null)
 	{
 		if ($stock) {
-			$this->addUsingAlias(StockPeer::ID, $stock->getId(), Criteria::NOT_EQUAL);
+			$this->addUsingAlias(StockPeer::PRODUCTO_ID, $stock->getProductoId(), Criteria::NOT_EQUAL);
 		}
 
 		return $this;

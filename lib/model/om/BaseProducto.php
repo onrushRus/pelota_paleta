@@ -54,9 +54,9 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	protected $collCuerpoPedidos;
 
 	/**
-	 * @var        array Stock[] Collection to store aggregation of Stock objects.
+	 * @var        Stock one-to-one related Stock object
 	 */
-	protected $collStocks;
+	protected $singleStock;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -281,7 +281,7 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 
 			$this->collCuerpoPedidos = null;
 
-			$this->collStocks = null;
+			$this->singleStock = null;
 
 		} // if (deep)
 	}
@@ -462,11 +462,9 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 				}
 			}
 
-			if ($this->collStocks !== null) {
-				foreach ($this->collStocks as $referrerFK) {
-					if (!$referrerFK->isDeleted()) {
-						$affectedRows += $referrerFK->save($con);
-					}
+			if ($this->singleStock !== null) {
+				if (!$this->singleStock->isDeleted()) {
+						$affectedRows += $this->singleStock->save($con);
 				}
 			}
 
@@ -629,11 +627,9 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 					}
 				}
 
-				if ($this->collStocks !== null) {
-					foreach ($this->collStocks as $referrerFK) {
-						if (!$referrerFK->validate($columns)) {
-							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-						}
+				if ($this->singleStock !== null) {
+					if (!$this->singleStock->validate($columns)) {
+						$failureMap = array_merge($failureMap, $this->singleStock->getValidationFailures());
 					}
 				}
 
@@ -716,8 +712,8 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			if (null !== $this->collCuerpoPedidos) {
 				$result['CuerpoPedidos'] = $this->collCuerpoPedidos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
-			if (null !== $this->collStocks) {
-				$result['Stocks'] = $this->collStocks->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			if (null !== $this->singleStock) {
+				$result['Stock'] = $this->singleStock->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
 			}
 		}
 		return $result;
@@ -878,10 +874,9 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 				}
 			}
 
-			foreach ($this->getStocks() as $relObj) {
-				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addStock($relObj->copy($deepCopy));
-				}
+			$relObj = $this->getStock();
+			if ($relObj) {
+				$copyObj->setStock($relObj->copy($deepCopy));
 			}
 
 			//unflag object copy
@@ -945,9 +940,6 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	{
 		if ('CuerpoPedido' == $relationName) {
 			return $this->initCuerpoPedidos();
-		}
-		if ('Stock' == $relationName) {
-			return $this->initStocks();
 		}
 	}
 
@@ -1125,151 +1117,39 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Clears out the collStocks collection
+	 * Gets a single Stock object, which is related to this object by a one-to-one relationship.
 	 *
-	 * This does not modify the database; however, it will remove any associated objects, causing
-	 * them to be refetched by subsequent calls to accessor method.
-	 *
-	 * @return     void
-	 * @see        addStocks()
-	 */
-	public function clearStocks()
-	{
-		$this->collStocks = null; // important to set this to NULL since that means it is uninitialized
-	}
-
-	/**
-	 * Initializes the collStocks collection.
-	 *
-	 * By default this just sets the collStocks collection to an empty array (like clearcollStocks());
-	 * however, you may wish to override this method in your stub class to provide setting appropriate
-	 * to your application -- for example, setting the initial array to the values stored in database.
-	 *
-	 * @param      boolean $overrideExisting If set to true, the method call initializes
-	 *                                        the collection even if it is not empty
-	 *
-	 * @return     void
-	 */
-	public function initStocks($overrideExisting = true)
-	{
-		if (null !== $this->collStocks && !$overrideExisting) {
-			return;
-		}
-		$this->collStocks = new PropelObjectCollection();
-		$this->collStocks->setModel('Stock');
-	}
-
-	/**
-	 * Gets an array of Stock objects which contain a foreign key that references this object.
-	 *
-	 * If the $criteria is not null, it is used to always fetch the results from the database.
-	 * Otherwise the results are fetched from the database the first time, then cached.
-	 * Next time the same method is called without $criteria, the cached collection is returned.
-	 * If this Producto is new, it will return
-	 * an empty collection or the current collection; the criteria is ignored on a new object.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array Stock[] List of Stock objects
+	 * @return     Stock
 	 * @throws     PropelException
 	 */
-	public function getStocks($criteria = null, PropelPDO $con = null)
+	public function getStock(PropelPDO $con = null)
 	{
-		if(null === $this->collStocks || null !== $criteria) {
-			if ($this->isNew() && null === $this->collStocks) {
-				// return empty collection
-				$this->initStocks();
-			} else {
-				$collStocks = StockQuery::create(null, $criteria)
-					->filterByProducto($this)
-					->find($con);
-				if (null !== $criteria) {
-					return $collStocks;
-				}
-				$this->collStocks = $collStocks;
-			}
+
+		if ($this->singleStock === null && !$this->isNew()) {
+			$this->singleStock = StockQuery::create()->findPk($this->getPrimaryKey(), $con);
 		}
-		return $this->collStocks;
+
+		return $this->singleStock;
 	}
 
 	/**
-	 * Sets a collection of Stock objects related by a one-to-many relationship
-	 * to the current object.
-	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-	 * and new objects from the given Propel collection.
+	 * Sets a single Stock object as related to this object by a one-to-one relationship.
 	 *
-	 * @param      PropelCollection $stocks A Propel collection.
-	 * @param      PropelPDO $con Optional connection object
-	 */
-	public function setStocks(PropelCollection $stocks, PropelPDO $con = null)
-	{
-		$this->stocksScheduledForDeletion = $this->getStocks(new Criteria(), $con)->diff($stocks);
-
-		foreach ($stocks as $stock) {
-			// Fix issue with collection modified by reference
-			if ($stock->isNew()) {
-				$stock->setProducto($this);
-			}
-			$this->addStock($stock);
-		}
-
-		$this->collStocks = $stocks;
-	}
-
-	/**
-	 * Returns the number of related Stock objects.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct
-	 * @param      PropelPDO $con
-	 * @return     int Count of related Stock objects.
-	 * @throws     PropelException
-	 */
-	public function countStocks(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-	{
-		if(null === $this->collStocks || null !== $criteria) {
-			if ($this->isNew() && null === $this->collStocks) {
-				return 0;
-			} else {
-				$query = StockQuery::create(null, $criteria);
-				if($distinct) {
-					$query->distinct();
-				}
-				return $query
-					->filterByProducto($this)
-					->count($con);
-			}
-		} else {
-			return count($this->collStocks);
-		}
-	}
-
-	/**
-	 * Method called to associate a Stock object to this object
-	 * through the Stock foreign key attribute.
-	 *
-	 * @param      Stock $l Stock
+	 * @param      Stock $v Stock
 	 * @return     Producto The current object (for fluent API support)
+	 * @throws     PropelException
 	 */
-	public function addStock(Stock $l)
+	public function setStock(Stock $v = null)
 	{
-		if ($this->collStocks === null) {
-			$this->initStocks();
-		}
-		if (!$this->collStocks->contains($l)) { // only add it if the **same** object is not already associated
-			$this->doAddStock($l);
+		$this->singleStock = $v;
+
+		// Make sure that that the passed-in Stock isn't already associated with this object
+		if ($v !== null && $v->getProducto() === null) {
+			$v->setProducto($this);
 		}
 
 		return $this;
-	}
-
-	/**
-	 * @param	Stock $stock The stock object to add.
-	 */
-	protected function doAddStock($stock)
-	{
-		$this->collStocks[]= $stock;
-		$stock->setProducto($this);
 	}
 
 	/**
@@ -1305,10 +1185,8 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collStocks) {
-				foreach ($this->collStocks as $o) {
-					$o->clearAllReferences($deep);
-				}
+			if ($this->singleStock) {
+				$this->singleStock->clearAllReferences($deep);
 			}
 		} // if ($deep)
 
@@ -1316,20 +1194,20 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			$this->collCuerpoPedidos->clearIterator();
 		}
 		$this->collCuerpoPedidos = null;
-		if ($this->collStocks instanceof PropelCollection) {
-			$this->collStocks->clearIterator();
+		if ($this->singleStock instanceof PropelCollection) {
+			$this->singleStock->clearIterator();
 		}
-		$this->collStocks = null;
+		$this->singleStock = null;
 	}
 
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'descripcion_prod' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(ProductoPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getDescripcionProd();
 	}
 
 	/**
