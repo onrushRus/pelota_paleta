@@ -1,6 +1,8 @@
-<h1>Reservas List</h1>
+<?php /* @var $Reserva Reserva */ ?>
+<h1 class="alert-info">Reservas de Hoy</h1>
 
-<table>
+
+<table class="table table-bordered">
   <thead>
     <tr>
       <th>Socio nro doc</th>
@@ -10,6 +12,7 @@
       <th>Dia fin reserva</th>
       <th>Hora fin reserva</th>
       <th>Cantidad turnos</th>
+      <th>Nombre Socio</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +25,7 @@
       <td><?php echo $Reserva->getDiaFinReserva() ?></td>
       <td><?php echo $Reserva->getHoraFinReserva() ?></td>
       <td><?php echo $Reserva->getCantidadTurnos() ?></td>
+      <td><?php echo $Reserva->getNombreSocio($Reserva->getSocioNroDoc()) ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

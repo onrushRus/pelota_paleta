@@ -15,4 +15,12 @@
  */
 class Reserva extends BaseReserva {
 
+    public function getNombreSocio($dni_socio) 
+    {
+        $p = new Persona();
+        $p = PersonaPeer::retrieveByPK($dni_socio);   //Fijate esta gaby pedaso de trolin JAJA
+        return $p->getNomApellido();
+    }
+    
+
 } // Reserva
