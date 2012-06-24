@@ -11,7 +11,7 @@ class ProductoForm extends BaseProductoForm
 {
   public function configure()
   {
-		$this->widgetSchema['id']= new sfWidgetFormInputText();
+		//$this->widgetSchema['id']= new sfWidgetFormInputText();
 		
 		parent::configure();       
  
