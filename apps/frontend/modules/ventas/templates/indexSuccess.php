@@ -19,8 +19,10 @@
               <thead>
                 <tr>
                   <th>Código</th>
-                  <th>Dni</th>
-                  <th>Apellido y Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Cantidad a llevar</th>
+                  <th>Cantidad Actual</th>
                   <th>Agregar al carrito</th> 
                 </tr>
               </thead>
@@ -30,6 +32,10 @@
                     <td><?php echo $prod->getId() ?></td>
                     <td><?php echo $prod->getDescripcionProd() ?></td>
                     <td><?php echo $prod->getPrecio() ?></td>  
+                    <td>
+                        <input type="text" class="span1" name="cantidad_prod"/>
+                    </td>
+                    <td><?php echo $prod->getStock()->getCantidadActual() ?></td> 
                     <td>
                         <input type="checkbox" value="<?php echo $prod->getId()?>" name="ventas_prod[]"/>
                     </td>

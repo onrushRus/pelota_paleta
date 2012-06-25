@@ -15,19 +15,15 @@
  */
 class Producto extends BaseProducto {
 	
-    public function getStockCritico($prod) 
-    {
+    public function getStockCritico($prod) {
         $p = new Stock();
         $p = StockPeer::retrieveByPK($prod);   //Fijate esta gaby pedaso de trolin JAJA
- 
-       // if ( ($p->getCantidadActual()!=null) and ($p->getCantidadMinima()!= null) ){
-        if ($p->getCantidadActual()<$p->getCantidadMinima()){
-			
-			return "Poco stock"; //solo contamos con ".getCantidadActual()." unidades";
-			}else {
-				return "Stock normal";// con ".getCantidadActual()." unidades";
-				}
+        // if ( ($p->getCantidadActual()!=null) and ($p->getCantidadMinima()!= null) ){
+        if ($p->getCantidadActual() < $p->getCantidadMinima()) {
+            return "Poco stock"; //solo contamos con ".getCantidadActual()." unidades";
+        } else {
+            return "Stock normal"; // con ".getCantidadActual()." unidades";
+        }
         //}else return "nada cargado";
-
     }
 } // Producto

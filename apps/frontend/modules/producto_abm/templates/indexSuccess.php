@@ -1,3 +1,4 @@
+<?php /* @var $Producto Producto*/?>
 <h1>Productos List</h1>
 
 <table>
