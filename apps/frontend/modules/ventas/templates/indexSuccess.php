@@ -33,11 +33,11 @@
                     <td><?php echo $prod->getDescripcionProd() ?></td>
                     <td><?php echo $prod->getPrecio() ?></td>  
                     <td>
-                        <input type="text" class="span1" name="cantidad_prod"/>
+                        <input type="text" class="span1" name="prod[<?php echo $prod->getId()?>][cant]"/>
                     </td>
                     <td><?php echo $prod->getStock()->getCantidadActual() ?></td> 
                     <td>
-                        <input type="checkbox" value="<?php echo $prod->getId()?>" name="ventas_prod[]"/>
+                        <input type="checkbox" value="1" name="prod[<?php echo $prod->getId()?>][compra]"/>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -1,19 +1,21 @@
 <h1>Stocks List</h1>
 
-<table>
+<table class="table table-bordered">
   <thead>
     <tr>
-      <th>Producto</th>
+      <th>Id producto</th>
       <th>Cantidad actual</th>
       <th>Cantidad minima</th>
+      <th>Editar stock</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($Stocks as $Stock): ?>
     <tr>
-      <td><a href="<?php echo url_for('stock_abm/edit?producto_id='.$Stock->getProductoId()) ?>"><?php echo $Stock->getProductoId() ?></a></td>
+      <td><?php echo $Stock->getProductoId() ?></td>
       <td><?php echo $Stock->getCantidadActual() ?></td>
       <td><?php echo $Stock->getCantidadMinima() ?></td>
+      <td><a href="<?php echo url_for('stock_abm/edit?producto_id='.$Stock->getProductoId()) ?>">Editar</a></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

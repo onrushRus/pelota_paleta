@@ -37,13 +37,17 @@ class ventasActions extends sfActions
   {   
       if($request->isMethod(sfWebRequest::POST)){
           //tomo los productos vendidos
-          $this->lista_prod = $request->getParameter("ventas_prod", array());
+          $this->lista_prod = $request->getParameter("prod", array());
+          
+          foreach($this->lista_prod as $id => $item){
+              if(isset($item['compra'])){
+                  $stock = StockQuery::create()->findPk($id);
+                  $stock->setCantidadActual($stock->getCantidadActual() - $item['cant']);
+                  $stock->save();
+              }
+          }
           
       }
-      //$stock = new Stock();
-      //$stock = StockPeer::retrieveByPK($id_producto);   //Fijate esta gaby pedaso de trolin JAJA
-      //$stock->getCantidadActual()-cantidad;
-      
       
   }
 }
