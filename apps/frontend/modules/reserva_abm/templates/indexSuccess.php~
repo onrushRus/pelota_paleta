@@ -26,8 +26,13 @@
       <td><?php echo $Reserva->getHoraFinReserva() ?></td>
       <td><?php echo $Reserva->getCantidadTurnos() ?></td>
       <td><?php echo $Reserva->getNombreSocio($Reserva->getSocioNroDoc()) ?></td>
+<<<<<<< HEAD
+      <td><a class="btn btn-mini btn-warning" href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>"><i class="icon-pencil icon-white"></i></a></td>
+      <td><a class="btn btn-mini btn-danger" href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>"><i class="icon-trash icon-white"></i></a></td>
+=======
       <td><a href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>">Editar</a></td>
       <td><?php echo link_to('Delete', 'reserva_abm/delete?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?></td>
+>>>>>>> corrijo listado de reservas
     </tr>
     <?php endforeach; ?>
   </tbody>
