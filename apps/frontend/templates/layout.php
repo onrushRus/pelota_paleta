@@ -32,9 +32,7 @@
           <a class="brand" href="#">Pelota Paleta</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">menu 1</a></li>
-              <li><a href="#">menu 2</a></li>
-              <li><a href="#">menu 3</a></li>
+              <li class="active"><a href="<?php echo url_for('principal/index');?>">Home</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   menu 4 <b class="caret"></b>
@@ -55,7 +53,6 @@
       <footer>
         <p>&copy; Company 2012</p>
           <br><br>
-<a href="<?php echo url_for('principal/index');?>">Index</a>
       </footer>
     </div> <!-- /container -->
     <!-- include base js files from plugin -->

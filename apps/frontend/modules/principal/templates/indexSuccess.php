@@ -1,12 +1,10 @@
            <div class="nav-collapse">
             <ul class="nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  ABM socios <b class="caret"></b>
-                </a>
-					<a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a>
+              <li>
+		  <a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a>
+              </li>
+              <li>
                   <a href="<?php echo url_for('persona_abm/index');?>">Persona ABM</a>
-
               </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
