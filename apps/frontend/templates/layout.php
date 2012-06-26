@@ -32,14 +32,34 @@
           <a class="brand" href="#">Pelota Paleta</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="<?php echo url_for('principal/index');?>">Home</a></li>
+              <li class="active"><a href="<?php echo url_for('principal/index');?>">Inicio</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Gestion de Personas <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a></li>
+                  <li><a href="<?php echo url_for('persona_abm/index');?>">Persona ABM</a></li>
+                </ul>
+              </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   Buffet <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="<?php echo url_for('ventas/index')?>">Ventas</a></li>
-                  <li><a href="<?php echo url_for('producto_abm/index')?>">Productos</a></li>
+                  <li><a href="<?php echo url_for('ventas/index');?>">Ventas</a></li>
+                  <li><a href="<?php echo url_for('producto_abm/index');?>">ABM Productos</a></li>
+                  <li><a href="<?php echo url_for('stock_abm/index');?>">ABM Stock</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Cuotas<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Operacion 1..</a></li>
+                  <li><a href="#">Operacion 2..</a></li>
+                  <li><a href="#">Operacion 3..</a></li>
                 </ul>
               </li>
             </ul>

@@ -9,11 +9,8 @@
     <tfoot>
       <tr>
         <td colspan="2">
-          &nbsp;<a href="<?php echo url_for('socio_abm/index') ?>">Back to list</a>
-          <?php if (!$form->getObject()->isNew()): ?>
-            &nbsp;<?php echo link_to('Delete', 'socio_abm/delete?persona_nro_doc='.$form->getObject()->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
-          <?php endif; ?>
-          <input type="submit" value="Save" />
+          &nbsp;<a class="btn" href="<?php echo url_for('socio_abm/index') ?>">Atras</a>
+          <input class="btn" type="submit" value="Guardar" />
         </td>
       </tr>
     </tfoot>

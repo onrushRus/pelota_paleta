@@ -1,15 +1,15 @@
 <?php /*@var $Socio Socio*/?>
-<h1>Socios List</h1>
+<h1>Socios</h1>
 
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Persona nro doc</th>
-      <th>Nombre Socio</th>
+      <th>Nro documento</th>
+      <th>Nombre - Apellido</th>
       <th>Fecha alta</th>
       <th>Vitalicio</th>
       <th>Activo</th>
-      <th>Editar Socio</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -20,10 +20,11 @@
       <td><?php echo $Socio->getFechaAlta() ?></td>
       <td><?php echo $Socio->getVitalicio() ?></td>
       <td><?php echo $Socio->getActivo() ?></td>
-      <td><a href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Editar</a></td>
+      <td><a href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Modificar</a></td>
+      <td><a href="<?php echo url_for('socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Borrar</a></td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('socio_abm/new') ?>">New</a>
+  <a href="<?php echo url_for('socio_abm/new') ?>">Nuevo Socio</a>

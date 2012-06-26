@@ -1,44 +1,8 @@
            <div class="nav-collapse">
             <ul class="nav">
-              <li>
-		  <a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a>
-              </li>
-              <li>
-                  <a href="<?php echo url_for('persona_abm/index');?>">Persona ABM</a>
-              </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Servicios <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="<?php echo url_for('cancha/index');?>">Cancha</a></li>
-                  <li><a href="<?php echo url_for('quincho/index');?>">Quincho</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Buffet <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="<?php echo url_for('ventas/index');?>">Ventas</a></li>
-                  <li><a href="<?php echo url_for('producto_abm/index');?>">ABM Productos</a></li>
-                  <li><a href="<?php echo url_for('stock_abm/index');?>">ABM Stock</a></li>
-                </ul>
-              </li>
-              <li>
-<a href="<?php echo url_for('torneo/index');?>">torneo</a>
-              </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Cuotas<b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Operacion 1..</a></li>
-                  <li><a href="#">Operacion 2..</a></li>
-                  <li><a href="#">Operacion 3..</a></li>
-                </ul>
-              </li>
+              <li><a href="<?php echo url_for('reserva_abm/index');?>">Reservas</a></li>
+              <li><a href="<?php echo url_for('torneo/index');?>">Torneo</a></li>
+              
             </ul>
           </div> <!--/.nav-collapse -->
   <br><br>
-<a href="<?php echo url_for('principal/index');?>">Index</a>
