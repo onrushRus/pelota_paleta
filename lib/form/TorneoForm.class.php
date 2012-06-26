@@ -11,5 +11,8 @@ class TorneoForm extends BaseTorneoForm
 {
   public function configure()
   {
+     // $arreglo= array('1'=>'nacional');
+      //$this->widgetSchema['tipo_torneo']= new sfWidgetFormText();
+      //$this->validatorSchema['tipo_torneo'] = new sfValidatorInteger();
   }
 }

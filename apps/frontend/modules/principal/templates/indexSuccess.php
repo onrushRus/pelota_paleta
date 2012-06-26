@@ -25,15 +25,8 @@
                   <li><a href="<?php echo url_for('stock_abm/index');?>">ABM Stock</a></li>
                 </ul>
               </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Torneo <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Operacion 1..</a></li>
-                  <li><a href="#">Operacion 2..</a></li>
-                  <li><a href="#">Operacion 3..</a></li>
-                </ul>
+              <li>
+<a href="<?php echo url_for('torneo/index');?>">torneo</a>
               </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
