@@ -10,9 +10,6 @@
       <tr>
         <td colspan="2">
           &nbsp;<a class="btn" href="<?php echo url_for('stock_abm/index') ?>">Atras</a>
-          <?php if (!$form->getObject()->isNew()): ?>
-            &nbsp;<?php echo link_to('Delete', 'stock_abm/delete?producto_id='.$form->getObject()->getProductoId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
-          <?php endif; ?>
           <input class="btn" type="submit" value="Guardar" />
         </td>
       </tr>

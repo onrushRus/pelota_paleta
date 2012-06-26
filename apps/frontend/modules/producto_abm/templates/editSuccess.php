@@ -1,3 +1,3 @@
-<h1>Edit Producto</h1>
+<h1>Modificar Producto</h1>
 
 <?php include_partial('form', array('form' => $form)) ?>

@@ -9,18 +9,12 @@
     <tfoot>
       <tr>
         <td colspan="2">
-          &nbsp;<a href="<?php echo url_for('producto_abm/index') ?>">Back to list</a>
-          <?php if (!$form->getObject()->isNew()): ?>
-            &nbsp;<?php echo link_to('Delete', 'producto_abm/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
-          <?php endif; ?>
-          <input type="submit" value="Save" />
+          &nbsp;<a class="btn" href="<?php echo url_for('producto_abm/index') ?>">Atras</a>
+          <input class="btn" type="submit" value="Save" />
         </td>
-         
       </tr>
       <tr>
-        <td>
-        <td><a href="<?php echo url_for('stock_abm/new');?>">Cargar Stock</a></td>
-		</td>
+        <td><a class="btn" href="<?php echo url_for('stock_abm/new');?>">Cargar Stock</a></td>	
       </tr>
     </tfoot>
     

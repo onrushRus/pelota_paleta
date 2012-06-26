@@ -1,5 +1,5 @@
 <?php /* @var $Producto Producto*/?>
-<h1>Productos List</h1>
+<h1>Productos</h1>
 
 <table class="table table-bordered">
   <thead>
@@ -7,9 +7,8 @@
       <th>Id</th>
       <th>Descripcion prod</th>
       <th>Precio</th>
-      <th>Editar Producto</th>
       <th>Stock</th>
-      <th>Cargar Stock</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -18,12 +17,14 @@
       <td><?php echo $Producto->getId() ?></td>
       <td><?php echo $Producto->getDescripcionProd() ?></td>
       <td><?php echo $Producto->getPrecio() ?></td>
-      <td><a href="<?php echo url_for('producto_abm/edit?id='.$Producto->getId()) ?>">Editar</a></td>
       <td><?php echo ($Producto->getStockCritico($Producto->getId())); ?></td>
-      <td><a href="<?php echo url_for('stock_abm/edit?producto_id='.$Producto->getId());?>">Cargar Stock</a></td>
+      <td>
+          <a class="btn btn-mini btn-warning" href="<?php echo url_for('producto_abm/edit?id='.$Producto->getId()) ?> ?>"><i class="icon-pencil icon-white"></i></a>
+          <a class="btn btn-mini btn-danger" href="<?php echo url_for('producto_abm/edit?id='.$Producto->getId())?>"><i class="icon-trash icon-trash"></i></a>
+      </td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('producto_abm/new') ?>">New</a>
+  <a class="btn btn-info" href="<?php echo url_for('producto_abm/new') ?>">Nuevo</a>

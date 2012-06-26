@@ -1,7 +1,6 @@
 <?php /* @var $Reserva Reserva */ ?>
 <h1 class="alert-info">Reservas de Hoy</h1>
 
-
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -13,7 +12,7 @@
       <th>Hora fin reserva</th>
       <th>Cantidad turnos</th>
       <th>Nombre Socio</th>
-      <th>Editar Reservas</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -27,10 +26,11 @@
       <td><?php echo $Reserva->getHoraFinReserva() ?></td>
       <td><?php echo $Reserva->getCantidadTurnos() ?></td>
       <td><?php echo $Reserva->getNombreSocio($Reserva->getSocioNroDoc()) ?></td>
-      <td><a href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>">Editar</a></td>
+      <td><a class="btn btn-mini btn-warning" href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>"><i class="icon-pencil icon-white"></i></a></td>
+      <td><a class="btn btn-mini btn-danger" href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>"><i class="icon-trash icon-white"></i></a></td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('reserva_abm/new') ?>">New</a>
+  <a class="btn btn-info" href="<?php echo url_for('reserva_abm/new') ?>">Nuevo</a>
