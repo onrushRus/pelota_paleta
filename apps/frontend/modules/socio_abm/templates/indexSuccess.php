@@ -18,8 +18,8 @@
       <td><?php echo $Socio->getPersonaNroDoc()?></td>
       <td><?php echo $Socio->getPersona()->getNomApellido()?></td>
       <td><?php echo $Socio->getFechaAlta() ?></td>
-      <td><?php echo $Socio->getVitalicio() ?></td>
-      <td><?php echo $Socio->getActivo() ?></td>
+      <td><i class="icon-<?php echo $Socio->getIconoVitalicio() ?>"></i></td>
+      <td><i class="icon-<?php echo $Socio->getIconoActivo() ?>"></i></td>
       <td><a href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Modificar</a></td>
       <td><?php echo link_to('Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?')) ?></td>
 

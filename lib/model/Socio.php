@@ -14,5 +14,17 @@
  * @package    propel.generator.lib.model
  */
 class Socio extends BaseSocio {
-
+    public function getIconoActivo(){
+        if ($this->getActivo())
+            return "ok";
+        else
+            return "remove";
+    }
+    
+    public function getIconoVitalicio(){
+        if ($this->getVitalicio())
+            return "ok";
+        else
+            return "remove";
+    }
 } // Socio
