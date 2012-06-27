@@ -21,7 +21,7 @@
       <td><i class="icon-<?php echo $Socio->getIconoVitalicio() ?>"></i></td>
       <td><i class="icon-<?php echo $Socio->getIconoActivo() ?>"></i></td>
       <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Modificar</a>
-              <?php echo link_to('<i class="icon-pencil icon-white"></i>Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?', 'class'=>"btn btn-warning btn-mini")) ?></td>
+              <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?', 'class'=>"btn btn-danger btn-mini")) ?></td>
 
     </tr>
     <?php endforeach; ?>

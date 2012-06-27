@@ -27,4 +27,4 @@
   </tbody>
 </table>
 
-  <a class="btn btn-info" href="<?php echo url_for('producto_abm/new') ?>">Nuevo</a>
+  <a class="btn btn-info" href="<?php echo url_for('producto_abm/new') ?>">Nuevo Producto</a>

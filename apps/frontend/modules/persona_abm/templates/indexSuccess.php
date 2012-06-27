@@ -20,7 +20,7 @@
       <td><?php echo $Persona->getEMail() ?></td>
       <td><?php echo $Persona->getLocalidadId() ?></td>
       <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Editar </a>
-          <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'persona_abm/delete?nro_doc='.$Persona->getNroDoc(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-warning btn-mini")) ?>
+          <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'persona_abm/delete?nro_doc='.$Persona->getNroDoc(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini")) ?>
           
       </td>
     </tr>
@@ -28,4 +28,4 @@
   </tbody>
 </table>
 
-  <a class="btn btn-warning" href="<?php echo url_for('persona_abm/new') ?>">Nuevo</a>
+  <a class="btn btn-info" href="<?php echo url_for('persona_abm/new') ?>">Nueva Persona</a>
