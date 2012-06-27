@@ -9,7 +9,7 @@
       <th>Fecha alta</th>
       <th>Vitalicio</th>
       <th>Activo</th>
-      <th>Acciones</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -20,12 +20,12 @@
       <td><?php echo $Socio->getFechaAlta() ?></td>
       <td><i class="icon-<?php echo $Socio->getIconoVitalicio() ?>"></i></td>
       <td><i class="icon-<?php echo $Socio->getIconoActivo() ?>"></i></td>
-      <td><a href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Modificar</a></td>
-      <td><?php echo link_to('Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?')) ?></td>
+      <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Modificar</a>
+              <?php echo link_to('<i class="icon-pencil icon-white"></i>Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?', 'class'=>"btn btn-warning btn-mini")) ?></td>
 
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('socio_abm/new') ?>">Nuevo Socio</a>
+  <a class="btn btn-info" href="<?php echo url_for('socio_abm/new') ?>">Nuevo Socio</a>

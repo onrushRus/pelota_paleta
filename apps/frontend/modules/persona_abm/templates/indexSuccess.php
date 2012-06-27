@@ -1,12 +1,12 @@
-<h1>Personas List</h1>
+<h1>Personas</h1>
 
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Nro doc</th>
-      <th>Nom apellido</th>
+      <th>Nro documento</th>
+      <th>Nombre - Apellido</th>
       <th>Fecha nacimiento</th>
-      <th>E mail</th>
+      <th>E-mail</th>
       <th>Localidad</th>
       <th>Editar Persona</th>
     </tr>
@@ -19,10 +19,13 @@
       <td><?php echo $Persona->getFechaNacimiento() ?></td>
       <td><?php echo $Persona->getEMail() ?></td>
       <td><?php echo $Persona->getLocalidadId() ?></td>
-      <td><a href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"> Editar </a></td>
+      <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Editar </a>
+          <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'persona_abm/delete?nro_doc='.$Persona->getNroDoc(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-warning btn-mini")) ?>
+          
+      </td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('persona_abm/new') ?>">New</a>
+  <a class="btn btn-warning" href="<?php echo url_for('persona_abm/new') ?>">Nuevo</a>

@@ -10,7 +10,7 @@
       <tr>
         <td colspan="2">
           &nbsp;<a class="btn" href="<?php echo url_for('producto_abm/index') ?>">Atras</a>
-          <input class="btn" type="submit" value="Save" />
+          <input class="btn" type="submit" value="Guardar" />
         </td>
       </tr>
       <tr>
