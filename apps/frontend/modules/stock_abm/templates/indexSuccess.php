@@ -16,7 +16,7 @@
       <td><?php echo $Stock->getCantidadActual() ?></td>
       <td><?php echo $Stock->getCantidadMinima() ?></td>
       <td><a class="btn" href="<?php echo url_for('stock_abm/edit?producto_id='.$Stock->getProductoId()) ?>">Modificar</a></td>
-      <td><a class="btn" href="<?php echo url_for('stock_abm/edit?producto_id='.$Stock->getProductoId()) ?>">Eliminar</a></td>
+      <td><?php echo link_to('Eliminar', 'stock_abm/delete?producto_id='.$Stock->getProductoId(), array('method' => 'delete', 'confirm' => '¿Estas seguro?')) ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

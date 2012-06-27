@@ -21,7 +21,8 @@
       <td><?php echo $Socio->getVitalicio() ?></td>
       <td><?php echo $Socio->getActivo() ?></td>
       <td><a href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Modificar</a></td>
-      <td><a href="<?php echo url_for('socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>">Borrar</a></td>
+      <td><?php echo link_to('Eliminar', 'socio_abm/delete?persona_nro_doc='.$Socio->getPersonaNroDoc(), array('method' => 'delete', 'confirm' => '¿Estas seguro?')) ?></td>
+
     </tr>
     <?php endforeach; ?>
   </tbody>

@@ -12,7 +12,7 @@
       <th>Hora fin reserva</th>
       <th>Cantidad turnos</th>
       <th>Nombre Socio</th>
-      <th></th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -27,7 +27,7 @@
       <td><?php echo $Reserva->getCantidadTurnos() ?></td>
       <td><?php echo $Reserva->getNombreSocio($Reserva->getSocioNroDoc()) ?></td>
       <td><a href="<?php echo url_for('reserva_abm/edit?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva()) ?>">Editar</a></td>
-      <td><?php echo link_to('Delete', 'reserva_abm/delete?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?></td>
+      <td><?php echo link_to('Eliminar', 'reserva_abm/delete?socio_nro_doc='.$Reserva->getSocioNroDoc().'&tipo_reserva_id='.$Reserva->getTipoReservaId().'&dia_comienzo_reserva='.$Reserva->getDiaComienzoReserva().'&hora_comienzo_reserva='.$Reserva->getHoraComienzoReserva(), array('method' => 'delete', 'confirm' => '¿Estas seguro?')) ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

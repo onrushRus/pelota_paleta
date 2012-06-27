@@ -20,7 +20,7 @@
       <td><?php echo ($Producto->getStockCritico($Producto->getId())); ?></td>
       <td>
           <a class="btn btn-mini btn-warning" href="<?php echo url_for('producto_abm/edit?id='.$Producto->getId()) ?> ?>"><i class="icon-pencil icon-white"></i></a>
-          <a class="btn btn-mini btn-danger" href="<?php echo url_for('producto_abm/edit?id='.$Producto->getId())?>"><i class="icon-trash icon-trash"></i></a>
+          <td><?php echo link_to('Eliminar', 'producto_abm/delete?id='.$Producto->getId(), array('method' => 'delete', 'confirm' => '¿Estas seguro?', 'class' => "btn btn-mini btn-danger")) ?></td>
       </td>
     </tr>
     <?php endforeach; ?>
