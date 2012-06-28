@@ -36,12 +36,11 @@ class CuerpoPedidoTableMap extends TableMap
 		$this->setPhpName('CuerpoPedido');
 		$this->setClassname('CuerpoPedido');
 		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(true);
+		$this->setUseIdGenerator(false);
 		// columns
-		$this->addForeignKey('ENCABEZADO_PEDIDO_ID', 'EncabezadoPedidoId', 'INTEGER', 'encabezado_pedido', 'ID', true, 10, null);
-		$this->addForeignKey('PRODUCTO_ID', 'ProductoId', 'INTEGER', 'producto', 'ID', true, 10, null);
+		$this->addForeignPrimaryKey('ENCABEZADO_PEDIDO_ID', 'EncabezadoPedidoId', 'INTEGER' , 'encabezado_pedido', 'ID', true, 10, null);
+		$this->addForeignPrimaryKey('PRODUCTO_ID', 'ProductoId', 'INTEGER' , 'producto', 'ID', true, 10, null);
 		$this->addColumn('CANTIDAD', 'Cantidad', 'INTEGER', true, 10, null);
-		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		// validators
 	} // initialize()
 

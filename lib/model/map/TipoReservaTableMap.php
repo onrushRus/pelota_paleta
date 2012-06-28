@@ -50,7 +50,7 @@ class TipoReservaTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Reserva', 'Reserva', RelationMap::ONE_TO_MANY, array('id' => 'tipo_reserva_id', ), null, null, 'Reservas');
+		$this->addRelation('Reserva', 'Reserva', RelationMap::ONE_TO_MANY, array('id' => 'tipo_reserva_id', ), 'CASCADE', 'CASCADE', 'Reservas');
 	} // buildRelations()
 
 	/**

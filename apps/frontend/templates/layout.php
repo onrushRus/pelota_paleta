@@ -49,7 +49,6 @@
                 <ul class="dropdown-menu">
                   <li><a href="<?php echo url_for('ventas/index');?>">Ventas</a></li>
                   <li><a href="<?php echo url_for('producto_abm/index');?>">ABM Productos</a></li>
-                  <li><a href="<?php echo url_for('stock_abm/index');?>">ABM Stock</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -71,7 +70,7 @@
         <?php echo $sf_content ?>
       <hr>
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>&copy; UDC 2012 </p>
           <br><br>
       </footer>
     </div> <!-- /container -->

@@ -62,9 +62,9 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	protected $club_representado;
 
 	/**
-	 * @var        Ranking
+	 * @var        Persona
 	 */
-	protected $aRanking;
+	protected $aPersona;
 
 	/**
 	 * @var        TorneoCategoria
@@ -75,6 +75,11 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	 * @var        Club
 	 */
 	protected $aClub;
+
+	/**
+	 * @var        array Ranking[] Collection to store aggregation of Ranking objects.
+	 */
+	protected $collRankings;
 
 	/**
 	 * @var        array ResultadoTorneo[] Collection to store aggregation of ResultadoTorneo objects.
@@ -94,6 +99,12 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $rankingsScheduledForDeletion = null;
 
 	/**
 	 * An array of objects scheduled for deletion.
@@ -209,8 +220,8 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			$this->modifiedColumns[] = InscriptoPeer::PERSONA_NRO_DOC;
 		}
 
-		if ($this->aRanking !== null && $this->aRanking->getPelotariNroDoc() !== $v) {
-			$this->aRanking = null;
+		if ($this->aPersona !== null && $this->aPersona->getNroDoc() !== $v) {
+			$this->aPersona = null;
 		}
 
 		return $this;
@@ -356,8 +367,8 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	public function ensureConsistency()
 	{
 
-		if ($this->aRanking !== null && $this->persona_nro_doc !== $this->aRanking->getPelotariNroDoc()) {
-			$this->aRanking = null;
+		if ($this->aPersona !== null && $this->persona_nro_doc !== $this->aPersona->getNroDoc()) {
+			$this->aPersona = null;
 		}
 		if ($this->aTorneoCategoria !== null && $this->torneo_cat_id !== $this->aTorneoCategoria->getIdTorneoCategoria()) {
 			$this->aTorneoCategoria = null;
@@ -404,9 +415,11 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->aRanking = null;
+			$this->aPersona = null;
 			$this->aTorneoCategoria = null;
 			$this->aClub = null;
+			$this->collRankings = null;
+
 			$this->collResultadoTorneos = null;
 
 		} // if (deep)
@@ -556,11 +569,11 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aRanking !== null) {
-				if ($this->aRanking->isModified() || $this->aRanking->isNew()) {
-					$affectedRows += $this->aRanking->save($con);
+			if ($this->aPersona !== null) {
+				if ($this->aPersona->isModified() || $this->aPersona->isNew()) {
+					$affectedRows += $this->aPersona->save($con);
 				}
-				$this->setRanking($this->aRanking);
+				$this->setPersona($this->aPersona);
 			}
 
 			if ($this->aTorneoCategoria !== null) {
@@ -586,6 +599,23 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 				}
 				$affectedRows += 1;
 				$this->resetModified();
+			}
+
+			if ($this->rankingsScheduledForDeletion !== null) {
+				if (!$this->rankingsScheduledForDeletion->isEmpty()) {
+					RankingQuery::create()
+						->filterByPrimaryKeys($this->rankingsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->rankingsScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collRankings !== null) {
+				foreach ($this->collRankings as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
 			}
 
 			if ($this->resultadoTorneosScheduledForDeletion !== null) {
@@ -768,9 +798,9 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aRanking !== null) {
-				if (!$this->aRanking->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aRanking->getValidationFailures());
+			if ($this->aPersona !== null) {
+				if (!$this->aPersona->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aPersona->getValidationFailures());
 				}
 			}
 
@@ -791,6 +821,14 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
+
+				if ($this->collRankings !== null) {
+					foreach ($this->collRankings as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
 
 				if ($this->collResultadoTorneos !== null) {
 					foreach ($this->collResultadoTorneos as $referrerFK) {
@@ -884,14 +922,17 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			$keys[4] => $this->getClubRepresentado(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->aRanking) {
-				$result['Ranking'] = $this->aRanking->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			if (null !== $this->aPersona) {
+				$result['Persona'] = $this->aPersona->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aTorneoCategoria) {
 				$result['TorneoCategoria'] = $this->aTorneoCategoria->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aClub) {
 				$result['Club'] = $this->aClub->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collRankings) {
+				$result['Rankings'] = $this->collRankings->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 			if (null !== $this->collResultadoTorneos) {
 				$result['ResultadoTorneos'] = $this->collResultadoTorneos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1061,6 +1102,12 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			// store object hash to prevent cycle
 			$this->startCopy = true;
 
+			foreach ($this->getRankings() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addRanking($relObj->copy($deepCopy));
+				}
+			}
+
 			foreach ($this->getResultadoTorneos() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addResultadoTorneo($relObj->copy($deepCopy));
@@ -1116,24 +1163,24 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Declares an association between this object and a Ranking object.
+	 * Declares an association between this object and a Persona object.
 	 *
-	 * @param      Ranking $v
+	 * @param      Persona $v
 	 * @return     Inscripto The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setRanking(Ranking $v = null)
+	public function setPersona(Persona $v = null)
 	{
 		if ($v === null) {
 			$this->setPersonaNroDoc(NULL);
 		} else {
-			$this->setPersonaNroDoc($v->getPelotariNroDoc());
+			$this->setPersonaNroDoc($v->getNroDoc());
 		}
 
-		$this->aRanking = $v;
+		$this->aPersona = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Ranking object, it will not be re-added.
+		// If this object has already been added to the Persona object, it will not be re-added.
 		if ($v !== null) {
 			$v->addInscripto($this);
 		}
@@ -1143,27 +1190,25 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 
 
 	/**
-	 * Get the associated Ranking object
+	 * Get the associated Persona object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     Ranking The associated Ranking object.
+	 * @return     Persona The associated Persona object.
 	 * @throws     PropelException
 	 */
-	public function getRanking(PropelPDO $con = null)
+	public function getPersona(PropelPDO $con = null)
 	{
-		if ($this->aRanking === null && ($this->persona_nro_doc !== null)) {
-			$this->aRanking = RankingQuery::create()
-				->filterByInscripto($this) // here
-				->findOne($con);
+		if ($this->aPersona === null && ($this->persona_nro_doc !== null)) {
+			$this->aPersona = PersonaQuery::create()->findPk($this->persona_nro_doc, $con);
 			/* The following can be used additionally to
 				guarantee the related object contains a reference
 				to this object.  This level of coupling may, however, be
 				undesirable since it could result in an only partially populated collection
 				in the referenced object.
-				$this->aRanking->addInscriptos($this);
+				$this->aPersona->addInscriptos($this);
 			 */
 		}
-		return $this->aRanking;
+		return $this->aPersona;
 	}
 
 	/**
@@ -1275,9 +1320,185 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	 */
 	public function initRelation($relationName)
 	{
+		if ('Ranking' == $relationName) {
+			return $this->initRankings();
+		}
 		if ('ResultadoTorneo' == $relationName) {
 			return $this->initResultadoTorneos();
 		}
+	}
+
+	/**
+	 * Clears out the collRankings collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addRankings()
+	 */
+	public function clearRankings()
+	{
+		$this->collRankings = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collRankings collection.
+	 *
+	 * By default this just sets the collRankings collection to an empty array (like clearcollRankings());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
+	 * @return     void
+	 */
+	public function initRankings($overrideExisting = true)
+	{
+		if (null !== $this->collRankings && !$overrideExisting) {
+			return;
+		}
+		$this->collRankings = new PropelObjectCollection();
+		$this->collRankings->setModel('Ranking');
+	}
+
+	/**
+	 * Gets an array of Ranking objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this Inscripto is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array Ranking[] List of Ranking objects
+	 * @throws     PropelException
+	 */
+	public function getRankings($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collRankings || null !== $criteria) {
+			if ($this->isNew() && null === $this->collRankings) {
+				// return empty collection
+				$this->initRankings();
+			} else {
+				$collRankings = RankingQuery::create(null, $criteria)
+					->filterByInscripto($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collRankings;
+				}
+				$this->collRankings = $collRankings;
+			}
+		}
+		return $this->collRankings;
+	}
+
+	/**
+	 * Sets a collection of Ranking objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $rankings A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setRankings(PropelCollection $rankings, PropelPDO $con = null)
+	{
+		$this->rankingsScheduledForDeletion = $this->getRankings(new Criteria(), $con)->diff($rankings);
+
+		foreach ($rankings as $ranking) {
+			// Fix issue with collection modified by reference
+			if ($ranking->isNew()) {
+				$ranking->setInscripto($this);
+			}
+			$this->addRanking($ranking);
+		}
+
+		$this->collRankings = $rankings;
+	}
+
+	/**
+	 * Returns the number of related Ranking objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Ranking objects.
+	 * @throws     PropelException
+	 */
+	public function countRankings(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collRankings || null !== $criteria) {
+			if ($this->isNew() && null === $this->collRankings) {
+				return 0;
+			} else {
+				$query = RankingQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByInscripto($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collRankings);
+		}
+	}
+
+	/**
+	 * Method called to associate a Ranking object to this object
+	 * through the Ranking foreign key attribute.
+	 *
+	 * @param      Ranking $l Ranking
+	 * @return     Inscripto The current object (for fluent API support)
+	 */
+	public function addRanking(Ranking $l)
+	{
+		if ($this->collRankings === null) {
+			$this->initRankings();
+		}
+		if (!$this->collRankings->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddRanking($l);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Ranking $ranking The ranking object to add.
+	 */
+	protected function doAddRanking($ranking)
+	{
+		$this->collRankings[]= $ranking;
+		$ranking->setInscripto($this);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Inscripto is new, it will return
+	 * an empty collection; or if this Inscripto has previously
+	 * been saved, it will retrieve related Rankings from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Inscripto.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Ranking[] List of Ranking objects
+	 */
+	public function getRankingsJoinCategoria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = RankingQuery::create(null, $criteria);
+		$query->joinWith('Categoria', $join_behavior);
+
+		return $this->getRankings($query, $con);
 	}
 
 	/**
@@ -1509,6 +1730,11 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
+			if ($this->collRankings) {
+				foreach ($this->collRankings as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collResultadoTorneos) {
 				foreach ($this->collResultadoTorneos as $o) {
 					$o->clearAllReferences($deep);
@@ -1516,11 +1742,15 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			}
 		} // if ($deep)
 
+		if ($this->collRankings instanceof PropelCollection) {
+			$this->collRankings->clearIterator();
+		}
+		$this->collRankings = null;
 		if ($this->collResultadoTorneos instanceof PropelCollection) {
 			$this->collResultadoTorneos->clearIterator();
 		}
 		$this->collResultadoTorneos = null;
-		$this->aRanking = null;
+		$this->aPersona = null;
 		$this->aTorneoCategoria = null;
 		$this->aClub = null;
 	}

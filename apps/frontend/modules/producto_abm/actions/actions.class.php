@@ -67,7 +67,7 @@ class producto_abmActions extends sfActions
     {
       $Producto = $form->save();
 
-      $this->redirect('producto_abm/edit?id='.$Producto->getId());
+      $this->redirect('producto_abm/index');
     }
   }
 }

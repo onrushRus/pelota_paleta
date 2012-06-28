@@ -373,6 +373,18 @@ abstract class BasePersonaPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
+		// Invalidate objects in DireccionPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		DireccionPeer::clearInstancePool();
+		// Invalidate objects in InscriptoPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		InscriptoPeer::clearInstancePool();
+		// Invalidate objects in SocioPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		SocioPeer::clearInstancePool();
+		// Invalidate objects in TelefonoPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		TelefonoPeer::clearInstancePool();
 	}
 
 	/**
@@ -852,6 +864,7 @@ abstract class BasePersonaPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += PersonaPeer::doOnDeleteCascade(new Criteria(PersonaPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(PersonaPeer::TABLE_NAME, $con, PersonaPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -884,24 +897,14 @@ abstract class BasePersonaPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			PersonaPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
 		} elseif ($values instanceof Persona) { // it's a model object
-			// invalidate the cache for this single object
-			PersonaPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(PersonaPeer::NRO_DOC, (array) $values, Criteria::IN);
-			// invalidate the cache for this object(s)
-			foreach ((array) $values as $singleval) {
-				PersonaPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -914,6 +917,23 @@ abstract class BasePersonaPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += PersonaPeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				PersonaPeer::clearInstancePool();
+			} elseif ($values instanceof Persona) { // it's a model object
+				PersonaPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					PersonaPeer::removeInstanceFromPool($singleval);
+				}
+			}
+			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
 			PersonaPeer::clearRelatedInstancePool();
 			$con->commit();
@@ -922,6 +942,56 @@ abstract class BasePersonaPeer {
 			$con->rollBack();
 			throw $e;
 		}
+	}
+
+	/**
+	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 */
+	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	{
+		// initialize var to track total num of affected rows
+		$affectedRows = 0;
+
+		// first find the objects that are implicated by the $criteria
+		$objects = PersonaPeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+
+			// delete related Direccion objects
+			$criteria = new Criteria(DireccionPeer::DATABASE_NAME);
+			
+			$criteria->add(DireccionPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
+			$affectedRows += DireccionPeer::doDelete($criteria, $con);
+
+			// delete related Inscripto objects
+			$criteria = new Criteria(InscriptoPeer::DATABASE_NAME);
+			
+			$criteria->add(InscriptoPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
+			$affectedRows += InscriptoPeer::doDelete($criteria, $con);
+
+			// delete related Socio objects
+			$criteria = new Criteria(SocioPeer::DATABASE_NAME);
+			
+			$criteria->add(SocioPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
+			$affectedRows += SocioPeer::doDelete($criteria, $con);
+
+			// delete related Telefono objects
+			$criteria = new Criteria(TelefonoPeer::DATABASE_NAME);
+			
+			$criteria->add(TelefonoPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
+			$affectedRows += TelefonoPeer::doDelete($criteria, $con);
+		}
+		return $affectedRows;
 	}
 
 	/**

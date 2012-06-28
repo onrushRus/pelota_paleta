@@ -49,12 +49,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	protected $cantidad;
 
 	/**
-	 * The value for the id field.
-	 * @var        int
-	 */
-	protected $id;
-
-	/**
 	 * @var        EncabezadoPedido
 	 */
 	protected $aEncabezadoPedido;
@@ -106,16 +100,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	public function getCantidad()
 	{
 		return $this->cantidad;
-	}
-
-	/**
-	 * Get the [id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getId()
-	{
-		return $this->id;
 	}
 
 	/**
@@ -187,26 +171,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	} // setCantidad()
 
 	/**
-	 * Set the value of [id] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     CuerpoPedido The current object (for fluent API support)
-	 */
-	public function setId($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->id !== $v) {
-			$this->id = $v;
-			$this->modifiedColumns[] = CuerpoPedidoPeer::ID;
-		}
-
-		return $this;
-	} // setId()
-
-	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -241,7 +205,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 			$this->encabezado_pedido_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->producto_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->cantidad = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -250,7 +213,7 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 4; // 4 = CuerpoPedidoPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 3; // 3 = CuerpoPedidoPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating CuerpoPedido object", $e);
@@ -511,10 +474,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 		$modifiedColumns = array();
 		$index = 0;
 
-		$this->modifiedColumns[] = CuerpoPedidoPeer::ID;
-		if (null !== $this->id) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key (' . CuerpoPedidoPeer::ID . ')');
-		}
 
 		 // check the columns in natural order for more readable SQL queries
 		if ($this->isColumnModified(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID)) {
@@ -525,9 +484,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 		}
 		if ($this->isColumnModified(CuerpoPedidoPeer::CANTIDAD)) {
 			$modifiedColumns[':p' . $index++]  = '`CANTIDAD`';
-		}
-		if ($this->isColumnModified(CuerpoPedidoPeer::ID)) {
-			$modifiedColumns[':p' . $index++]  = '`ID`';
 		}
 
 		$sql = sprintf(
@@ -549,9 +505,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 					case '`CANTIDAD`':
 						$stmt->bindValue($identifier, $this->cantidad, PDO::PARAM_INT);
 						break;
-					case '`ID`':
-						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-						break;
 				}
 			}
 			$stmt->execute();
@@ -559,13 +512,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 			Propel::log($e->getMessage(), Propel::LOG_ERR);
 			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
 		}
-
-		try {
-			$pk = $con->lastInsertId();
-		} catch (Exception $e) {
-			throw new PropelException('Unable to get autoincrement id.', $e);
-		}
-		$this->setId($pk);
 
 		$this->setNew(false);
 	}
@@ -709,9 +655,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 			case 2:
 				return $this->getCantidad();
 				break;
-			case 3:
-				return $this->getId();
-				break;
 			default:
 				return null;
 				break;
@@ -735,16 +678,15 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
-		if (isset($alreadyDumpedObjects['CuerpoPedido'][$this->getPrimaryKey()])) {
+		if (isset($alreadyDumpedObjects['CuerpoPedido'][serialize($this->getPrimaryKey())])) {
 			return '*RECURSION*';
 		}
-		$alreadyDumpedObjects['CuerpoPedido'][$this->getPrimaryKey()] = true;
+		$alreadyDumpedObjects['CuerpoPedido'][serialize($this->getPrimaryKey())] = true;
 		$keys = CuerpoPedidoPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getEncabezadoPedidoId(),
 			$keys[1] => $this->getProductoId(),
 			$keys[2] => $this->getCantidad(),
-			$keys[3] => $this->getId(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aEncabezadoPedido) {
@@ -793,9 +735,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 			case 2:
 				$this->setCantidad($value);
 				break;
-			case 3:
-				$this->setId($value);
-				break;
 		} // switch()
 	}
 
@@ -823,7 +762,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setEncabezadoPedidoId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setProductoId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setCantidad($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setId($arr[$keys[3]]);
 	}
 
 	/**
@@ -838,7 +776,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 		if ($this->isColumnModified(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID)) $criteria->add(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $this->encabezado_pedido_id);
 		if ($this->isColumnModified(CuerpoPedidoPeer::PRODUCTO_ID)) $criteria->add(CuerpoPedidoPeer::PRODUCTO_ID, $this->producto_id);
 		if ($this->isColumnModified(CuerpoPedidoPeer::CANTIDAD)) $criteria->add(CuerpoPedidoPeer::CANTIDAD, $this->cantidad);
-		if ($this->isColumnModified(CuerpoPedidoPeer::ID)) $criteria->add(CuerpoPedidoPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -854,29 +791,36 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(CuerpoPedidoPeer::DATABASE_NAME);
-		$criteria->add(CuerpoPedidoPeer::ID, $this->id);
+		$criteria->add(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $this->encabezado_pedido_id);
+		$criteria->add(CuerpoPedidoPeer::PRODUCTO_ID, $this->producto_id);
 
 		return $criteria;
 	}
 
 	/**
-	 * Returns the primary key for this object (row).
-	 * @return     int
+	 * Returns the composite primary key for this object.
+	 * The array elements will be in same order as specified in XML.
+	 * @return     array
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getId();
+		$pks = array();
+		$pks[0] = $this->getEncabezadoPedidoId();
+		$pks[1] = $this->getProductoId();
+
+		return $pks;
 	}
 
 	/**
-	 * Generic method to set the primary key (id column).
+	 * Set the [composite] primary key.
 	 *
-	 * @param      int $key Primary key.
+	 * @param      array $keys The elements of the composite key (order must match the order in XML file).
 	 * @return     void
 	 */
-	public function setPrimaryKey($key)
+	public function setPrimaryKey($keys)
 	{
-		$this->setId($key);
+		$this->setEncabezadoPedidoId($keys[0]);
+		$this->setProductoId($keys[1]);
 	}
 
 	/**
@@ -885,7 +829,7 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 	 */
 	public function isPrimaryKeyNull()
 	{
-		return null === $this->getId();
+		return (null === $this->getEncabezadoPedidoId()) && (null === $this->getProductoId());
 	}
 
 	/**
@@ -918,7 +862,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 
 		if ($makeNew) {
 			$copyObj->setNew(true);
-			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
 		}
 	}
 
@@ -1066,7 +1009,6 @@ abstract class BaseCuerpoPedido extends BaseObject  implements Persistent
 		$this->encabezado_pedido_id = null;
 		$this->producto_id = null;
 		$this->cantidad = null;
-		$this->id = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

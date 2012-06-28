@@ -21,7 +21,7 @@ abstract class BaseRankingForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'pelotari_nro_doc' => new sfValidatorChoice(array('choices' => array($this->getObject()->getPelotariNroDoc()), 'empty_value' => $this->getObject()->getPelotariNroDoc(), 'required' => false)),
+      'pelotari_nro_doc' => new sfValidatorPropelChoice(array('model' => 'Inscripto', 'column' => 'persona_nro_doc', 'required' => false)),
       'tipo_ranking'     => new sfValidatorChoice(array('choices' => array($this->getObject()->getTipoRanking()), 'empty_value' => $this->getObject()->getTipoRanking(), 'required' => false)),
       'categoria_id'     => new sfValidatorPropelChoice(array('model' => 'Categoria', 'column' => 'id', 'required' => false)),
       'pelotari_puntos'  => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),

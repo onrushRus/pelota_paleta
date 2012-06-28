@@ -1013,10 +1013,10 @@ abstract class BaseClub extends BaseObject  implements Persistent
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
 	 * @return     PropelCollection|array Inscripto[] List of Inscripto objects
 	 */
-	public function getInscriptosJoinRanking($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getInscriptosJoinPersona($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$query = InscriptoQuery::create(null, $criteria);
-		$query->joinWith('Ranking', $join_behavior);
+		$query->joinWith('Persona', $join_behavior);
 
 		return $this->getInscriptos($query, $con);
 	}

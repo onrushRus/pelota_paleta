@@ -854,7 +854,7 @@ abstract class BaseLocalidadPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += LocalidadPeer::doOnDeleteCascade(new Criteria(LocalidadPeer::DATABASE_NAME), $con);
+			LocalidadPeer::doOnDeleteSetNull(new Criteria(LocalidadPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(LocalidadPeer::TABLE_NAME, $con, LocalidadPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -909,7 +909,7 @@ abstract class BaseLocalidadPeer {
 			
 			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
 			$c = clone $criteria;
-			$affectedRows += LocalidadPeer::doOnDeleteCascade($c, $con);
+			LocalidadPeer::doOnDeleteSetNull($c, $con);
 			
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -935,7 +935,7 @@ abstract class BaseLocalidadPeer {
 	}
 
 	/**
-	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * This is a method for emulating ON DELETE SET NULL DBs that don't support this
 	 * feature (like MySQL or SQLite).
 	 *
 	 * This method is not very speedy because it must perform a query first to get
@@ -945,25 +945,24 @@ abstract class BaseLocalidadPeer {
 	 *
 	 * @param      Criteria $criteria
 	 * @param      PropelPDO $con
-	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 * @return     void
 	 */
-	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	protected static function doOnDeleteSetNull(Criteria $criteria, PropelPDO $con)
 	{
-		// initialize var to track total num of affected rows
-		$affectedRows = 0;
 
 		// first find the objects that are implicated by the $criteria
 		$objects = LocalidadPeer::doSelect($criteria, $con);
 		foreach ($objects as $obj) {
 
+			// set fkey col in related Persona rows to NULL
+			$selectCriteria = new Criteria(LocalidadPeer::DATABASE_NAME);
+			$updateValues = new Criteria(LocalidadPeer::DATABASE_NAME);
+			$selectCriteria->add(PersonaPeer::LOCALIDAD_ID, $obj->getId());
+			$updateValues->add(PersonaPeer::LOCALIDAD_ID, null);
 
-			// delete related Persona objects
-			$criteria = new Criteria(PersonaPeer::DATABASE_NAME);
-			
-			$criteria->add(PersonaPeer::LOCALIDAD_ID, $obj->getId());
-			$affectedRows += PersonaPeer::doDelete($criteria, $con);
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+
 		}
-		return $affectedRows;
 	}
 
 	/**

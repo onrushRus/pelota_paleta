@@ -67,7 +67,7 @@ class persona_abmActions extends sfActions
     {
       $Persona = $form->save();
 
-      $this->redirect('persona_abm/edit?nro_doc='.$Persona->getNroDoc());
+      $this->redirect('persona_abm/index');
     }
   }
 }

@@ -467,7 +467,7 @@ abstract class BaseInscriptoPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Ranking table
+	 * Returns the number of rows matching criteria, joining the related Persona table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -475,7 +475,7 @@ abstract class BaseInscriptoPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinRanking(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinPersona(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -502,7 +502,7 @@ abstract class BaseInscriptoPeer {
 			$con = Propel::getConnection(InscriptoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -635,7 +635,7 @@ abstract class BaseInscriptoPeer {
 
 
 	/**
-	 * Selects a collection of Inscripto objects pre-filled with their Ranking objects.
+	 * Selects a collection of Inscripto objects pre-filled with their Persona objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -643,7 +643,7 @@ abstract class BaseInscriptoPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinRanking(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinPersona(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -654,9 +654,9 @@ abstract class BaseInscriptoPeer {
 
 		InscriptoPeer::addSelectColumns($criteria);
 		$startcol = InscriptoPeer::NUM_HYDRATE_COLUMNS;
-		RankingPeer::addSelectColumns($criteria);
+		PersonaPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -682,19 +682,19 @@ abstract class BaseInscriptoPeer {
 				InscriptoPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = RankingPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = PersonaPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = RankingPeer::getInstanceFromPool($key2);
+				$obj2 = PersonaPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = RankingPeer::getOMClass();
+					$cls = PersonaPeer::getOMClass();
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					RankingPeer::addInstanceToPool($obj2, $key2);
+					PersonaPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (Inscripto) to $obj2 (Ranking)
+				// Add the $obj1 (Inscripto) to $obj2 (Persona)
 				$obj2->addInscripto($obj1);
 
 			} // if joined row was not null
@@ -886,7 +886,7 @@ abstract class BaseInscriptoPeer {
 			$con = Propel::getConnection(InscriptoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::TORNEO_CAT_ID, TorneoCategoriaPeer::ID_TORNEO_CATEGORIA, $join_behavior);
 
@@ -931,8 +931,8 @@ abstract class BaseInscriptoPeer {
 		InscriptoPeer::addSelectColumns($criteria);
 		$startcol2 = InscriptoPeer::NUM_HYDRATE_COLUMNS;
 
-		RankingPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + RankingPeer::NUM_HYDRATE_COLUMNS;
+		PersonaPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + PersonaPeer::NUM_HYDRATE_COLUMNS;
 
 		TorneoCategoriaPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + TorneoCategoriaPeer::NUM_HYDRATE_COLUMNS;
@@ -940,7 +940,7 @@ abstract class BaseInscriptoPeer {
 		ClubPeer::addSelectColumns($criteria);
 		$startcol5 = $startcol4 + ClubPeer::NUM_HYDRATE_COLUMNS;
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::TORNEO_CAT_ID, TorneoCategoriaPeer::ID_TORNEO_CATEGORIA, $join_behavior);
 
@@ -969,21 +969,21 @@ abstract class BaseInscriptoPeer {
 				InscriptoPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined Ranking rows
+			// Add objects for joined Persona rows
 
-			$key2 = RankingPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = PersonaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = RankingPeer::getInstanceFromPool($key2);
+				$obj2 = PersonaPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = RankingPeer::getOMClass();
+					$cls = PersonaPeer::getOMClass();
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					RankingPeer::addInstanceToPool($obj2, $key2);
+					PersonaPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Inscripto) to the collection in $obj2 (Ranking)
+				// Add the $obj1 (Inscripto) to the collection in $obj2 (Persona)
 				$obj2->addInscripto($obj1);
 			} // if joined row not null
 
@@ -1031,7 +1031,7 @@ abstract class BaseInscriptoPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Ranking table
+	 * Returns the number of rows matching criteria, joining the related Persona table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1039,7 +1039,7 @@ abstract class BaseInscriptoPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptRanking(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptPersona(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1124,7 +1124,7 @@ abstract class BaseInscriptoPeer {
 			$con = Propel::getConnection(InscriptoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::CLUB_REPRESENTADO, ClubPeer::ID, $join_behavior);
 
@@ -1182,7 +1182,7 @@ abstract class BaseInscriptoPeer {
 			$con = Propel::getConnection(InscriptoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::TORNEO_CAT_ID, TorneoCategoriaPeer::ID_TORNEO_CATEGORIA, $join_behavior);
 
@@ -1205,7 +1205,7 @@ abstract class BaseInscriptoPeer {
 
 
 	/**
-	 * Selects a collection of Inscripto objects pre-filled with all related objects except Ranking.
+	 * Selects a collection of Inscripto objects pre-filled with all related objects except Persona.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1214,7 +1214,7 @@ abstract class BaseInscriptoPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptRanking(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptPersona(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1331,13 +1331,13 @@ abstract class BaseInscriptoPeer {
 		InscriptoPeer::addSelectColumns($criteria);
 		$startcol2 = InscriptoPeer::NUM_HYDRATE_COLUMNS;
 
-		RankingPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + RankingPeer::NUM_HYDRATE_COLUMNS;
+		PersonaPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + PersonaPeer::NUM_HYDRATE_COLUMNS;
 
 		ClubPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + ClubPeer::NUM_HYDRATE_COLUMNS;
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::CLUB_REPRESENTADO, ClubPeer::ID, $join_behavior);
 
@@ -1365,21 +1365,21 @@ abstract class BaseInscriptoPeer {
 				InscriptoPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined Ranking rows
+				// Add objects for joined Persona rows
 
-				$key2 = RankingPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = PersonaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = RankingPeer::getInstanceFromPool($key2);
+					$obj2 = PersonaPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = RankingPeer::getOMClass();
+						$cls = PersonaPeer::getOMClass();
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					RankingPeer::addInstanceToPool($obj2, $key2);
+					PersonaPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (Inscripto) to the collection in $obj2 (Ranking)
+				// Add the $obj1 (Inscripto) to the collection in $obj2 (Persona)
 				$obj2->addInscripto($obj1);
 
 			} // if joined row is not null
@@ -1434,13 +1434,13 @@ abstract class BaseInscriptoPeer {
 		InscriptoPeer::addSelectColumns($criteria);
 		$startcol2 = InscriptoPeer::NUM_HYDRATE_COLUMNS;
 
-		RankingPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + RankingPeer::NUM_HYDRATE_COLUMNS;
+		PersonaPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + PersonaPeer::NUM_HYDRATE_COLUMNS;
 
 		TorneoCategoriaPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + TorneoCategoriaPeer::NUM_HYDRATE_COLUMNS;
 
-		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, RankingPeer::PELOTARI_NRO_DOC, $join_behavior);
+		$criteria->addJoin(InscriptoPeer::PERSONA_NRO_DOC, PersonaPeer::NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(InscriptoPeer::TORNEO_CAT_ID, TorneoCategoriaPeer::ID_TORNEO_CATEGORIA, $join_behavior);
 
@@ -1468,21 +1468,21 @@ abstract class BaseInscriptoPeer {
 				InscriptoPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined Ranking rows
+				// Add objects for joined Persona rows
 
-				$key2 = RankingPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = PersonaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = RankingPeer::getInstanceFromPool($key2);
+					$obj2 = PersonaPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = RankingPeer::getOMClass();
+						$cls = PersonaPeer::getOMClass();
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					RankingPeer::addInstanceToPool($obj2, $key2);
+					PersonaPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (Inscripto) to the collection in $obj2 (Ranking)
+				// Add the $obj1 (Inscripto) to the collection in $obj2 (Persona)
 				$obj2->addInscripto($obj1);
 
 			} // if joined row is not null

@@ -12,7 +12,8 @@
             </ul>
         </form>
     </fieldset>
-    
+
+<?php if((int)$sf_request->getParameter('codigo_producto') && count($Productos) > 0): ?>
     <fieldset><legend>Productos</legend>
         <form name="busqueda" method="POST" action="<?php echo url_for('ventas/ventas_realizadas'); ?>">
             <table class="table table-bordered">
@@ -46,5 +47,8 @@
             <input class="btn-inverse" type="submit" value="Vender"></input>
         </form>
     </fieldset>
-</fieldset>
+   </fieldset>
 <a href="<?php echo url_for('principal/index');?>">Home</a>
+<?php else:?>
+<div class="alert alert-info">No hay registros</div>
+<?php endif ?>

@@ -8,10 +8,14 @@
  *
  * @method     ProductoQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ProductoQuery orderByDescripcionProd($order = Criteria::ASC) Order by the descripcion_prod column
+ * @method     ProductoQuery orderByMarca($order = Criteria::ASC) Order by the marca column
+ * @method     ProductoQuery orderByPresentacion($order = Criteria::ASC) Order by the presentacion column
  * @method     ProductoQuery orderByPrecio($order = Criteria::ASC) Order by the precio column
  *
  * @method     ProductoQuery groupById() Group by the id column
  * @method     ProductoQuery groupByDescripcionProd() Group by the descripcion_prod column
+ * @method     ProductoQuery groupByMarca() Group by the marca column
+ * @method     ProductoQuery groupByPresentacion() Group by the presentacion column
  * @method     ProductoQuery groupByPrecio() Group by the precio column
  *
  * @method     ProductoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -31,10 +35,14 @@
  *
  * @method     Producto findOneById(int $id) Return the first Producto filtered by the id column
  * @method     Producto findOneByDescripcionProd(string $descripcion_prod) Return the first Producto filtered by the descripcion_prod column
+ * @method     Producto findOneByMarca(string $marca) Return the first Producto filtered by the marca column
+ * @method     Producto findOneByPresentacion(string $presentacion) Return the first Producto filtered by the presentacion column
  * @method     Producto findOneByPrecio(string $precio) Return the first Producto filtered by the precio column
  *
  * @method     array findById(int $id) Return Producto objects filtered by the id column
  * @method     array findByDescripcionProd(string $descripcion_prod) Return Producto objects filtered by the descripcion_prod column
+ * @method     array findByMarca(string $marca) Return Producto objects filtered by the marca column
+ * @method     array findByPresentacion(string $presentacion) Return Producto objects filtered by the presentacion column
  * @method     array findByPrecio(string $precio) Return Producto objects filtered by the precio column
  *
  * @package    propel.generator.lib.model.om
@@ -124,7 +132,7 @@ abstract class BaseProductoQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `DESCRIPCION_PROD`, `PRECIO` FROM `producto` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `DESCRIPCION_PROD`, `MARCA`, `PRESENTACION`, `PRECIO` FROM `producto` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -261,6 +269,62 @@ abstract class BaseProductoQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(ProductoPeer::DESCRIPCION_PROD, $descripcionProd, $comparison);
+	}
+
+	/**
+	 * Filter the query on the marca column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByMarca('fooValue');   // WHERE marca = 'fooValue'
+	 * $query->filterByMarca('%fooValue%'); // WHERE marca LIKE '%fooValue%'
+	 * </code>
+	 *
+	 * @param     string $marca The value to use as filter.
+	 *              Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ProductoQuery The current query, for fluid interface
+	 */
+	public function filterByMarca($marca = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($marca)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $marca)) {
+				$marca = str_replace('*', '%', $marca);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(ProductoPeer::MARCA, $marca, $comparison);
+	}
+
+	/**
+	 * Filter the query on the presentacion column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByPresentacion('fooValue');   // WHERE presentacion = 'fooValue'
+	 * $query->filterByPresentacion('%fooValue%'); // WHERE presentacion LIKE '%fooValue%'
+	 * </code>
+	 *
+	 * @param     string $presentacion The value to use as filter.
+	 *              Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ProductoQuery The current query, for fluid interface
+	 */
+	public function filterByPresentacion($presentacion = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($presentacion)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $presentacion)) {
+				$presentacion = str_replace('*', '%', $presentacion);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(ProductoPeer::PRESENTACION, $presentacion, $comparison);
 	}
 
 	/**

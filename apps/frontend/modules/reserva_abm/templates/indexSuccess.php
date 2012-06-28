@@ -29,4 +29,4 @@
   </tbody>
 </table>
 
-  <a class="btn btn-info" href="<?php echo url_for('reserva_abm/new') ?>">Nuevo</a>
+  <a class="btn btn-info" href="<?php echo url_for('reserva_abm/new') ?>">Nueva Reserva</a>

@@ -53,8 +53,8 @@ class ReservaTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Socio', 'Socio', RelationMap::MANY_TO_ONE, array('socio_nro_doc' => 'persona_nro_doc', ), null, null);
-		$this->addRelation('TipoReserva', 'TipoReserva', RelationMap::MANY_TO_ONE, array('tipo_reserva_id' => 'id', ), null, null);
+		$this->addRelation('Socio', 'Socio', RelationMap::MANY_TO_ONE, array('socio_nro_doc' => 'persona_nro_doc', ), 'CASCADE', 'CASCADE');
+		$this->addRelation('TipoReserva', 'TipoReserva', RelationMap::MANY_TO_ONE, array('tipo_reserva_id' => 'id', ), 'CASCADE', 'CASCADE');
 	} // buildRelations()
 
 	/**

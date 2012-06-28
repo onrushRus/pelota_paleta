@@ -368,6 +368,9 @@ abstract class BaseSocioPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
+		// Invalidate objects in ReservaPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		ReservaPeer::clearInstancePool();
 	}
 
 	/**
@@ -848,6 +851,7 @@ abstract class BaseSocioPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += SocioPeer::doOnDeleteCascade(new Criteria(SocioPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(SocioPeer::TABLE_NAME, $con, SocioPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -880,24 +884,14 @@ abstract class BaseSocioPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			SocioPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
 		} elseif ($values instanceof Socio) { // it's a model object
-			// invalidate the cache for this single object
-			SocioPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(SocioPeer::PERSONA_NRO_DOC, (array) $values, Criteria::IN);
-			// invalidate the cache for this object(s)
-			foreach ((array) $values as $singleval) {
-				SocioPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -910,6 +904,23 @@ abstract class BaseSocioPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += SocioPeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				SocioPeer::clearInstancePool();
+			} elseif ($values instanceof Socio) { // it's a model object
+				SocioPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					SocioPeer::removeInstanceFromPool($singleval);
+				}
+			}
+			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
 			SocioPeer::clearRelatedInstancePool();
 			$con->commit();
@@ -918,6 +929,38 @@ abstract class BaseSocioPeer {
 			$con->rollBack();
 			throw $e;
 		}
+	}
+
+	/**
+	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 */
+	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	{
+		// initialize var to track total num of affected rows
+		$affectedRows = 0;
+
+		// first find the objects that are implicated by the $criteria
+		$objects = SocioPeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+
+			// delete related Reserva objects
+			$criteria = new Criteria(ReservaPeer::DATABASE_NAME);
+			
+			$criteria->add(ReservaPeer::SOCIO_NRO_DOC, $obj->getPersonaNroDoc());
+			$affectedRows += ReservaPeer::doDelete($criteria, $con);
+		}
+		return $affectedRows;
 	}
 
 	/**

@@ -21,5 +21,9 @@ class ReservaForm extends BaseReservaForm
 	  
 	  $this->validatorSchema['dia_comienzo_reserva']= new sfValidatorDate(array('required' => false));
 	  $this->validatorSchema['hora_comienzo_reserva']= new sfValidatorTime(array('required' => false));
+          
+          $this->validatorSchema['socio_nro_doc']->setMessage("invalid", "Falta el dni socio");
+        //  $this->validatorSchema['socio_nro_doc']->setOption("min_length", 6);
+          
   }
 }

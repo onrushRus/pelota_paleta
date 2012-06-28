@@ -39,7 +39,7 @@ class SocioTableMap extends TableMap
 		$this->setUseIdGenerator(false);
 		// columns
 		$this->addForeignPrimaryKey('PERSONA_NRO_DOC', 'PersonaNroDoc', 'INTEGER' , 'persona', 'NRO_DOC', true, 10, 0);
-		$this->addColumn('FECHA_ALTA', 'FechaAlta', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
+		$this->addColumn('FECHA_ALTA', 'FechaAlta', 'DATE', true, null, null);
 		$this->addColumn('VITALICIO', 'Vitalicio', 'BOOLEAN', true, 1, false);
 		$this->addColumn('ACTIVO', 'Activo', 'BOOLEAN', true, 1, false);
 		// validators
@@ -50,8 +50,8 @@ class SocioTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), null, null);
-		$this->addRelation('Reserva', 'Reserva', RelationMap::ONE_TO_MANY, array('persona_nro_doc' => 'socio_nro_doc', ), null, null, 'Reservas');
+		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), 'CASCADE', 'CASCADE');
+		$this->addRelation('Reserva', 'Reserva', RelationMap::ONE_TO_MANY, array('persona_nro_doc' => 'socio_nro_doc', ), 'CASCADE', 'CASCADE', 'Reservas');
 	} // buildRelations()
 
 	/**

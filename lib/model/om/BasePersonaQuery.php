@@ -30,6 +30,10 @@
  * @method     PersonaQuery rightJoinDireccion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Direccion relation
  * @method     PersonaQuery innerJoinDireccion($relationAlias = null) Adds a INNER JOIN clause to the query using the Direccion relation
  *
+ * @method     PersonaQuery leftJoinInscripto($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inscripto relation
+ * @method     PersonaQuery rightJoinInscripto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inscripto relation
+ * @method     PersonaQuery innerJoinInscripto($relationAlias = null) Adds a INNER JOIN clause to the query using the Inscripto relation
+ *
  * @method     PersonaQuery leftJoinSocio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Socio relation
  * @method     PersonaQuery rightJoinSocio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Socio relation
  * @method     PersonaQuery innerJoinSocio($relationAlias = null) Adds a INNER JOIN clause to the query using the Socio relation
@@ -423,7 +427,7 @@ abstract class BasePersonaQuery extends ModelCriteria
 	 *
 	 * @return    PersonaQuery The current query, for fluid interface
 	 */
-	public function joinLocalidad($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function joinLocalidad($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Localidad');
@@ -458,7 +462,7 @@ abstract class BasePersonaQuery extends ModelCriteria
 	 *
 	 * @return    LocalidadQuery A secondary query class using the current class as primary query
 	 */
-	public function useLocalidadQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function useLocalidadQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		return $this
 			->joinLocalidad($relationAlias, $joinType)
@@ -536,6 +540,79 @@ abstract class BasePersonaQuery extends ModelCriteria
 		return $this
 			->joinDireccion($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Direccion', 'DireccionQuery');
+	}
+
+	/**
+	 * Filter the query by a related Inscripto object
+	 *
+	 * @param     Inscripto $inscripto  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    PersonaQuery The current query, for fluid interface
+	 */
+	public function filterByInscripto($inscripto, $comparison = null)
+	{
+		if ($inscripto instanceof Inscripto) {
+			return $this
+				->addUsingAlias(PersonaPeer::NRO_DOC, $inscripto->getPersonaNroDoc(), $comparison);
+		} elseif ($inscripto instanceof PropelCollection) {
+			return $this
+				->useInscriptoQuery()
+				->filterByPrimaryKeys($inscripto->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByInscripto() only accepts arguments of type Inscripto or PropelCollection');
+		}
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the Inscripto relation
+	 *
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    PersonaQuery The current query, for fluid interface
+	 */
+	public function joinInscripto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('Inscripto');
+
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'Inscripto');
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Use the Inscripto relation Inscripto object
+	 *
+	 * @see       useQuery()
+	 *
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    InscriptoQuery A secondary query class using the current class as primary query
+	 */
+	public function useInscriptoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		return $this
+			->joinInscripto($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'Inscripto', 'InscriptoQuery');
 	}
 
 	/**

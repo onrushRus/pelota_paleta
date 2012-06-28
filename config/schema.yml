@@ -14,13 +14,13 @@ propel:
     nombre_club: { phpName: NombreClub, type: VARCHAR, size: '45', required: true }
   cuerpo_pedido:
     _attributes: { phpName: CuerpoPedido, idMethod: native }
-    encabezado_pedido_id: { phpName: EncabezadoPedidoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: encabezado_pedido, foreignReference: id }
-    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: producto, foreignReference: id }
+    encabezado_pedido_id: { phpName: EncabezadoPedidoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: encabezado_pedido, foreignReference: id }
+    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id }
     cantidad: { phpName: Cantidad, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
-    _indexes: { fk_CUERPO_PEDIDO_PRODUCTO1: [producto_id], fk_CUERPO_PEDIDO_ENCABEZADO_PEDIDO1: [encabezado_pedido_id] }
+    _indexes: { fk_CUERPO_PEDIDO_PRODUCTO1: [producto_id] }
   direccion:
     _attributes: { phpName: Direccion, idMethod: native }
-    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc, onDelete: CASCADE, onUpdate: CASCADE }
     calle: { phpName: Calle, type: VARCHAR, size: '45', primaryKey: true, required: true, defaultValue: 'Sin Nombre' }
     numero: { phpName: Numero, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0' }
     monoblock_edif: { phpName: MonoblockEdif, type: VARCHAR, size: '5', required: false, defaultValue: S/N }
@@ -35,10 +35,10 @@ propel:
   inscripto:
     _attributes: { phpName: Inscripto, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
-    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: ranking, foreignReference: pelotari_nro_doc }
-    torneo_cat_id: { phpName: TorneoCatId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: torneo_categoria, foreignReference: id_torneo_categoria }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: persona, foreignReference: nro_doc, onDelete: CASCADE, onUpdate: CASCADE }
+    torneo_cat_id: { phpName: TorneoCatId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: torneo_categoria, foreignReference: id_torneo_categoria, onDelete: CASCADE, onUpdate: CASCADE }
     nro_equipo: { phpName: NroEquipo, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '0' }
-    club_representado: { phpName: ClubRepresentado, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: club, foreignReference: id }
+    club_representado: { phpName: ClubRepresentado, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: club, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
     _indexes: { fk_inscripto_Club1: [club_representado], fk_inscripto_torneo_categoria1: [torneo_cat_id], fk_inscripto_persona1: [persona_nro_doc] }
     _uniques: { torneo_cat_id_UNIQUE: [torneo_cat_id, persona_nro_doc] }
   localidad:
@@ -54,12 +54,14 @@ propel:
     nom_apellido: { phpName: NomApellido, type: VARCHAR, size: '45', required: true }
     fecha_nacimiento: { phpName: FechaNacimiento, type: DATE, required: true }
     e_mail: { phpName: EMail, type: VARCHAR, size: '30', required: true }
-    localidad_id: { phpName: LocalidadId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: localidad, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    localidad_id: { phpName: LocalidadId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: localidad, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
     _indexes: { fk_PERS_LOCALIDAD: [localidad_id] }
   producto:
     _attributes: { phpName: Producto, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     descripcion_prod: { phpName: DescripcionProd, type: VARCHAR, size: '45', required: true }
+    marca: { phpName: Marca, type: VARCHAR, size: '45', required: true }
+    presentacion: { phpName: Presentacion, type: VARCHAR, size: '45', required: true }
     precio: { phpName: Precio, type: DECIMAL, size: '6', scale: '2', sqlType: 'decimal(6,2) unsigned', required: true }
   proveedor:
     _attributes: { phpName: Proveedor, idMethod: native }
@@ -80,15 +82,15 @@ propel:
     puntos_por_puesto: { phpName: PuntosPorPuesto, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
   ranking:
     _attributes: { phpName: Ranking, idMethod: native }
-    pelotari_nro_doc: { phpName: PelotariNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    pelotari_nro_doc: { phpName: PelotariNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: inscripto, foreignReference: persona_nro_doc }
     tipo_ranking: { phpName: TipoRanking, type: BOOLEAN, size: '1', primaryKey: true, required: true, defaultValue: false }
     categoria_id: { phpName: CategoriaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: categoria, foreignReference: id }
     pelotari_puntos: { phpName: PelotariPuntos, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
-    _indexes: { fk_ranking_categoria1: [categoria_id] }
+    _indexes: { fk_ranking_categoria1: [categoria_id], fk_ranking_inscripto1: [pelotari_nro_doc] }
   reserva:
     _attributes: { phpName: Reserva, idMethod: native }
-    socio_nro_doc: { phpName: SocioNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: socio, foreignReference: persona_nro_doc }
-    tipo_reserva_id: { phpName: TipoReservaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: tipo_reserva, foreignReference: id }
+    socio_nro_doc: { phpName: SocioNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: socio, foreignReference: persona_nro_doc, onDelete: CASCADE, onUpdate: CASCADE }
+    tipo_reserva_id: { phpName: TipoReservaId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: tipo_reserva, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     dia_comienzo_reserva: { phpName: DiaComienzoReserva, type: DATE, primaryKey: true, required: true, defaultValue: '0000-00-00' }
     hora_comienzo_reserva: { phpName: HoraComienzoReserva, type: TIME, primaryKey: true, required: true, defaultValue: '00:00:00' }
     dia_fin_reserva: { phpName: DiaFinReserva, type: DATE, required: false }
@@ -104,20 +106,20 @@ propel:
     _indexes: { fk_Resultado_torneo_inscripto1: [pelotari_nro_doc], fk_Resultado_torneo_torneo_categoria1: [torneo_cat_id], fk_Resultado_torneo_puntos_puesto1: [puesto_id] }
   socio:
     _attributes: { phpName: Socio, idMethod: native }
-    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: persona, foreignReference: nro_doc }
-    fecha_alta: { phpName: FechaAlta, type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0', foreignTable: persona, foreignReference: nro_doc, onDelete: CASCADE, onUpdate: CASCADE }
+    fecha_alta: { phpName: FechaAlta, type: DATE, required: true }
     vitalicio: { phpName: Vitalicio, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     activo: { phpName: Activo, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     _indexes: { fk_socio_persona: [persona_nro_doc] }
   stock:
     _attributes: { phpName: Stock, idMethod: native }
-    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id }
-    cantidad_actual: { phpName: CantidadActual, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
-    cantidad_minima: { phpName: CantidadMinima, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    producto_id: { phpName: ProductoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: producto, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    cantidad_actual: { phpName: CantidadActual, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '0' }
+    cantidad_minima: { phpName: CantidadMinima, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '0' }
     _indexes: { fk_STOCK_PRODUCTO1: [producto_id] }
   telefono:
     _attributes: { phpName: Telefono, idMethod: native }
-    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc }
+    persona_nro_doc: { phpName: PersonaNroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: persona, foreignReference: nro_doc, onDelete: CASCADE, onUpdate: CASCADE }
     telefono_nro: { phpName: TelefonoNro, type: VARCHAR, size: '20', primaryKey: true, required: true, defaultValue: S/N }
     _indexes: { fk_telefono_persona1: [persona_nro_doc] }
   tipo_reserva:

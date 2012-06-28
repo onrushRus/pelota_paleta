@@ -51,7 +51,7 @@ class TorneoCategoriaTableMap extends TableMap
 	{
 		$this->addRelation('Torneo', 'Torneo', RelationMap::MANY_TO_ONE, array('torneo_id' => 'id', ), null, null);
 		$this->addRelation('Categoria', 'Categoria', RelationMap::MANY_TO_ONE, array('categoria_id' => 'id', ), null, null);
-		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('id_torneo_categoria' => 'torneo_cat_id', ), null, null, 'Inscriptos');
+		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('id_torneo_categoria' => 'torneo_cat_id', ), 'CASCADE', 'CASCADE', 'Inscriptos');
 		$this->addRelation('ResultadoTorneo', 'ResultadoTorneo', RelationMap::ONE_TO_MANY, array('id_torneo_categoria' => 'torneo_cat_id', ), null, null, 'ResultadoTorneos');
 	} // buildRelations()
 

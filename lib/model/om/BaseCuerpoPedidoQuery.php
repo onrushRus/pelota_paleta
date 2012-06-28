@@ -9,12 +9,10 @@
  * @method     CuerpoPedidoQuery orderByEncabezadoPedidoId($order = Criteria::ASC) Order by the encabezado_pedido_id column
  * @method     CuerpoPedidoQuery orderByProductoId($order = Criteria::ASC) Order by the producto_id column
  * @method     CuerpoPedidoQuery orderByCantidad($order = Criteria::ASC) Order by the cantidad column
- * @method     CuerpoPedidoQuery orderById($order = Criteria::ASC) Order by the id column
  *
  * @method     CuerpoPedidoQuery groupByEncabezadoPedidoId() Group by the encabezado_pedido_id column
  * @method     CuerpoPedidoQuery groupByProductoId() Group by the producto_id column
  * @method     CuerpoPedidoQuery groupByCantidad() Group by the cantidad column
- * @method     CuerpoPedidoQuery groupById() Group by the id column
  *
  * @method     CuerpoPedidoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     CuerpoPedidoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,12 +32,10 @@
  * @method     CuerpoPedido findOneByEncabezadoPedidoId(int $encabezado_pedido_id) Return the first CuerpoPedido filtered by the encabezado_pedido_id column
  * @method     CuerpoPedido findOneByProductoId(int $producto_id) Return the first CuerpoPedido filtered by the producto_id column
  * @method     CuerpoPedido findOneByCantidad(int $cantidad) Return the first CuerpoPedido filtered by the cantidad column
- * @method     CuerpoPedido findOneById(int $id) Return the first CuerpoPedido filtered by the id column
  *
  * @method     array findByEncabezadoPedidoId(int $encabezado_pedido_id) Return CuerpoPedido objects filtered by the encabezado_pedido_id column
  * @method     array findByProductoId(int $producto_id) Return CuerpoPedido objects filtered by the producto_id column
  * @method     array findByCantidad(int $cantidad) Return CuerpoPedido objects filtered by the cantidad column
- * @method     array findById(int $id) Return CuerpoPedido objects filtered by the id column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -87,10 +83,10 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 * Go fast if the query is untouched.
 	 *
 	 * <code>
-	 * $obj  = $c->findPk(12, $con);
+	 * $obj = $c->findPk(array(12, 34), $con);
 	 * </code>
 	 *
-	 * @param     mixed $key Primary key to use for the query
+	 * @param     array[$encabezado_pedido_id, $producto_id] $key Primary key to use for the query
 	 * @param     PropelPDO $con an optional connection object
 	 *
 	 * @return    CuerpoPedido|array|mixed the result, formatted by the current formatter
@@ -100,7 +96,7 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 		if ($key === null) {
 			return null;
 		}
-		if ((null !== ($obj = CuerpoPedidoPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
+		if ((null !== ($obj = CuerpoPedidoPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
 			// the object is alredy in the instance pool
 			return $obj;
 		}
@@ -128,10 +124,11 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ENCABEZADO_PEDIDO_ID`, `PRODUCTO_ID`, `CANTIDAD`, `ID` FROM `cuerpo_pedido` WHERE `ID` = :p0';
+		$sql = 'SELECT `ENCABEZADO_PEDIDO_ID`, `PRODUCTO_ID`, `CANTIDAD` FROM `cuerpo_pedido` WHERE `ENCABEZADO_PEDIDO_ID` = :p0 AND `PRODUCTO_ID` = :p1';
 		try {
 			$stmt = $con->prepare($sql);
-			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+			$stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {
 			Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -141,7 +138,7 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$obj = new CuerpoPedido();
 			$obj->hydrate($row);
-			CuerpoPedidoPeer::addInstanceToPool($obj, (string) $key);
+			CuerpoPedidoPeer::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
 		}
 		$stmt->closeCursor();
 
@@ -169,7 +166,7 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	/**
 	 * Find objects by primary key
 	 * <code>
-	 * $objs = $c->findPks(array(12, 56, 832), $con);
+	 * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
 	 * </code>
 	 * @param     array $keys Primary keys to use for the query
 	 * @param     PropelPDO $con an optional connection object
@@ -198,7 +195,10 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 */
 	public function filterByPrimaryKey($key)
 	{
-		return $this->addUsingAlias(CuerpoPedidoPeer::ID, $key, Criteria::EQUAL);
+		$this->addUsingAlias(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $key[0], Criteria::EQUAL);
+		$this->addUsingAlias(CuerpoPedidoPeer::PRODUCTO_ID, $key[1], Criteria::EQUAL);
+
+		return $this;
 	}
 
 	/**
@@ -210,7 +210,17 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 */
 	public function filterByPrimaryKeys($keys)
 	{
-		return $this->addUsingAlias(CuerpoPedidoPeer::ID, $keys, Criteria::IN);
+		if (empty($keys)) {
+			return $this->add(null, '1<>1', Criteria::CUSTOM);
+		}
+		foreach ($keys as $key) {
+			$cton0 = $this->getNewCriterion(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $key[0], Criteria::EQUAL);
+			$cton1 = $this->getNewCriterion(CuerpoPedidoPeer::PRODUCTO_ID, $key[1], Criteria::EQUAL);
+			$cton0->addAnd($cton1);
+			$this->addOr($cton0);
+		}
+
+		return $this;
 	}
 
 	/**
@@ -235,22 +245,8 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 */
 	public function filterByEncabezadoPedidoId($encabezadoPedidoId = null, $comparison = null)
 	{
-		if (is_array($encabezadoPedidoId)) {
-			$useMinMax = false;
-			if (isset($encabezadoPedidoId['min'])) {
-				$this->addUsingAlias(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $encabezadoPedidoId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($encabezadoPedidoId['max'])) {
-				$this->addUsingAlias(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $encabezadoPedidoId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
+		if (is_array($encabezadoPedidoId) && null === $comparison) {
+			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $encabezadoPedidoId, $comparison);
 	}
@@ -277,22 +273,8 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	 */
 	public function filterByProductoId($productoId = null, $comparison = null)
 	{
-		if (is_array($productoId)) {
-			$useMinMax = false;
-			if (isset($productoId['min'])) {
-				$this->addUsingAlias(CuerpoPedidoPeer::PRODUCTO_ID, $productoId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($productoId['max'])) {
-				$this->addUsingAlias(CuerpoPedidoPeer::PRODUCTO_ID, $productoId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
+		if (is_array($productoId) && null === $comparison) {
+			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(CuerpoPedidoPeer::PRODUCTO_ID, $productoId, $comparison);
 	}
@@ -335,32 +317,6 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(CuerpoPedidoPeer::CANTIDAD, $cantidad, $comparison);
-	}
-
-	/**
-	 * Filter the query on the id column
-	 *
-	 * Example usage:
-	 * <code>
-	 * $query->filterById(1234); // WHERE id = 1234
-	 * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-	 * $query->filterById(array('min' => 12)); // WHERE id > 12
-	 * </code>
-	 *
-	 * @param     mixed $id The value to use as filter.
-	 *              Use scalar values for equality.
-	 *              Use array values for in_array() equivalent.
-	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    CuerpoPedidoQuery The current query, for fluid interface
-	 */
-	public function filterById($id = null, $comparison = null)
-	{
-		if (is_array($id) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(CuerpoPedidoPeer::ID, $id, $comparison);
 	}
 
 	/**
@@ -521,7 +477,9 @@ abstract class BaseCuerpoPedidoQuery extends ModelCriteria
 	public function prune($cuerpoPedido = null)
 	{
 		if ($cuerpoPedido) {
-			$this->addUsingAlias(CuerpoPedidoPeer::ID, $cuerpoPedido->getId(), Criteria::NOT_EQUAL);
+			$this->addCond('pruneCond0', $this->getAliasedColName(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID), $cuerpoPedido->getEncabezadoPedidoId(), Criteria::NOT_EQUAL);
+			$this->addCond('pruneCond1', $this->getAliasedColName(CuerpoPedidoPeer::PRODUCTO_ID), $cuerpoPedido->getProductoId(), Criteria::NOT_EQUAL);
+			$this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
 		}
 
 		return $this;

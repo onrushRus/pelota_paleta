@@ -1152,6 +1152,31 @@ abstract class BaseCategoria extends BaseObject  implements Persistent
 		$ranking->setCategoria($this);
 	}
 
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Categoria is new, it will return
+	 * an empty collection; or if this Categoria has previously
+	 * been saved, it will retrieve related Rankings from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Categoria.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Ranking[] List of Ranking objects
+	 */
+	public function getRankingsJoinInscripto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = RankingQuery::create(null, $criteria);
+		$query->joinWith('Inscripto', $join_behavior);
+
+		return $this->getRankings($query, $con);
+	}
+
 	/**
 	 * Clears out the collTorneoCategorias collection
 	 *

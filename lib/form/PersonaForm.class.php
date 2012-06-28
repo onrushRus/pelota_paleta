@@ -17,9 +17,17 @@ class PersonaForm extends BasePersonaForm
 	  $this->widgetSchema['fecha_nacimiento'] = new sfWidgetFormInputText();
 	  //$this->validatorSchema['fecha_nacimiento'] = new sfValidatorDate();
 	  $this->widgetSchema['fecha_nacimiento']->setDefault("06-06-2006");
-	   
+          //cambios de campos nombre y apellido por el comupuesto
+	
 	  $this->validatorSchema['e_mail'] = new sfValidatorEmail(); 
 	  $this->validatorSchema['e_mail']->setOption('required', false);
-	
+          
+
+        
 	}
+        
+     /*   public function doUpdateObject($values){
+            
+            $this->getObject()->setNomApellido($values['nombre'].' '.$values['apellido']);
+        }*/
 }

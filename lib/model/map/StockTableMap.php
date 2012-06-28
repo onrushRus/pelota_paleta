@@ -39,8 +39,8 @@ class StockTableMap extends TableMap
 		$this->setUseIdGenerator(false);
 		// columns
 		$this->addForeignPrimaryKey('PRODUCTO_ID', 'ProductoId', 'INTEGER' , 'producto', 'ID', true, 10, null);
-		$this->addColumn('CANTIDAD_ACTUAL', 'CantidadActual', 'INTEGER', true, 10, null);
-		$this->addColumn('CANTIDAD_MINIMA', 'CantidadMinima', 'INTEGER', true, 10, null);
+		$this->addColumn('CANTIDAD_ACTUAL', 'CantidadActual', 'INTEGER', true, 10, 0);
+		$this->addColumn('CANTIDAD_MINIMA', 'CantidadMinima', 'INTEGER', true, 10, 0);
 		// validators
 	} // initialize()
 
@@ -49,7 +49,7 @@ class StockTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('producto_id' => 'id', ), null, null);
+		$this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('producto_id' => 'id', ), 'CASCADE', 'CASCADE');
 	} // buildRelations()
 
 	/**

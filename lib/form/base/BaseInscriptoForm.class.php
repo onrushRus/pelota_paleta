@@ -15,18 +15,18 @@ abstract class BaseInscriptoForm extends BaseFormPropel
   {
     $this->setWidgets(array(
       'id'                => new sfWidgetFormInputHidden(),
-      'persona_nro_doc'   => new sfWidgetFormPropelChoice(array('model' => 'Ranking', 'add_empty' => false)),
+      'persona_nro_doc'   => new sfWidgetFormPropelChoice(array('model' => 'Persona', 'add_empty' => false)),
       'torneo_cat_id'     => new sfWidgetFormPropelChoice(array('model' => 'TorneoCategoria', 'add_empty' => false)),
       'nro_equipo'        => new sfWidgetFormInputText(),
-      'club_representado' => new sfWidgetFormPropelChoice(array('model' => 'Club', 'add_empty' => false)),
+      'club_representado' => new sfWidgetFormPropelChoice(array('model' => 'Club', 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
       'id'                => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
-      'persona_nro_doc'   => new sfValidatorPropelChoice(array('model' => 'Ranking', 'column' => 'pelotari_nro_doc')),
+      'persona_nro_doc'   => new sfValidatorPropelChoice(array('model' => 'Persona', 'column' => 'nro_doc')),
       'torneo_cat_id'     => new sfValidatorPropelChoice(array('model' => 'TorneoCategoria', 'column' => 'id_torneo_categoria')),
       'nro_equipo'        => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
-      'club_representado' => new sfValidatorPropelChoice(array('model' => 'Club', 'column' => 'id')),
+      'club_representado' => new sfValidatorPropelChoice(array('model' => 'Club', 'column' => 'id', 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(

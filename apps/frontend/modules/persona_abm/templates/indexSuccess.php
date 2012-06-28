@@ -3,8 +3,8 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Nro documento</th>
       <th>Nombre - Apellido</th>
+      <th>Nro documento</th>
       <th>Fecha nacimiento</th>
       <th>E-mail</th>
       <th>Localidad</th>
@@ -14,8 +14,8 @@
   <tbody>
     <?php foreach ($Personas as $Persona): ?>
     <tr>
-      <td><?php echo $Persona->getNroDoc() ?></td>
       <td><?php echo $Persona->getNomApellido() ?></td>
+      <td><?php echo $Persona->getNroDoc() ?></td>
       <td><?php echo $Persona->getFechaNacimiento() ?></td>
       <td><?php echo $Persona->getEMail() ?></td>
       <td><?php echo $Persona->getLocalidadId() ?></td>

@@ -36,9 +36,9 @@ class RankingTableMap extends TableMap
 		$this->setPhpName('Ranking');
 		$this->setClassname('Ranking');
 		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(true);
+		$this->setUseIdGenerator(false);
 		// columns
-		$this->addPrimaryKey('PELOTARI_NRO_DOC', 'PelotariNroDoc', 'INTEGER', true, 10, null);
+		$this->addForeignPrimaryKey('PELOTARI_NRO_DOC', 'PelotariNroDoc', 'INTEGER' , 'inscripto', 'PERSONA_NRO_DOC', true, 10, null);
 		$this->addPrimaryKey('TIPO_RANKING', 'TipoRanking', 'BOOLEAN', true, 1, false);
 		$this->addForeignPrimaryKey('CATEGORIA_ID', 'CategoriaId', 'INTEGER' , 'categoria', 'ID', true, 10, 0);
 		$this->addColumn('PELOTARI_PUNTOS', 'PelotariPuntos', 'INTEGER', true, 10, null);
@@ -50,8 +50,8 @@ class RankingTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
+		$this->addRelation('Inscripto', 'Inscripto', RelationMap::MANY_TO_ONE, array('pelotari_nro_doc' => 'persona_nro_doc', ), null, null);
 		$this->addRelation('Categoria', 'Categoria', RelationMap::MANY_TO_ONE, array('categoria_id' => 'id', ), null, null);
-		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('pelotari_nro_doc' => 'persona_nro_doc', ), null, null, 'Inscriptos');
 	} // buildRelations()
 
 	/**

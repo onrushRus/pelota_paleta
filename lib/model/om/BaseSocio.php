@@ -39,7 +39,6 @@ abstract class BaseSocio extends BaseObject  implements Persistent
 
 	/**
 	 * The value for the fecha_alta field.
-	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
 	 * @var        string
 	 */
 	protected $fecha_alta;
@@ -127,17 +126,17 @@ abstract class BaseSocio extends BaseObject  implements Persistent
 	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the raw DateTime object will be returned.
-	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00
 	 * @throws     PropelException - if unable to parse/validate the date/time value.
 	 */
-	public function getFechaAlta($format = 'Y-m-d H:i:s')
+	public function getFechaAlta($format = 'Y-m-d')
 	{
 		if ($this->fecha_alta === null) {
 			return null;
 		}
 
 
-		if ($this->fecha_alta === '0000-00-00 00:00:00') {
+		if ($this->fecha_alta === '0000-00-00') {
 			// while technically this is not a default value of NULL,
 			// this seems to be closest in meaning.
 			return null;
@@ -214,8 +213,8 @@ abstract class BaseSocio extends BaseObject  implements Persistent
 	{
 		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
 		if ($this->fecha_alta !== null || $dt !== null) {
-			$currentDateAsString = ($this->fecha_alta !== null && $tmpDt = new DateTime($this->fecha_alta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			$currentDateAsString = ($this->fecha_alta !== null && $tmpDt = new DateTime($this->fecha_alta)) ? $tmpDt->format('Y-m-d') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d') : null;
 			if ($currentDateAsString !== $newDateAsString) {
 				$this->fecha_alta = $newDateAsString;
 				$this->modifiedColumns[] = SocioPeer::FECHA_ALTA;

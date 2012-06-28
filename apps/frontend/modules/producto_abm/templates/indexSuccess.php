@@ -6,6 +6,8 @@
     <tr>
       <th>Id</th>
       <th>Descripcion producto</th>
+      <th>Marca</th>
+      <th>Presentación</th>
       <th>Precio</th>
       <th>Stock</th>
       <th></th>
@@ -16,6 +18,8 @@
     <tr>
       <td><?php echo $Producto->getId() ?></td>
       <td><?php echo $Producto->getDescripcionProd() ?></td>
+      <td><?php echo $Producto->getMarca() ?></td>
+      <td><?php echo $Producto->getPresentacion() ?></td>
       <td><?php echo $Producto->getPrecio() ?></td>
       <td><?php echo ($Producto->getStockCritico($Producto->getId())); ?></td>
       <td>

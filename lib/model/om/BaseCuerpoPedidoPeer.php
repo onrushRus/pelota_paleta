@@ -23,13 +23,13 @@ abstract class BaseCuerpoPedidoPeer {
 	const TM_CLASS = 'CuerpoPedidoTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 4;
+	const NUM_COLUMNS = 3;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 4;
+	const NUM_HYDRATE_COLUMNS = 3;
 
 	/** the column name for the ENCABEZADO_PEDIDO_ID field */
 	const ENCABEZADO_PEDIDO_ID = 'cuerpo_pedido.ENCABEZADO_PEDIDO_ID';
@@ -39,9 +39,6 @@ abstract class BaseCuerpoPedidoPeer {
 
 	/** the column name for the CANTIDAD field */
 	const CANTIDAD = 'cuerpo_pedido.CANTIDAD';
-
-	/** the column name for the ID field */
-	const ID = 'cuerpo_pedido.ID';
 
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
@@ -62,12 +59,12 @@ abstract class BaseCuerpoPedidoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('EncabezadoPedidoId', 'ProductoId', 'Cantidad', 'Id', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('encabezadoPedidoId', 'productoId', 'cantidad', 'id', ),
-		BasePeer::TYPE_COLNAME => array (self::ENCABEZADO_PEDIDO_ID, self::PRODUCTO_ID, self::CANTIDAD, self::ID, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ENCABEZADO_PEDIDO_ID', 'PRODUCTO_ID', 'CANTIDAD', 'ID', ),
-		BasePeer::TYPE_FIELDNAME => array ('encabezado_pedido_id', 'producto_id', 'cantidad', 'id', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('EncabezadoPedidoId', 'ProductoId', 'Cantidad', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('encabezadoPedidoId', 'productoId', 'cantidad', ),
+		BasePeer::TYPE_COLNAME => array (self::ENCABEZADO_PEDIDO_ID, self::PRODUCTO_ID, self::CANTIDAD, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ENCABEZADO_PEDIDO_ID', 'PRODUCTO_ID', 'CANTIDAD', ),
+		BasePeer::TYPE_FIELDNAME => array ('encabezado_pedido_id', 'producto_id', 'cantidad', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -77,12 +74,12 @@ abstract class BaseCuerpoPedidoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('EncabezadoPedidoId' => 0, 'ProductoId' => 1, 'Cantidad' => 2, 'Id' => 3, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('encabezadoPedidoId' => 0, 'productoId' => 1, 'cantidad' => 2, 'id' => 3, ),
-		BasePeer::TYPE_COLNAME => array (self::ENCABEZADO_PEDIDO_ID => 0, self::PRODUCTO_ID => 1, self::CANTIDAD => 2, self::ID => 3, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ENCABEZADO_PEDIDO_ID' => 0, 'PRODUCTO_ID' => 1, 'CANTIDAD' => 2, 'ID' => 3, ),
-		BasePeer::TYPE_FIELDNAME => array ('encabezado_pedido_id' => 0, 'producto_id' => 1, 'cantidad' => 2, 'id' => 3, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('EncabezadoPedidoId' => 0, 'ProductoId' => 1, 'Cantidad' => 2, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('encabezadoPedidoId' => 0, 'productoId' => 1, 'cantidad' => 2, ),
+		BasePeer::TYPE_COLNAME => array (self::ENCABEZADO_PEDIDO_ID => 0, self::PRODUCTO_ID => 1, self::CANTIDAD => 2, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ENCABEZADO_PEDIDO_ID' => 0, 'PRODUCTO_ID' => 1, 'CANTIDAD' => 2, ),
+		BasePeer::TYPE_FIELDNAME => array ('encabezado_pedido_id' => 0, 'producto_id' => 1, 'cantidad' => 2, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -157,12 +154,10 @@ abstract class BaseCuerpoPedidoPeer {
 			$criteria->addSelectColumn(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID);
 			$criteria->addSelectColumn(CuerpoPedidoPeer::PRODUCTO_ID);
 			$criteria->addSelectColumn(CuerpoPedidoPeer::CANTIDAD);
-			$criteria->addSelectColumn(CuerpoPedidoPeer::ID);
 		} else {
 			$criteria->addSelectColumn($alias . '.ENCABEZADO_PEDIDO_ID');
 			$criteria->addSelectColumn($alias . '.PRODUCTO_ID');
 			$criteria->addSelectColumn($alias . '.CANTIDAD');
-			$criteria->addSelectColumn($alias . '.ID');
 		}
 	}
 
@@ -299,7 +294,7 @@ abstract class BaseCuerpoPedidoPeer {
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = (string) $obj->getId();
+				$key = serialize(array((string) $obj->getEncabezadoPedidoId(), (string) $obj->getProductoId()));
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -319,10 +314,10 @@ abstract class BaseCuerpoPedidoPeer {
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
 			if (is_object($value) && $value instanceof CuerpoPedido) {
-				$key = (string) $value->getId();
-			} elseif (is_scalar($value)) {
+				$key = serialize(array((string) $value->getEncabezadoPedidoId(), (string) $value->getProductoId()));
+			} elseif (is_array($value) && count($value) === 2) {
 				// assume we've been passed a primary key
-				$key = (string) $value;
+				$key = serialize(array((string) $value[0], (string) $value[1]));
 			} else {
 				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or CuerpoPedido object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
@@ -383,10 +378,10 @@ abstract class BaseCuerpoPedidoPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 3] === null) {
+		if ($row[$startcol] === null && $row[$startcol + 1] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 3];
+		return serialize(array((string) $row[$startcol], (string) $row[$startcol + 1]));
 	}
 
 	/**
@@ -400,7 +395,7 @@ abstract class BaseCuerpoPedidoPeer {
 	 */
 	public static function getPrimaryKeyFromRow($row, $startcol = 0)
 	{
-		return (int) $row[$startcol + 3];
+		return array((int) $row[$startcol], (int) $row[$startcol + 1]);
 	}
 	
 	/**
@@ -1197,10 +1192,6 @@ abstract class BaseCuerpoPedidoPeer {
 			$criteria = $values->buildCriteria(); // build Criteria from CuerpoPedido object
 		}
 
-		if ($criteria->containsKey(CuerpoPedidoPeer::ID) && $criteria->keyContainsValue(CuerpoPedidoPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.CuerpoPedidoPeer::ID.')');
-		}
-
 
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
@@ -1239,10 +1230,18 @@ abstract class BaseCuerpoPedidoPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(CuerpoPedidoPeer::ID);
-			$value = $criteria->remove(CuerpoPedidoPeer::ID);
+			$comparison = $criteria->getComparison(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID);
+			$value = $criteria->remove(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID);
 			if ($value) {
-				$selectCriteria->add(CuerpoPedidoPeer::ID, $value, $comparison);
+				$selectCriteria->add(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(CuerpoPedidoPeer::TABLE_NAME);
+			}
+
+			$comparison = $criteria->getComparison(CuerpoPedidoPeer::PRODUCTO_ID);
+			$value = $criteria->remove(CuerpoPedidoPeer::PRODUCTO_ID);
+			if ($value) {
+				$selectCriteria->add(CuerpoPedidoPeer::PRODUCTO_ID, $value, $comparison);
 			} else {
 				$selectCriteria->setPrimaryTableName(CuerpoPedidoPeer::TABLE_NAME);
 			}
@@ -1319,10 +1318,18 @@ abstract class BaseCuerpoPedidoPeer {
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(CuerpoPedidoPeer::ID, (array) $values, Criteria::IN);
-			// invalidate the cache for this object(s)
-			foreach ((array) $values as $singleval) {
-				CuerpoPedidoPeer::removeInstanceFromPool($singleval);
+			// primary key is composite; we therefore, expect
+			// the primary key passed to be an array of pkey values
+			if (count($values) == count($values, COUNT_RECURSIVE)) {
+				// array is not multi-dimensional
+				$values = array($values);
+			}
+			foreach ($values as $value) {
+				$criterion = $criteria->getNewCriterion(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $value[0]);
+				$criterion->addAnd($criteria->getNewCriterion(CuerpoPedidoPeer::PRODUCTO_ID, $value[1]));
+				$criteria->addOr($criterion);
+				// we can invalidate the cache for this single PK
+				CuerpoPedidoPeer::removeInstanceFromPool($value);
 			}
 		}
 
@@ -1384,56 +1391,28 @@ abstract class BaseCuerpoPedidoPeer {
 	}
 
 	/**
-	 * Retrieve a single object by pkey.
-	 *
-	 * @param      int $pk the primary key.
-	 * @param      PropelPDO $con the connection to use
+	 * Retrieve object using using composite pkey values.
+	 * @param      int $encabezado_pedido_id
+	 * @param      int $producto_id
+	 * @param      PropelPDO $con
 	 * @return     CuerpoPedido
 	 */
-	public static function retrieveByPK($pk, PropelPDO $con = null)
-	{
-
-		if (null !== ($obj = CuerpoPedidoPeer::getInstanceFromPool((string) $pk))) {
-			return $obj;
+	public static function retrieveByPK($encabezado_pedido_id, $producto_id, PropelPDO $con = null) {
+		$_instancePoolKey = serialize(array((string) $encabezado_pedido_id, (string) $producto_id));
+ 		if (null !== ($obj = CuerpoPedidoPeer::getInstanceFromPool($_instancePoolKey))) {
+ 			return $obj;
 		}
 
 		if ($con === null) {
 			$con = Propel::getConnection(CuerpoPedidoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
-
 		$criteria = new Criteria(CuerpoPedidoPeer::DATABASE_NAME);
-		$criteria->add(CuerpoPedidoPeer::ID, $pk);
-
+		$criteria->add(CuerpoPedidoPeer::ENCABEZADO_PEDIDO_ID, $encabezado_pedido_id);
+		$criteria->add(CuerpoPedidoPeer::PRODUCTO_ID, $producto_id);
 		$v = CuerpoPedidoPeer::doSelect($criteria, $con);
 
-		return !empty($v) > 0 ? $v[0] : null;
+		return !empty($v) ? $v[0] : null;
 	}
-
-	/**
-	 * Retrieve multiple objects by pkey.
-	 *
-	 * @param      array $pks List of primary keys
-	 * @param      PropelPDO $con the connection to use
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function retrieveByPKs($pks, PropelPDO $con = null)
-	{
-		if ($con === null) {
-			$con = Propel::getConnection(CuerpoPedidoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-
-		$objs = null;
-		if (empty($pks)) {
-			$objs = array();
-		} else {
-			$criteria = new Criteria(CuerpoPedidoPeer::DATABASE_NAME);
-			$criteria->add(CuerpoPedidoPeer::ID, $pks, Criteria::IN);
-			$objs = CuerpoPedidoPeer::doSelect($criteria, $con);
-		}
-		return $objs;
-	}
-
 	// symfony behavior
 	
 	/**

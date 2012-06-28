@@ -13,9 +13,6 @@
           <input class="btn" type="submit" value="Guardar" />
         </td>
       </tr>
-      <tr>
-        <td><a class="btn" href="<?php echo url_for('stock_abm/new');?>">Cargar Stock</a></td>	
-      </tr>
     </tfoot>
     
     <tbody>

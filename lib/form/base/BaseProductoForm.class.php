@@ -16,12 +16,16 @@ abstract class BaseProductoForm extends BaseFormPropel
     $this->setWidgets(array(
       'id'               => new sfWidgetFormInputHidden(),
       'descripcion_prod' => new sfWidgetFormInputText(),
+      'marca'            => new sfWidgetFormInputText(),
+      'presentacion'     => new sfWidgetFormInputText(),
       'precio'           => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
       'id'               => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'descripcion_prod' => new sfValidatorString(array('max_length' => 45)),
+      'marca'            => new sfValidatorString(array('max_length' => 45)),
+      'presentacion'     => new sfValidatorString(array('max_length' => 45)),
       'precio'           => new sfValidatorNumber(),
     ));
 

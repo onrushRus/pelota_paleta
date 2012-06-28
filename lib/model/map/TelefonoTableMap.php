@@ -48,7 +48,7 @@ class TelefonoTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), null, null);
+		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), 'CASCADE', 'CASCADE');
 	} // buildRelations()
 
 	/**

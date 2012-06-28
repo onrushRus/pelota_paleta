@@ -23,19 +23,25 @@ abstract class BaseProductoPeer {
 	const TM_CLASS = 'ProductoTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 3;
+	const NUM_HYDRATE_COLUMNS = 5;
 
 	/** the column name for the ID field */
 	const ID = 'producto.ID';
 
 	/** the column name for the DESCRIPCION_PROD field */
 	const DESCRIPCION_PROD = 'producto.DESCRIPCION_PROD';
+
+	/** the column name for the MARCA field */
+	const MARCA = 'producto.MARCA';
+
+	/** the column name for the PRESENTACION field */
+	const PRESENTACION = 'producto.PRESENTACION';
 
 	/** the column name for the PRECIO field */
 	const PRECIO = 'producto.PRECIO';
@@ -59,12 +65,12 @@ abstract class BaseProductoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'DescripcionProd', 'Precio', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'descripcionProd', 'precio', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::DESCRIPCION_PROD, self::PRECIO, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DESCRIPCION_PROD', 'PRECIO', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'descripcion_prod', 'precio', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'DescripcionProd', 'Marca', 'Presentacion', 'Precio', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'descripcionProd', 'marca', 'presentacion', 'precio', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::DESCRIPCION_PROD, self::MARCA, self::PRESENTACION, self::PRECIO, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DESCRIPCION_PROD', 'MARCA', 'PRESENTACION', 'PRECIO', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'descripcion_prod', 'marca', 'presentacion', 'precio', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -74,12 +80,12 @@ abstract class BaseProductoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DescripcionProd' => 1, 'Precio' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'descripcionProd' => 1, 'precio' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DESCRIPCION_PROD => 1, self::PRECIO => 2, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DESCRIPCION_PROD' => 1, 'PRECIO' => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'descripcion_prod' => 1, 'precio' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DescripcionProd' => 1, 'Marca' => 2, 'Presentacion' => 3, 'Precio' => 4, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'descripcionProd' => 1, 'marca' => 2, 'presentacion' => 3, 'precio' => 4, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DESCRIPCION_PROD => 1, self::MARCA => 2, self::PRESENTACION => 3, self::PRECIO => 4, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DESCRIPCION_PROD' => 1, 'MARCA' => 2, 'PRESENTACION' => 3, 'PRECIO' => 4, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'descripcion_prod' => 1, 'marca' => 2, 'presentacion' => 3, 'precio' => 4, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -153,10 +159,14 @@ abstract class BaseProductoPeer {
 		if (null === $alias) {
 			$criteria->addSelectColumn(ProductoPeer::ID);
 			$criteria->addSelectColumn(ProductoPeer::DESCRIPCION_PROD);
+			$criteria->addSelectColumn(ProductoPeer::MARCA);
+			$criteria->addSelectColumn(ProductoPeer::PRESENTACION);
 			$criteria->addSelectColumn(ProductoPeer::PRECIO);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.DESCRIPCION_PROD');
+			$criteria->addSelectColumn($alias . '.MARCA');
+			$criteria->addSelectColumn($alias . '.PRESENTACION');
 			$criteria->addSelectColumn($alias . '.PRECIO');
 		}
 	}
@@ -363,6 +373,9 @@ abstract class BaseProductoPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
+		// Invalidate objects in StockPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		StockPeer::clearInstancePool();
 	}
 
 	/**
@@ -588,6 +601,7 @@ abstract class BaseProductoPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += ProductoPeer::doOnDeleteCascade(new Criteria(ProductoPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(ProductoPeer::TABLE_NAME, $con, ProductoPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -620,24 +634,14 @@ abstract class BaseProductoPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			ProductoPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
 		} elseif ($values instanceof Producto) { // it's a model object
-			// invalidate the cache for this single object
-			ProductoPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(ProductoPeer::ID, (array) $values, Criteria::IN);
-			// invalidate the cache for this object(s)
-			foreach ((array) $values as $singleval) {
-				ProductoPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -650,6 +654,23 @@ abstract class BaseProductoPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += ProductoPeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				ProductoPeer::clearInstancePool();
+			} elseif ($values instanceof Producto) { // it's a model object
+				ProductoPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					ProductoPeer::removeInstanceFromPool($singleval);
+				}
+			}
+			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
 			ProductoPeer::clearRelatedInstancePool();
 			$con->commit();
@@ -658,6 +679,38 @@ abstract class BaseProductoPeer {
 			$con->rollBack();
 			throw $e;
 		}
+	}
+
+	/**
+	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 */
+	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	{
+		// initialize var to track total num of affected rows
+		$affectedRows = 0;
+
+		// first find the objects that are implicated by the $criteria
+		$objects = ProductoPeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+
+			// delete related Stock objects
+			$criteria = new Criteria(StockPeer::DATABASE_NAME);
+			
+			$criteria->add(StockPeer::PRODUCTO_ID, $obj->getId());
+			$affectedRows += StockPeer::doDelete($criteria, $con);
+		}
+		return $affectedRows;
 	}
 
 	/**

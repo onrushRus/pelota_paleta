@@ -42,7 +42,7 @@ class PersonaTableMap extends TableMap
 		$this->addColumn('NOM_APELLIDO', 'NomApellido', 'VARCHAR', true, 45, null);
 		$this->addColumn('FECHA_NACIMIENTO', 'FechaNacimiento', 'DATE', true, null, null);
 		$this->addColumn('E_MAIL', 'EMail', 'VARCHAR', true, 30, null);
-		$this->addForeignKey('LOCALIDAD_ID', 'LocalidadId', 'INTEGER', 'localidad', 'ID', true, 10, null);
+		$this->addForeignKey('LOCALIDAD_ID', 'LocalidadId', 'INTEGER', 'localidad', 'ID', false, 10, null);
 		// validators
 	} // initialize()
 
@@ -51,10 +51,11 @@ class PersonaTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Localidad', 'Localidad', RelationMap::MANY_TO_ONE, array('localidad_id' => 'id', ), 'CASCADE', 'CASCADE');
-		$this->addRelation('Direccion', 'Direccion', RelationMap::ONE_TO_MANY, array('nro_doc' => 'persona_nro_doc', ), null, null, 'Direccions');
-		$this->addRelation('Socio', 'Socio', RelationMap::ONE_TO_ONE, array('nro_doc' => 'persona_nro_doc', ), null, null);
-		$this->addRelation('Telefono', 'Telefono', RelationMap::ONE_TO_MANY, array('nro_doc' => 'persona_nro_doc', ), null, null, 'Telefonos');
+		$this->addRelation('Localidad', 'Localidad', RelationMap::MANY_TO_ONE, array('localidad_id' => 'id', ), 'SET NULL', 'CASCADE');
+		$this->addRelation('Direccion', 'Direccion', RelationMap::ONE_TO_MANY, array('nro_doc' => 'persona_nro_doc', ), 'CASCADE', 'CASCADE', 'Direccions');
+		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('nro_doc' => 'persona_nro_doc', ), 'CASCADE', 'CASCADE', 'Inscriptos');
+		$this->addRelation('Socio', 'Socio', RelationMap::ONE_TO_ONE, array('nro_doc' => 'persona_nro_doc', ), 'CASCADE', 'CASCADE');
+		$this->addRelation('Telefono', 'Telefono', RelationMap::ONE_TO_MANY, array('nro_doc' => 'persona_nro_doc', ), 'CASCADE', 'CASCADE', 'Telefonos');
 	} // buildRelations()
 
 	/**

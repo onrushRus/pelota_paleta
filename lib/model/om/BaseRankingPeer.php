@@ -462,6 +462,62 @@ abstract class BaseRankingPeer {
 
 
 	/**
+	 * Returns the number of rows matching criteria, joining the related Inscripto table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinInscripto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(RankingPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			RankingPeer::addSelectColumns($criteria);
+		}
+
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(RankingPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
 	 * Returns the number of rows matching criteria, joining the related Categoria table
 	 *
 	 * @param      Criteria $criteria
@@ -514,6 +570,78 @@ abstract class BaseRankingPeer {
 		}
 		$stmt->closeCursor();
 		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of Ranking objects pre-filled with their Inscripto objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Ranking objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinInscripto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		RankingPeer::addSelectColumns($criteria);
+		$startcol = RankingPeer::NUM_HYDRATE_COLUMNS;
+		InscriptoPeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = RankingPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = RankingPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = RankingPeer::getOMClass();
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				RankingPeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = InscriptoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = InscriptoPeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = InscriptoPeer::getOMClass();
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					InscriptoPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+
+				// Add the $obj1 (Ranking) to $obj2 (Inscripto)
+				$obj2->addRanking($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
 	}
 
 
@@ -625,6 +753,8 @@ abstract class BaseRankingPeer {
 			$con = Propel::getConnection(RankingPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
+
 		$criteria->addJoin(RankingPeer::CATEGORIA_ID, CategoriaPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
@@ -666,8 +796,13 @@ abstract class BaseRankingPeer {
 		RankingPeer::addSelectColumns($criteria);
 		$startcol2 = RankingPeer::NUM_HYDRATE_COLUMNS;
 
+		InscriptoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + InscriptoPeer::NUM_HYDRATE_COLUMNS;
+
 		CategoriaPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + CategoriaPeer::NUM_HYDRATE_COLUMNS;
+		$startcol4 = $startcol3 + CategoriaPeer::NUM_HYDRATE_COLUMNS;
+
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
 
 		$criteria->addJoin(RankingPeer::CATEGORIA_ID, CategoriaPeer::ID, $join_behavior);
 
@@ -694,23 +829,311 @@ abstract class BaseRankingPeer {
 				RankingPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined Categoria rows
+			// Add objects for joined Inscripto rows
 
-			$key2 = CategoriaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = InscriptoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = CategoriaPeer::getInstanceFromPool($key2);
+				$obj2 = InscriptoPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
+					$cls = InscriptoPeer::getOMClass();
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					InscriptoPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 loaded
+
+				// Add the $obj1 (Ranking) to the collection in $obj2 (Inscripto)
+				$obj2->addRanking($obj1);
+			} // if joined row not null
+
+			// Add objects for joined Categoria rows
+
+			$key3 = CategoriaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			if ($key3 !== null) {
+				$obj3 = CategoriaPeer::getInstanceFromPool($key3);
+				if (!$obj3) {
+
 					$cls = CategoriaPeer::getOMClass();
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					CategoriaPeer::addInstanceToPool($obj3, $key3);
+				} // if obj3 loaded
+
+				// Add the $obj1 (Ranking) to the collection in $obj3 (Categoria)
+				$obj3->addRanking($obj1);
+			} // if joined row not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Inscripto table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptInscripto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(RankingPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			RankingPeer::addSelectColumns($criteria);
+		}
+
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(RankingPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(RankingPeer::CATEGORIA_ID, CategoriaPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Categoria table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptCategoria(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(RankingPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			RankingPeer::addSelectColumns($criteria);
+		}
+
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(RankingPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of Ranking objects pre-filled with all related objects except Inscripto.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Ranking objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptInscripto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		RankingPeer::addSelectColumns($criteria);
+		$startcol2 = RankingPeer::NUM_HYDRATE_COLUMNS;
+
+		CategoriaPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + CategoriaPeer::NUM_HYDRATE_COLUMNS;
+
+		$criteria->addJoin(RankingPeer::CATEGORIA_ID, CategoriaPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = RankingPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = RankingPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = RankingPeer::getOMClass();
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				RankingPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Categoria rows
+
+				$key2 = CategoriaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = CategoriaPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = CategoriaPeer::getOMClass();
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					CategoriaPeer::addInstanceToPool($obj2, $key2);
-				} // if obj2 loaded
+				} // if $obj2 already loaded
 
 				// Add the $obj1 (Ranking) to the collection in $obj2 (Categoria)
 				$obj2->addRanking($obj1);
-			} // if joined row not null
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Ranking objects pre-filled with all related objects except Categoria.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Ranking objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCategoria(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		RankingPeer::addSelectColumns($criteria);
+		$startcol2 = RankingPeer::NUM_HYDRATE_COLUMNS;
+
+		InscriptoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + InscriptoPeer::NUM_HYDRATE_COLUMNS;
+
+		$criteria->addJoin(RankingPeer::PELOTARI_NRO_DOC, InscriptoPeer::PERSONA_NRO_DOC, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseRankingPeer', $criteria, $con);
+		}
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = RankingPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = RankingPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = RankingPeer::getOMClass();
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				RankingPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Inscripto rows
+
+				$key2 = InscriptoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = InscriptoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = InscriptoPeer::getOMClass();
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					InscriptoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Ranking) to the collection in $obj2 (Inscripto)
+				$obj2->addRanking($obj1);
+
+			} // if joined row is not null
 
 			$results[] = $obj1;
 		}
@@ -772,10 +1195,6 @@ abstract class BaseRankingPeer {
 			$criteria = clone $values; // rename for clarity
 		} else {
 			$criteria = $values->buildCriteria(); // build Criteria from Ranking object
-		}
-
-		if ($criteria->containsKey(RankingPeer::PELOTARI_NRO_DOC) && $criteria->keyContainsValue(RankingPeer::PELOTARI_NRO_DOC) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.RankingPeer::PELOTARI_NRO_DOC.')');
 		}
 
 
