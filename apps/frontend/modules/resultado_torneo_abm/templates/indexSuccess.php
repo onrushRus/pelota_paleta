@@ -1,24 +1,29 @@
-<h1>ResultadoTorneos List</h1>
+<h1>Resultado de Torneos</h1>
 
-<table>
+<table class="table table-bordered">
   <thead>
     <tr>
-      <th>Id</th>
+      <th>Identificador</th>
       <th>Puesto</th>
-      <th>Torneo cat</th>
-      <th>Pelotari nro doc</th>
+      <th>Torneo-Categoria</th>
+      <th>Nro documento del participante</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($ResultadoTorneos as $ResultadoTorneo): ?>
     <tr>
-      <td><a href="<?php echo url_for('resultado_torneo_abm/edit?id='.$ResultadoTorneo->getId()) ?>"><?php echo $ResultadoTorneo->getId() ?></a></td>
+      <td><?php echo $ResultadoTorneo->getId() ?></td>
       <td><?php echo $ResultadoTorneo->getPuestoId() ?></td>
       <td><?php echo $ResultadoTorneo->getTorneoCatId() ?></td>
       <td><?php echo $ResultadoTorneo->getPelotariNroDoc() ?></td>
+      <td>
+          <a class="btn btn-warning btn-mini"  href="<?php echo url_for('resultado_torneo_abm/edit?id='.$ResultadoTorneo->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
+          <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'resultado_torneo_abm/delete?id='.$ResultadoTorneo->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini" )) ?>
+      </td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('resultado_torneo_abm/new') ?>">New</a>
+  <a class="btn btn-info" href="<?php echo url_for('resultado_torneo_abm/new') ?>">Nuevo Resultado</a>

@@ -5,10 +5,10 @@
     <tr>
       <th>Id</th>
       <th>Nombre proveedor</th>
-      <th>Dom calle</th>
-      <th>Dom nro</th>
-      <th>Dom piso</th>
-      <th>Dom dpto</th>
+      <th>Calle</th>
+      <th>Numero</th>
+      <th>Piso</th>
+      <th>Departamento</th>
       <th>Telefono</th>
       <th>Acciones</th>
     </tr>
@@ -32,4 +32,4 @@
   </tbody>
 </table>
 
-  <a class="btn btn-info" href="<?php echo url_for('proveedor_abm/new') ?>">Nuevo</a>
+  <a class="btn btn-info" href="<?php echo url_for('proveedor_abm/new') ?>">Nuevo Proveedor</a>

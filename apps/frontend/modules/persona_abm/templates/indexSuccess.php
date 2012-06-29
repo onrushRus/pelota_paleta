@@ -19,7 +19,7 @@
       <td><?php echo $Persona->getFechaNacimiento() ?></td>
       <td><?php echo $Persona->getEMail() ?></td>
       <td><?php echo $Persona->getLocalidad() ?></td>
-      <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Editar </a>
+      <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Modificar</a>
           <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'persona_abm/delete?nro_doc='.$Persona->getNroDoc(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini")) ?>
       </td>
     </tr>
