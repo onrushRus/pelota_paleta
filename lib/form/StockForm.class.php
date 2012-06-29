@@ -17,5 +17,8 @@ class StockForm extends BaseStockForm
 //	   $this->widgetSchema['producto_id']->setLabel('aki ingresar el codigo del nuevo prodcuto, 
 //	   pero esta mal pq no sabes q nuevo codigo va a tener');
 	 //$this->widgetSchema['producto_id']= new sfWidgetFormPropelChoice(array('model' => 'Producto', 'add_empty' => false));
+      $this->widgetSchema->setLabels(array(
+            'cantidad_minima' => 'Cantidad mínima',
+        ));
   }
 }

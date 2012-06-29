@@ -25,5 +25,11 @@ class ReservaForm extends BaseReservaForm
           $this->validatorSchema['socio_nro_doc']->setMessage("invalid", "Falta el dni socio");
         //  $this->validatorSchema['socio_nro_doc']->setOption("min_length", 6);
           
+          
+          $this->widgetSchema->setLabels(array(
+              'socio_nro_doc' => 'Nro Documento', 
+              'pelotari_nro_doc' => 'Nro documentado participante', 
+          ));
+          
   }
 }

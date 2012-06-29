@@ -31,5 +31,10 @@ class ProductoForm extends BaseProductoForm
         //$this->embedRelation('PedidoProducto');
         //esto anda,,, pasa q no guarda en la tabla stock pq no existe
         // la referencia de un producto q aun no esta creado
+        
+        $this->widgetSchema->setLabels(array(
+            'descripcion_prod' => 'Descripción',
+            'presentacion' => 'Presentación',
+        ));
     }
 }

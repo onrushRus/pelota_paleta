@@ -17,5 +17,8 @@ class TelefonoForm extends BaseTelefonoForm
       
       $this->widgetSchema['telefono_nro']= new sfWidgetFormInputText();
       $this->validatorSchema['telefono_nro'] = new sfValidatorString();
+      $this->widgetSchema->setLabels(array(
+          'telefono_nro' => 'Telefono',
+      ));
   }
 }

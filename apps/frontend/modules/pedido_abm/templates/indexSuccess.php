@@ -4,7 +4,7 @@
 
   <thead>
     <tr>
-      <th>Id</th>
+      <th>Identificador</th>
       <th>Proveedor</th>
       <th>Fecha pedido</th>
       <th>Acciones</th>

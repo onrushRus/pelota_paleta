@@ -11,15 +11,6 @@ class PersonaForm extends BasePersonaForm
 {
   public function configure()
   {
-      $this->widgetSchema->setLabels(array(
-         'nro_doc'          => 'Nro documento',
-         'nom_apellido'     => 'Nombre y Apellido',
-         'fecha_nacimiento' => 'Fecha de Nacimiento',
-         'e_mail'           => 'E-mail',
-         'localidad_id'     => 'Localidad',          
-      ));
-      
-      
       
       $this->widgetSchema['nro_doc']= new sfWidgetFormInputText();
       $this->validatorSchema['nro_doc'] = new sfValidatorInteger();
@@ -56,9 +47,21 @@ class PersonaForm extends BasePersonaForm
       $this->validatorSchema['localidad_id']->setMessage('required', 'Seleccione Localidad');
       //cambios de campos nombre y apellido por el comupuesto
       
+      
+      
+      
           $this->embedRelation('Telefono');
           $this->embedRelation('Direccion');
+          
+          $this->widgetSchema->setLabels(array(
+         'nro_doc'          => 'Nro documento',
+         'nom_apellido'     => 'Nombre y Apellido',
+         'fecha_nacimiento' => 'Fecha de Nacimiento',
+         'e_mail'           => 'E-mail',
+         'localidad_id'     => 'Localidad',          
+      ));
 	}
+        
         
      /*   public function doUpdateObject($values){
             

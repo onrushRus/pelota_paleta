@@ -1,3 +1,3 @@
-<h1>Edit Pedido</h1>
+<h1>Modificar Pedido</h1>
 
 <?php include_partial('form', array('form' => $form)) ?>
