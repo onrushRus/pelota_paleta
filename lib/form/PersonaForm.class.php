@@ -55,6 +55,9 @@ class PersonaForm extends BasePersonaForm
       $this->validatorSchema['localidad_id']->setOption('required', true);
       $this->validatorSchema['localidad_id']->setMessage('required', 'Seleccione Localidad');
       //cambios de campos nombre y apellido por el comupuesto
+      
+          $this->embedRelation('Telefono');
+          $this->embedRelation('Direccion');
 	}
         
      /*   public function doUpdateObject($values){

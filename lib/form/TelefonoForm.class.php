@@ -11,5 +11,11 @@ class TelefonoForm extends BaseTelefonoForm
 {
   public function configure()
   {
+      unset($this['persona_nro_doc']);
+    //  $this->widgetSchema['persona_nro_doc']= new sfWidgetFormInputText();
+    //  $this->validatorSchema['persona_nro_doc'] = new sfValidatorInteger();
+      
+      $this->widgetSchema['telefono_nro']= new sfWidgetFormInputText();
+      $this->validatorSchema['telefono_nro'] = new sfValidatorString();
   }
 }
