@@ -286,7 +286,7 @@ abstract class BaseClubQuery extends ModelCriteria
 	 *
 	 * @return    ClubQuery The current query, for fluid interface
 	 */
-	public function joinInscripto($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function joinInscripto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Inscripto');
@@ -321,7 +321,7 @@ abstract class BaseClubQuery extends ModelCriteria
 	 *
 	 * @return    InscriptoQuery A secondary query class using the current class as primary query
 	 */
-	public function useInscriptoQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function useInscriptoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		return $this
 			->joinInscripto($relationAlias, $joinType)

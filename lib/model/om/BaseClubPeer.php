@@ -358,9 +358,6 @@ abstract class BaseClubPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
-		// Invalidate objects in InscriptoPeer instance pool,
-		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-		InscriptoPeer::clearInstancePool();
 	}
 
 	/**
@@ -586,7 +583,6 @@ abstract class BaseClubPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			ClubPeer::doOnDeleteSetNull(new Criteria(ClubPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(ClubPeer::TABLE_NAME, $con, ClubPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -619,14 +615,24 @@ abstract class BaseClubPeer {
 		}
 
 		if ($values instanceof Criteria) {
+			// invalidate the cache for all objects of this type, since we have no
+			// way of knowing (without running a query) what objects should be invalidated
+			// from the cache based on this Criteria.
+			ClubPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
 		} elseif ($values instanceof Club) { // it's a model object
+			// invalidate the cache for this single object
+			ClubPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(ClubPeer::ID, (array) $values, Criteria::IN);
+			// invalidate the cache for this object(s)
+			foreach ((array) $values as $singleval) {
+				ClubPeer::removeInstanceFromPool($singleval);
+			}
 		}
 
 		// Set the correct dbName
@@ -639,23 +645,6 @@ abstract class BaseClubPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			
-			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
-			$c = clone $criteria;
-			ClubPeer::doOnDeleteSetNull($c, $con);
-			
-			// Because this db requires some delete cascade/set null emulation, we have to
-			// clear the cached instance *after* the emulation has happened (since
-			// instances get re-added by the select statement contained therein).
-			if ($values instanceof Criteria) {
-				ClubPeer::clearInstancePool();
-			} elseif ($values instanceof Club) { // it's a model object
-				ClubPeer::removeInstanceFromPool($values);
-			} else { // it's a primary key, or an array of pks
-				foreach ((array) $values as $singleval) {
-					ClubPeer::removeInstanceFromPool($singleval);
-				}
-			}
-			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
 			ClubPeer::clearRelatedInstancePool();
 			$con->commit();
@@ -663,37 +652,6 @@ abstract class BaseClubPeer {
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
-		}
-	}
-
-	/**
-	 * This is a method for emulating ON DELETE SET NULL DBs that don't support this
-	 * feature (like MySQL or SQLite).
-	 *
-	 * This method is not very speedy because it must perform a query first to get
-	 * the implicated records and then perform the deletes by calling those Peer classes.
-	 *
-	 * This method should be used within a transaction if possible.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      PropelPDO $con
-	 * @return     void
-	 */
-	protected static function doOnDeleteSetNull(Criteria $criteria, PropelPDO $con)
-	{
-
-		// first find the objects that are implicated by the $criteria
-		$objects = ClubPeer::doSelect($criteria, $con);
-		foreach ($objects as $obj) {
-
-			// set fkey col in related Inscripto rows to NULL
-			$selectCriteria = new Criteria(ClubPeer::DATABASE_NAME);
-			$updateValues = new Criteria(ClubPeer::DATABASE_NAME);
-			$selectCriteria->add(InscriptoPeer::CLUB_REPRESENTADO, $obj->getId());
-			$updateValues->add(InscriptoPeer::CLUB_REPRESENTADO, null);
-
-			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
-
 		}
 	}
 

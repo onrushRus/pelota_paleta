@@ -48,7 +48,7 @@ class ClubTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('id' => 'club_representado', ), 'SET NULL', 'CASCADE', 'Inscriptos');
+		$this->addRelation('Inscripto', 'Inscripto', RelationMap::ONE_TO_MANY, array('id' => 'club_representado', ), null, null, 'Inscriptos');
 	} // buildRelations()
 
 	/**

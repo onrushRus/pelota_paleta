@@ -376,9 +376,6 @@ abstract class BasePersonaPeer {
 		// Invalidate objects in DireccionPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		DireccionPeer::clearInstancePool();
-		// Invalidate objects in InscriptoPeer instance pool,
-		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-		InscriptoPeer::clearInstancePool();
 		// Invalidate objects in SocioPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		SocioPeer::clearInstancePool();
@@ -972,12 +969,6 @@ abstract class BasePersonaPeer {
 			
 			$criteria->add(DireccionPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
 			$affectedRows += DireccionPeer::doDelete($criteria, $con);
-
-			// delete related Inscripto objects
-			$criteria = new Criteria(InscriptoPeer::DATABASE_NAME);
-			
-			$criteria->add(InscriptoPeer::PERSONA_NRO_DOC, $obj->getNroDoc());
-			$affectedRows += InscriptoPeer::doDelete($criteria, $con);
 
 			// delete related Socio objects
 			$criteria = new Criteria(SocioPeer::DATABASE_NAME);

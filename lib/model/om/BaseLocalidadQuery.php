@@ -442,7 +442,7 @@ abstract class BaseLocalidadQuery extends ModelCriteria
 	 *
 	 * @return    LocalidadQuery The current query, for fluid interface
 	 */
-	public function joinPersona($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function joinPersona($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Persona');
@@ -477,7 +477,7 @@ abstract class BaseLocalidadQuery extends ModelCriteria
 	 *
 	 * @return    PersonaQuery A secondary query class using the current class as primary query
 	 */
-	public function usePersonaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function usePersonaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		return $this
 			->joinPersona($relationAlias, $joinType)

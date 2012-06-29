@@ -22,9 +22,9 @@
  * @method     ProductoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ProductoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ProductoQuery leftJoinCuerpoPedido($relationAlias = null) Adds a LEFT JOIN clause to the query using the CuerpoPedido relation
- * @method     ProductoQuery rightJoinCuerpoPedido($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CuerpoPedido relation
- * @method     ProductoQuery innerJoinCuerpoPedido($relationAlias = null) Adds a INNER JOIN clause to the query using the CuerpoPedido relation
+ * @method     ProductoQuery leftJoinPedidoProducto($relationAlias = null) Adds a LEFT JOIN clause to the query using the PedidoProducto relation
+ * @method     ProductoQuery rightJoinPedidoProducto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PedidoProducto relation
+ * @method     ProductoQuery innerJoinPedidoProducto($relationAlias = null) Adds a INNER JOIN clause to the query using the PedidoProducto relation
  *
  * @method     ProductoQuery leftJoinStock($relationAlias = null) Adds a LEFT JOIN clause to the query using the Stock relation
  * @method     ProductoQuery rightJoinStock($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Stock relation
@@ -368,40 +368,40 @@ abstract class BaseProductoQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query by a related CuerpoPedido object
+	 * Filter the query by a related PedidoProducto object
 	 *
-	 * @param     CuerpoPedido $cuerpoPedido  the related object to use as filter
+	 * @param     PedidoProducto $pedidoProducto  the related object to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    ProductoQuery The current query, for fluid interface
 	 */
-	public function filterByCuerpoPedido($cuerpoPedido, $comparison = null)
+	public function filterByPedidoProducto($pedidoProducto, $comparison = null)
 	{
-		if ($cuerpoPedido instanceof CuerpoPedido) {
+		if ($pedidoProducto instanceof PedidoProducto) {
 			return $this
-				->addUsingAlias(ProductoPeer::ID, $cuerpoPedido->getProductoId(), $comparison);
-		} elseif ($cuerpoPedido instanceof PropelCollection) {
+				->addUsingAlias(ProductoPeer::ID, $pedidoProducto->getProductoId(), $comparison);
+		} elseif ($pedidoProducto instanceof PropelCollection) {
 			return $this
-				->useCuerpoPedidoQuery()
-				->filterByPrimaryKeys($cuerpoPedido->getPrimaryKeys())
+				->usePedidoProductoQuery()
+				->filterByPrimaryKeys($pedidoProducto->getPrimaryKeys())
 				->endUse();
 		} else {
-			throw new PropelException('filterByCuerpoPedido() only accepts arguments of type CuerpoPedido or PropelCollection');
+			throw new PropelException('filterByPedidoProducto() only accepts arguments of type PedidoProducto or PropelCollection');
 		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the CuerpoPedido relation
+	 * Adds a JOIN clause to the query using the PedidoProducto relation
 	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    ProductoQuery The current query, for fluid interface
 	 */
-	public function joinCuerpoPedido($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function joinPedidoProducto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('CuerpoPedido');
+		$relationMap = $tableMap->getRelation('PedidoProducto');
 
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
@@ -416,14 +416,14 @@ abstract class BaseProductoQuery extends ModelCriteria
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'CuerpoPedido');
+			$this->addJoinObject($join, 'PedidoProducto');
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Use the CuerpoPedido relation CuerpoPedido object
+	 * Use the PedidoProducto relation PedidoProducto object
 	 *
 	 * @see       useQuery()
 	 *
@@ -431,13 +431,13 @@ abstract class BaseProductoQuery extends ModelCriteria
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
-	 * @return    CuerpoPedidoQuery A secondary query class using the current class as primary query
+	 * @return    PedidoProductoQuery A secondary query class using the current class as primary query
 	 */
-	public function useCuerpoPedidoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function usePedidoProductoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		return $this
-			->joinCuerpoPedido($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'CuerpoPedido', 'CuerpoPedidoQuery');
+			->joinPedidoProducto($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'PedidoProducto', 'PedidoProductoQuery');
 	}
 
 	/**
@@ -511,6 +511,23 @@ abstract class BaseProductoQuery extends ModelCriteria
 		return $this
 			->joinStock($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Stock', 'StockQuery');
+	}
+
+	/**
+	 * Filter the query by a related Pedido object
+	 * using the pedido_producto table as cross reference
+	 *
+	 * @param     Pedido $pedido the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ProductoQuery The current query, for fluid interface
+	 */
+	public function filterByPedido($pedido, $comparison = Criteria::EQUAL)
+	{
+		return $this
+			->usePedidoProductoQuery()
+			->filterByPedido($pedido, $comparison)
+			->endUse();
 	}
 
 	/**

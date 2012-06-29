@@ -26,9 +26,9 @@
  * @method     ProveedorQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ProveedorQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ProveedorQuery leftJoinEncabezadoPedido($relationAlias = null) Adds a LEFT JOIN clause to the query using the EncabezadoPedido relation
- * @method     ProveedorQuery rightJoinEncabezadoPedido($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EncabezadoPedido relation
- * @method     ProveedorQuery innerJoinEncabezadoPedido($relationAlias = null) Adds a INNER JOIN clause to the query using the EncabezadoPedido relation
+ * @method     ProveedorQuery leftJoinPedido($relationAlias = null) Adds a LEFT JOIN clause to the query using the Pedido relation
+ * @method     ProveedorQuery rightJoinPedido($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Pedido relation
+ * @method     ProveedorQuery innerJoinPedido($relationAlias = null) Adds a INNER JOIN clause to the query using the Pedido relation
  *
  * @method     Proveedor findOne(PropelPDO $con = null) Return the first Proveedor matching the query
  * @method     Proveedor findOneOrCreate(PropelPDO $con = null) Return the first Proveedor matching the query, or a new Proveedor object populated from the query conditions when no match is found
@@ -416,40 +416,40 @@ abstract class BaseProveedorQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query by a related EncabezadoPedido object
+	 * Filter the query by a related Pedido object
 	 *
-	 * @param     EncabezadoPedido $encabezadoPedido  the related object to use as filter
+	 * @param     Pedido $pedido  the related object to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    ProveedorQuery The current query, for fluid interface
 	 */
-	public function filterByEncabezadoPedido($encabezadoPedido, $comparison = null)
+	public function filterByPedido($pedido, $comparison = null)
 	{
-		if ($encabezadoPedido instanceof EncabezadoPedido) {
+		if ($pedido instanceof Pedido) {
 			return $this
-				->addUsingAlias(ProveedorPeer::ID, $encabezadoPedido->getProveedorId(), $comparison);
-		} elseif ($encabezadoPedido instanceof PropelCollection) {
+				->addUsingAlias(ProveedorPeer::ID, $pedido->getProveedorId(), $comparison);
+		} elseif ($pedido instanceof PropelCollection) {
 			return $this
-				->useEncabezadoPedidoQuery()
-				->filterByPrimaryKeys($encabezadoPedido->getPrimaryKeys())
+				->usePedidoQuery()
+				->filterByPrimaryKeys($pedido->getPrimaryKeys())
 				->endUse();
 		} else {
-			throw new PropelException('filterByEncabezadoPedido() only accepts arguments of type EncabezadoPedido or PropelCollection');
+			throw new PropelException('filterByPedido() only accepts arguments of type Pedido or PropelCollection');
 		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the EncabezadoPedido relation
+	 * Adds a JOIN clause to the query using the Pedido relation
 	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    ProveedorQuery The current query, for fluid interface
 	 */
-	public function joinEncabezadoPedido($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function joinPedido($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('EncabezadoPedido');
+		$relationMap = $tableMap->getRelation('Pedido');
 
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
@@ -464,14 +464,14 @@ abstract class BaseProveedorQuery extends ModelCriteria
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'EncabezadoPedido');
+			$this->addJoinObject($join, 'Pedido');
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Use the EncabezadoPedido relation EncabezadoPedido object
+	 * Use the Pedido relation Pedido object
 	 *
 	 * @see       useQuery()
 	 *
@@ -479,13 +479,13 @@ abstract class BaseProveedorQuery extends ModelCriteria
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
-	 * @return    EncabezadoPedidoQuery A secondary query class using the current class as primary query
+	 * @return    PedidoQuery A secondary query class using the current class as primary query
 	 */
-	public function useEncabezadoPedidoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function usePedidoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
 	{
 		return $this
-			->joinEncabezadoPedido($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'EncabezadoPedido', 'EncabezadoPedidoQuery');
+			->joinPedido($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'Pedido', 'PedidoQuery');
 	}
 
 	/**

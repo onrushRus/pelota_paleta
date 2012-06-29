@@ -73,9 +73,9 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	protected $telefono;
 
 	/**
-	 * @var        array EncabezadoPedido[] Collection to store aggregation of EncabezadoPedido objects.
+	 * @var        array Pedido[] Collection to store aggregation of Pedido objects.
 	 */
-	protected $collEncabezadoPedidos;
+	protected $collPedidos;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -95,7 +95,7 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	 * An array of objects scheduled for deletion.
 	 * @var		array
 	 */
-	protected $encabezadoPedidosScheduledForDeletion = null;
+	protected $pedidosScheduledForDeletion = null;
 
 	/**
 	 * Get the [id] column value.
@@ -416,7 +416,7 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->collEncabezadoPedidos = null;
+			$this->collPedidos = null;
 
 		} // if (deep)
 	}
@@ -571,17 +571,17 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 				$this->resetModified();
 			}
 
-			if ($this->encabezadoPedidosScheduledForDeletion !== null) {
-				if (!$this->encabezadoPedidosScheduledForDeletion->isEmpty()) {
-					EncabezadoPedidoQuery::create()
-						->filterByPrimaryKeys($this->encabezadoPedidosScheduledForDeletion->getPrimaryKeys(false))
+			if ($this->pedidosScheduledForDeletion !== null) {
+				if (!$this->pedidosScheduledForDeletion->isEmpty()) {
+					PedidoQuery::create()
+						->filterByPrimaryKeys($this->pedidosScheduledForDeletion->getPrimaryKeys(false))
 						->delete($con);
-					$this->encabezadoPedidosScheduledForDeletion = null;
+					$this->pedidosScheduledForDeletion = null;
 				}
 			}
 
-			if ($this->collEncabezadoPedidos !== null) {
-				foreach ($this->collEncabezadoPedidos as $referrerFK) {
+			if ($this->collPedidos !== null) {
+				foreach ($this->collPedidos as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -763,8 +763,8 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 			}
 
 
-				if ($this->collEncabezadoPedidos !== null) {
-					foreach ($this->collEncabezadoPedidos as $referrerFK) {
+				if ($this->collPedidos !== null) {
+					foreach ($this->collPedidos as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -863,8 +863,8 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 			$keys[6] => $this->getTelefono(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->collEncabezadoPedidos) {
-				$result['EncabezadoPedidos'] = $this->collEncabezadoPedidos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			if (null !== $this->collPedidos) {
+				$result['Pedidos'] = $this->collPedidos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 		}
 		return $result;
@@ -1043,9 +1043,9 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 			// store object hash to prevent cycle
 			$this->startCopy = true;
 
-			foreach ($this->getEncabezadoPedidos() as $relObj) {
+			foreach ($this->getPedidos() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addEncabezadoPedido($relObj->copy($deepCopy));
+					$copyObj->addPedido($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1108,29 +1108,29 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	 */
 	public function initRelation($relationName)
 	{
-		if ('EncabezadoPedido' == $relationName) {
-			return $this->initEncabezadoPedidos();
+		if ('Pedido' == $relationName) {
+			return $this->initPedidos();
 		}
 	}
 
 	/**
-	 * Clears out the collEncabezadoPedidos collection
+	 * Clears out the collPedidos collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addEncabezadoPedidos()
+	 * @see        addPedidos()
 	 */
-	public function clearEncabezadoPedidos()
+	public function clearPedidos()
 	{
-		$this->collEncabezadoPedidos = null; // important to set this to NULL since that means it is uninitialized
+		$this->collPedidos = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collEncabezadoPedidos collection.
+	 * Initializes the collPedidos collection.
 	 *
-	 * By default this just sets the collEncabezadoPedidos collection to an empty array (like clearcollEncabezadoPedidos());
+	 * By default this just sets the collPedidos collection to an empty array (like clearcollPedidos());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
@@ -1139,17 +1139,17 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	 *
 	 * @return     void
 	 */
-	public function initEncabezadoPedidos($overrideExisting = true)
+	public function initPedidos($overrideExisting = true)
 	{
-		if (null !== $this->collEncabezadoPedidos && !$overrideExisting) {
+		if (null !== $this->collPedidos && !$overrideExisting) {
 			return;
 		}
-		$this->collEncabezadoPedidos = new PropelObjectCollection();
-		$this->collEncabezadoPedidos->setModel('EncabezadoPedido');
+		$this->collPedidos = new PropelObjectCollection();
+		$this->collPedidos->setModel('Pedido');
 	}
 
 	/**
-	 * Gets an array of EncabezadoPedido objects which contain a foreign key that references this object.
+	 * Gets an array of Pedido objects which contain a foreign key that references this object.
 	 *
 	 * If the $criteria is not null, it is used to always fetch the results from the database.
 	 * Otherwise the results are fetched from the database the first time, then cached.
@@ -1159,68 +1159,68 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	 *
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array EncabezadoPedido[] List of EncabezadoPedido objects
+	 * @return     PropelCollection|array Pedido[] List of Pedido objects
 	 * @throws     PropelException
 	 */
-	public function getEncabezadoPedidos($criteria = null, PropelPDO $con = null)
+	public function getPedidos($criteria = null, PropelPDO $con = null)
 	{
-		if(null === $this->collEncabezadoPedidos || null !== $criteria) {
-			if ($this->isNew() && null === $this->collEncabezadoPedidos) {
+		if(null === $this->collPedidos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidos) {
 				// return empty collection
-				$this->initEncabezadoPedidos();
+				$this->initPedidos();
 			} else {
-				$collEncabezadoPedidos = EncabezadoPedidoQuery::create(null, $criteria)
+				$collPedidos = PedidoQuery::create(null, $criteria)
 					->filterByProveedor($this)
 					->find($con);
 				if (null !== $criteria) {
-					return $collEncabezadoPedidos;
+					return $collPedidos;
 				}
-				$this->collEncabezadoPedidos = $collEncabezadoPedidos;
+				$this->collPedidos = $collPedidos;
 			}
 		}
-		return $this->collEncabezadoPedidos;
+		return $this->collPedidos;
 	}
 
 	/**
-	 * Sets a collection of EncabezadoPedido objects related by a one-to-many relationship
+	 * Sets a collection of Pedido objects related by a one-to-many relationship
 	 * to the current object.
 	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
 	 * and new objects from the given Propel collection.
 	 *
-	 * @param      PropelCollection $encabezadoPedidos A Propel collection.
+	 * @param      PropelCollection $pedidos A Propel collection.
 	 * @param      PropelPDO $con Optional connection object
 	 */
-	public function setEncabezadoPedidos(PropelCollection $encabezadoPedidos, PropelPDO $con = null)
+	public function setPedidos(PropelCollection $pedidos, PropelPDO $con = null)
 	{
-		$this->encabezadoPedidosScheduledForDeletion = $this->getEncabezadoPedidos(new Criteria(), $con)->diff($encabezadoPedidos);
+		$this->pedidosScheduledForDeletion = $this->getPedidos(new Criteria(), $con)->diff($pedidos);
 
-		foreach ($encabezadoPedidos as $encabezadoPedido) {
+		foreach ($pedidos as $pedido) {
 			// Fix issue with collection modified by reference
-			if ($encabezadoPedido->isNew()) {
-				$encabezadoPedido->setProveedor($this);
+			if ($pedido->isNew()) {
+				$pedido->setProveedor($this);
 			}
-			$this->addEncabezadoPedido($encabezadoPedido);
+			$this->addPedido($pedido);
 		}
 
-		$this->collEncabezadoPedidos = $encabezadoPedidos;
+		$this->collPedidos = $pedidos;
 	}
 
 	/**
-	 * Returns the number of related EncabezadoPedido objects.
+	 * Returns the number of related Pedido objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related EncabezadoPedido objects.
+	 * @return     int Count of related Pedido objects.
 	 * @throws     PropelException
 	 */
-	public function countEncabezadoPedidos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countPedidos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if(null === $this->collEncabezadoPedidos || null !== $criteria) {
-			if ($this->isNew() && null === $this->collEncabezadoPedidos) {
+		if(null === $this->collPedidos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidos) {
 				return 0;
 			} else {
-				$query = EncabezadoPedidoQuery::create(null, $criteria);
+				$query = PedidoQuery::create(null, $criteria);
 				if($distinct) {
 					$query->distinct();
 				}
@@ -1229,36 +1229,36 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 					->count($con);
 			}
 		} else {
-			return count($this->collEncabezadoPedidos);
+			return count($this->collPedidos);
 		}
 	}
 
 	/**
-	 * Method called to associate a EncabezadoPedido object to this object
-	 * through the EncabezadoPedido foreign key attribute.
+	 * Method called to associate a Pedido object to this object
+	 * through the Pedido foreign key attribute.
 	 *
-	 * @param      EncabezadoPedido $l EncabezadoPedido
+	 * @param      Pedido $l Pedido
 	 * @return     Proveedor The current object (for fluent API support)
 	 */
-	public function addEncabezadoPedido(EncabezadoPedido $l)
+	public function addPedido(Pedido $l)
 	{
-		if ($this->collEncabezadoPedidos === null) {
-			$this->initEncabezadoPedidos();
+		if ($this->collPedidos === null) {
+			$this->initPedidos();
 		}
-		if (!$this->collEncabezadoPedidos->contains($l)) { // only add it if the **same** object is not already associated
-			$this->doAddEncabezadoPedido($l);
+		if (!$this->collPedidos->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddPedido($l);
 		}
 
 		return $this;
 	}
 
 	/**
-	 * @param	EncabezadoPedido $encabezadoPedido The encabezadoPedido object to add.
+	 * @param	Pedido $pedido The pedido object to add.
 	 */
-	protected function doAddEncabezadoPedido($encabezadoPedido)
+	protected function doAddPedido($pedido)
 	{
-		$this->collEncabezadoPedidos[]= $encabezadoPedido;
-		$encabezadoPedido->setProveedor($this);
+		$this->collPedidos[]= $pedido;
+		$pedido->setProveedor($this);
 	}
 
 	/**
@@ -1293,17 +1293,17 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collEncabezadoPedidos) {
-				foreach ($this->collEncabezadoPedidos as $o) {
+			if ($this->collPedidos) {
+				foreach ($this->collPedidos as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
-		if ($this->collEncabezadoPedidos instanceof PropelCollection) {
-			$this->collEncabezadoPedidos->clearIterator();
+		if ($this->collPedidos instanceof PropelCollection) {
+			$this->collPedidos->clearIterator();
 		}
-		$this->collEncabezadoPedidos = null;
+		$this->collPedidos = null;
 	}
 
 	/**

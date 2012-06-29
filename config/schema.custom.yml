@@ -11,3 +11,6 @@ propel:
     
   producto:
     descripcion_prod: { primaryString: true }
+  
+  pedido_producto:
+    _attributes: { isCrossRef: true }

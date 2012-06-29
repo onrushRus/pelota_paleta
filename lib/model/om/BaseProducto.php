@@ -61,14 +61,19 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	protected $precio;
 
 	/**
-	 * @var        array CuerpoPedido[] Collection to store aggregation of CuerpoPedido objects.
+	 * @var        array PedidoProducto[] Collection to store aggregation of PedidoProducto objects.
 	 */
-	protected $collCuerpoPedidos;
+	protected $collPedidoProductos;
 
 	/**
 	 * @var        Stock one-to-one related Stock object
 	 */
 	protected $singleStock;
+
+	/**
+	 * @var        array Pedido[] Collection to store aggregation of Pedido objects.
+	 */
+	protected $collPedidos;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -88,7 +93,13 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 * An array of objects scheduled for deletion.
 	 * @var		array
 	 */
-	protected $cuerpoPedidosScheduledForDeletion = null;
+	protected $pedidosScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $pedidoProductosScheduledForDeletion = null;
 
 	/**
 	 * An array of objects scheduled for deletion.
@@ -353,10 +364,11 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->collCuerpoPedidos = null;
+			$this->collPedidoProductos = null;
 
 			$this->singleStock = null;
 
+			$this->collPedidos = null;
 		} // if (deep)
 	}
 
@@ -510,17 +522,32 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 				$this->resetModified();
 			}
 
-			if ($this->cuerpoPedidosScheduledForDeletion !== null) {
-				if (!$this->cuerpoPedidosScheduledForDeletion->isEmpty()) {
-					CuerpoPedidoQuery::create()
-						->filterByPrimaryKeys($this->cuerpoPedidosScheduledForDeletion->getPrimaryKeys(false))
+			if ($this->pedidosScheduledForDeletion !== null) {
+				if (!$this->pedidosScheduledForDeletion->isEmpty()) {
+					PedidoProductoQuery::create()
+						->filterByPrimaryKeys($this->pedidosScheduledForDeletion->getPrimaryKeys(false))
 						->delete($con);
-					$this->cuerpoPedidosScheduledForDeletion = null;
+					$this->pedidosScheduledForDeletion = null;
+				}
+
+				foreach ($this->getPedidos() as $pedido) {
+					if ($pedido->isModified()) {
+						$pedido->save($con);
+					}
 				}
 			}
 
-			if ($this->collCuerpoPedidos !== null) {
-				foreach ($this->collCuerpoPedidos as $referrerFK) {
+			if ($this->pedidoProductosScheduledForDeletion !== null) {
+				if (!$this->pedidoProductosScheduledForDeletion->isEmpty()) {
+					PedidoProductoQuery::create()
+						->filterByPrimaryKeys($this->pedidoProductosScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->pedidoProductosScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collPedidoProductos !== null) {
+				foreach ($this->collPedidoProductos as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -705,8 +732,8 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			}
 
 
-				if ($this->collCuerpoPedidos !== null) {
-					foreach ($this->collCuerpoPedidos as $referrerFK) {
+				if ($this->collPedidoProductos !== null) {
+					foreach ($this->collPedidoProductos as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -803,8 +830,8 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			$keys[4] => $this->getPrecio(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->collCuerpoPedidos) {
-				$result['CuerpoPedidos'] = $this->collCuerpoPedidos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			if (null !== $this->collPedidoProductos) {
+				$result['PedidoProductos'] = $this->collPedidoProductos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 			if (null !== $this->singleStock) {
 				$result['Stock'] = $this->singleStock->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
@@ -974,9 +1001,9 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			// store object hash to prevent cycle
 			$this->startCopy = true;
 
-			foreach ($this->getCuerpoPedidos() as $relObj) {
+			foreach ($this->getPedidoProductos() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addCuerpoPedido($relObj->copy($deepCopy));
+					$copyObj->addPedidoProducto($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1044,29 +1071,29 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 */
 	public function initRelation($relationName)
 	{
-		if ('CuerpoPedido' == $relationName) {
-			return $this->initCuerpoPedidos();
+		if ('PedidoProducto' == $relationName) {
+			return $this->initPedidoProductos();
 		}
 	}
 
 	/**
-	 * Clears out the collCuerpoPedidos collection
+	 * Clears out the collPedidoProductos collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addCuerpoPedidos()
+	 * @see        addPedidoProductos()
 	 */
-	public function clearCuerpoPedidos()
+	public function clearPedidoProductos()
 	{
-		$this->collCuerpoPedidos = null; // important to set this to NULL since that means it is uninitialized
+		$this->collPedidoProductos = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collCuerpoPedidos collection.
+	 * Initializes the collPedidoProductos collection.
 	 *
-	 * By default this just sets the collCuerpoPedidos collection to an empty array (like clearcollCuerpoPedidos());
+	 * By default this just sets the collPedidoProductos collection to an empty array (like clearcollPedidoProductos());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
@@ -1075,17 +1102,17 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 *
 	 * @return     void
 	 */
-	public function initCuerpoPedidos($overrideExisting = true)
+	public function initPedidoProductos($overrideExisting = true)
 	{
-		if (null !== $this->collCuerpoPedidos && !$overrideExisting) {
+		if (null !== $this->collPedidoProductos && !$overrideExisting) {
 			return;
 		}
-		$this->collCuerpoPedidos = new PropelObjectCollection();
-		$this->collCuerpoPedidos->setModel('CuerpoPedido');
+		$this->collPedidoProductos = new PropelObjectCollection();
+		$this->collPedidoProductos->setModel('PedidoProducto');
 	}
 
 	/**
-	 * Gets an array of CuerpoPedido objects which contain a foreign key that references this object.
+	 * Gets an array of PedidoProducto objects which contain a foreign key that references this object.
 	 *
 	 * If the $criteria is not null, it is used to always fetch the results from the database.
 	 * Otherwise the results are fetched from the database the first time, then cached.
@@ -1095,68 +1122,68 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 *
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array CuerpoPedido[] List of CuerpoPedido objects
+	 * @return     PropelCollection|array PedidoProducto[] List of PedidoProducto objects
 	 * @throws     PropelException
 	 */
-	public function getCuerpoPedidos($criteria = null, PropelPDO $con = null)
+	public function getPedidoProductos($criteria = null, PropelPDO $con = null)
 	{
-		if(null === $this->collCuerpoPedidos || null !== $criteria) {
-			if ($this->isNew() && null === $this->collCuerpoPedidos) {
+		if(null === $this->collPedidoProductos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidoProductos) {
 				// return empty collection
-				$this->initCuerpoPedidos();
+				$this->initPedidoProductos();
 			} else {
-				$collCuerpoPedidos = CuerpoPedidoQuery::create(null, $criteria)
+				$collPedidoProductos = PedidoProductoQuery::create(null, $criteria)
 					->filterByProducto($this)
 					->find($con);
 				if (null !== $criteria) {
-					return $collCuerpoPedidos;
+					return $collPedidoProductos;
 				}
-				$this->collCuerpoPedidos = $collCuerpoPedidos;
+				$this->collPedidoProductos = $collPedidoProductos;
 			}
 		}
-		return $this->collCuerpoPedidos;
+		return $this->collPedidoProductos;
 	}
 
 	/**
-	 * Sets a collection of CuerpoPedido objects related by a one-to-many relationship
+	 * Sets a collection of PedidoProducto objects related by a one-to-many relationship
 	 * to the current object.
 	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
 	 * and new objects from the given Propel collection.
 	 *
-	 * @param      PropelCollection $cuerpoPedidos A Propel collection.
+	 * @param      PropelCollection $pedidoProductos A Propel collection.
 	 * @param      PropelPDO $con Optional connection object
 	 */
-	public function setCuerpoPedidos(PropelCollection $cuerpoPedidos, PropelPDO $con = null)
+	public function setPedidoProductos(PropelCollection $pedidoProductos, PropelPDO $con = null)
 	{
-		$this->cuerpoPedidosScheduledForDeletion = $this->getCuerpoPedidos(new Criteria(), $con)->diff($cuerpoPedidos);
+		$this->pedidoProductosScheduledForDeletion = $this->getPedidoProductos(new Criteria(), $con)->diff($pedidoProductos);
 
-		foreach ($cuerpoPedidos as $cuerpoPedido) {
+		foreach ($pedidoProductos as $pedidoProducto) {
 			// Fix issue with collection modified by reference
-			if ($cuerpoPedido->isNew()) {
-				$cuerpoPedido->setProducto($this);
+			if ($pedidoProducto->isNew()) {
+				$pedidoProducto->setProducto($this);
 			}
-			$this->addCuerpoPedido($cuerpoPedido);
+			$this->addPedidoProducto($pedidoProducto);
 		}
 
-		$this->collCuerpoPedidos = $cuerpoPedidos;
+		$this->collPedidoProductos = $pedidoProductos;
 	}
 
 	/**
-	 * Returns the number of related CuerpoPedido objects.
+	 * Returns the number of related PedidoProducto objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related CuerpoPedido objects.
+	 * @return     int Count of related PedidoProducto objects.
 	 * @throws     PropelException
 	 */
-	public function countCuerpoPedidos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countPedidoProductos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if(null === $this->collCuerpoPedidos || null !== $criteria) {
-			if ($this->isNew() && null === $this->collCuerpoPedidos) {
+		if(null === $this->collPedidoProductos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidoProductos) {
 				return 0;
 			} else {
-				$query = CuerpoPedidoQuery::create(null, $criteria);
+				$query = PedidoProductoQuery::create(null, $criteria);
 				if($distinct) {
 					$query->distinct();
 				}
@@ -1165,36 +1192,36 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 					->count($con);
 			}
 		} else {
-			return count($this->collCuerpoPedidos);
+			return count($this->collPedidoProductos);
 		}
 	}
 
 	/**
-	 * Method called to associate a CuerpoPedido object to this object
-	 * through the CuerpoPedido foreign key attribute.
+	 * Method called to associate a PedidoProducto object to this object
+	 * through the PedidoProducto foreign key attribute.
 	 *
-	 * @param      CuerpoPedido $l CuerpoPedido
+	 * @param      PedidoProducto $l PedidoProducto
 	 * @return     Producto The current object (for fluent API support)
 	 */
-	public function addCuerpoPedido(CuerpoPedido $l)
+	public function addPedidoProducto(PedidoProducto $l)
 	{
-		if ($this->collCuerpoPedidos === null) {
-			$this->initCuerpoPedidos();
+		if ($this->collPedidoProductos === null) {
+			$this->initPedidoProductos();
 		}
-		if (!$this->collCuerpoPedidos->contains($l)) { // only add it if the **same** object is not already associated
-			$this->doAddCuerpoPedido($l);
+		if (!$this->collPedidoProductos->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddPedidoProducto($l);
 		}
 
 		return $this;
 	}
 
 	/**
-	 * @param	CuerpoPedido $cuerpoPedido The cuerpoPedido object to add.
+	 * @param	PedidoProducto $pedidoProducto The pedidoProducto object to add.
 	 */
-	protected function doAddCuerpoPedido($cuerpoPedido)
+	protected function doAddPedidoProducto($pedidoProducto)
 	{
-		$this->collCuerpoPedidos[]= $cuerpoPedido;
-		$cuerpoPedido->setProducto($this);
+		$this->collPedidoProductos[]= $pedidoProducto;
+		$pedidoProducto->setProducto($this);
 	}
 
 
@@ -1203,7 +1230,7 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this Producto is new, it will return
 	 * an empty collection; or if this Producto has previously
-	 * been saved, it will retrieve related CuerpoPedidos from storage.
+	 * been saved, it will retrieve related PedidoProductos from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
@@ -1212,14 +1239,14 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array CuerpoPedido[] List of CuerpoPedido objects
+	 * @return     PropelCollection|array PedidoProducto[] List of PedidoProducto objects
 	 */
-	public function getCuerpoPedidosJoinEncabezadoPedido($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getPedidoProductosJoinPedido($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$query = CuerpoPedidoQuery::create(null, $criteria);
-		$query->joinWith('EncabezadoPedido', $join_behavior);
+		$query = PedidoProductoQuery::create(null, $criteria);
+		$query->joinWith('Pedido', $join_behavior);
 
-		return $this->getCuerpoPedidos($query, $con);
+		return $this->getPedidoProductos($query, $con);
 	}
 
 	/**
@@ -1259,6 +1286,158 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Clears out the collPedidos collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addPedidos()
+	 */
+	public function clearPedidos()
+	{
+		$this->collPedidos = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collPedidos collection.
+	 *
+	 * By default this just sets the collPedidos collection to an empty collection (like clearPedidos());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initPedidos()
+	{
+		$this->collPedidos = new PropelObjectCollection();
+		$this->collPedidos->setModel('Pedido');
+	}
+
+	/**
+	 * Gets a collection of Pedido objects related by a many-to-many relationship
+	 * to the current object by way of the pedido_producto cross-reference table.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this Producto is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria Optional query object to filter the query
+	 * @param      PropelPDO $con Optional connection object
+	 *
+	 * @return     PropelCollection|array Pedido[] List of Pedido objects
+	 */
+	public function getPedidos($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collPedidos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidos) {
+				// return empty collection
+				$this->initPedidos();
+			} else {
+				$collPedidos = PedidoQuery::create(null, $criteria)
+					->filterByProducto($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collPedidos;
+				}
+				$this->collPedidos = $collPedidos;
+			}
+		}
+		return $this->collPedidos;
+	}
+
+	/**
+	 * Sets a collection of Pedido objects related by a many-to-many relationship
+	 * to the current object by way of the pedido_producto cross-reference table.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $pedidos A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setPedidos(PropelCollection $pedidos, PropelPDO $con = null)
+	{
+		$pedidoProductos = PedidoProductoQuery::create()
+			->filterByPedido($pedidos)
+			->filterByProducto($this)
+			->find($con);
+
+		$this->pedidosScheduledForDeletion = $this->getPedidoProductos()->diff($pedidoProductos);
+		$this->collPedidoProductos = $pedidoProductos;
+
+		foreach ($pedidos as $pedido) {
+			// Fix issue with collection modified by reference
+			if ($pedido->isNew()) {
+				$this->doAddPedido($pedido);
+			} else {
+				$this->addPedido($pedido);
+			}
+		}
+
+		$this->collPedidos = $pedidos;
+	}
+
+	/**
+	 * Gets the number of Pedido objects related by a many-to-many relationship
+	 * to the current object by way of the pedido_producto cross-reference table.
+	 *
+	 * @param      Criteria $criteria Optional query object to filter the query
+	 * @param      boolean $distinct Set to true to force count distinct
+	 * @param      PropelPDO $con Optional connection object
+	 *
+	 * @return     int the number of related Pedido objects
+	 */
+	public function countPedidos($criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collPedidos || null !== $criteria) {
+			if ($this->isNew() && null === $this->collPedidos) {
+				return 0;
+			} else {
+				$query = PedidoQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByProducto($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collPedidos);
+		}
+	}
+
+	/**
+	 * Associate a Pedido object to this object
+	 * through the pedido_producto cross reference table.
+	 *
+	 * @param      Pedido $pedido The PedidoProducto object to relate
+	 * @return     void
+	 */
+	public function addPedido(Pedido $pedido)
+	{
+		if ($this->collPedidos === null) {
+			$this->initPedidos();
+		}
+		if (!$this->collPedidos->contains($pedido)) { // only add it if the **same** object is not already associated
+			$this->doAddPedido($pedido);
+
+			$this->collPedidos[]= $pedido;
+		}
+	}
+
+	/**
+	 * @param	Pedido $pedido The pedido object to add.
+	 */
+	protected function doAddPedido($pedido)
+	{
+		$pedidoProducto = new PedidoProducto();
+		$pedidoProducto->setPedido($pedido);
+		$this->addPedidoProducto($pedidoProducto);
+	}
+
+	/**
 	 * Clears the current object and sets all attributes to their default values
 	 */
 	public function clear()
@@ -1288,24 +1467,33 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collCuerpoPedidos) {
-				foreach ($this->collCuerpoPedidos as $o) {
+			if ($this->collPedidoProductos) {
+				foreach ($this->collPedidoProductos as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->singleStock) {
 				$this->singleStock->clearAllReferences($deep);
 			}
+			if ($this->collPedidos) {
+				foreach ($this->collPedidos as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
-		if ($this->collCuerpoPedidos instanceof PropelCollection) {
-			$this->collCuerpoPedidos->clearIterator();
+		if ($this->collPedidoProductos instanceof PropelCollection) {
+			$this->collPedidoProductos->clearIterator();
 		}
-		$this->collCuerpoPedidos = null;
+		$this->collPedidoProductos = null;
 		if ($this->singleStock instanceof PropelCollection) {
 			$this->singleStock->clearIterator();
 		}
 		$this->singleStock = null;
+		if ($this->collPedidos instanceof PropelCollection) {
+			$this->collPedidos->clearIterator();
+		}
+		$this->collPedidos = null;
 	}
 
 	/**

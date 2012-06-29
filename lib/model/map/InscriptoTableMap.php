@@ -42,7 +42,7 @@ class InscriptoTableMap extends TableMap
 		$this->addForeignKey('PERSONA_NRO_DOC', 'PersonaNroDoc', 'INTEGER', 'persona', 'NRO_DOC', true, 10, null);
 		$this->addForeignKey('TORNEO_CAT_ID', 'TorneoCatId', 'INTEGER', 'torneo_categoria', 'ID_TORNEO_CATEGORIA', true, 10, null);
 		$this->addColumn('NRO_EQUIPO', 'NroEquipo', 'INTEGER', true, 10, 0);
-		$this->addForeignKey('CLUB_REPRESENTADO', 'ClubRepresentado', 'INTEGER', 'club', 'ID', false, 10, null);
+		$this->addForeignKey('CLUB_REPRESENTADO', 'ClubRepresentado', 'INTEGER', 'club', 'ID', true, 10, null);
 		// validators
 	} // initialize()
 
@@ -51,9 +51,9 @@ class InscriptoTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), 'CASCADE', 'CASCADE');
-		$this->addRelation('TorneoCategoria', 'TorneoCategoria', RelationMap::MANY_TO_ONE, array('torneo_cat_id' => 'id_torneo_categoria', ), 'CASCADE', 'CASCADE');
-		$this->addRelation('Club', 'Club', RelationMap::MANY_TO_ONE, array('club_representado' => 'id', ), 'SET NULL', 'CASCADE');
+		$this->addRelation('Persona', 'Persona', RelationMap::MANY_TO_ONE, array('persona_nro_doc' => 'nro_doc', ), null, null);
+		$this->addRelation('TorneoCategoria', 'TorneoCategoria', RelationMap::MANY_TO_ONE, array('torneo_cat_id' => 'id_torneo_categoria', ), null, null);
+		$this->addRelation('Club', 'Club', RelationMap::MANY_TO_ONE, array('club_representado' => 'id', ), null, null);
 		$this->addRelation('Ranking', 'Ranking', RelationMap::ONE_TO_MANY, array('persona_nro_doc' => 'pelotari_nro_doc', ), null, null, 'Rankings');
 		$this->addRelation('ResultadoTorneo', 'ResultadoTorneo', RelationMap::ONE_TO_MANY, array('persona_nro_doc' => 'pelotari_nro_doc', ), null, null, 'ResultadoTorneos');
 	} // buildRelations()

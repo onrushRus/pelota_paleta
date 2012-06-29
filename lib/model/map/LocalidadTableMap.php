@@ -51,8 +51,8 @@ class LocalidadTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('Provincia', 'Provincia', RelationMap::MANY_TO_ONE, array('provincia_id' => 'id', ), 'CASCADE', 'CASCADE');
-		$this->addRelation('Persona', 'Persona', RelationMap::ONE_TO_MANY, array('id' => 'localidad_id', ), 'SET NULL', 'CASCADE', 'Personas');
+		$this->addRelation('Provincia', 'Provincia', RelationMap::MANY_TO_ONE, array('provincia_id' => 'id', ), null, null);
+		$this->addRelation('Persona', 'Persona', RelationMap::ONE_TO_MANY, array('id' => 'localidad_id', ), null, null, 'Personas');
 	} // buildRelations()
 
 	/**

@@ -26,6 +26,9 @@ class ProductoForm extends BaseProductoForm
 
         $this->embedForm('stock', $form2);
 
+        unset($this['pedido_producto_list']);
+        
+        //$this->embedRelation('PedidoProducto');
         //esto anda,,, pasa q no guarda en la tabla stock pq no existe
         // la referencia de un producto q aun no esta creado
     }

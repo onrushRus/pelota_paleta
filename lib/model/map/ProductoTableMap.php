@@ -52,8 +52,9 @@ class ProductoTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('CuerpoPedido', 'CuerpoPedido', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'CuerpoPedidos');
+		$this->addRelation('PedidoProducto', 'PedidoProducto', RelationMap::ONE_TO_MANY, array('id' => 'producto_id', ), null, null, 'PedidoProductos');
 		$this->addRelation('Stock', 'Stock', RelationMap::ONE_TO_ONE, array('id' => 'producto_id', ), 'CASCADE', 'CASCADE');
+		$this->addRelation('Pedido', 'Pedido', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'Pedidos');
 	} // buildRelations()
 
 	/**
