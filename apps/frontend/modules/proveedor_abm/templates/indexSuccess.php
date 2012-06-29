@@ -25,7 +25,7 @@
       <td><?php echo $Proveedor->getTelefono() ?></td>
       <td>
           <a class="btn btn-warning btn-mini" href="<?php echo url_for('proveedor_abm/edit?id='.$Proveedor->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
-      <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'proveedor_abm/delete?id='.$Proveedor->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de Eliminar?', 'class'=>"btn btn-warning btn-mini")) ?>
+      <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'proveedor_abm/delete?id='.$Proveedor->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de Eliminar?', 'class'=>"btn btn-danger btn-mini")) ?>
       </td>
     </tr>
     <?php endforeach; ?>
