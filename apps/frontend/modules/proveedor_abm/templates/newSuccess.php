@@ -1,3 +1,3 @@
-<h1>New Proveedor</h1>
+<h1>Nuevo Proveedor</h1>
 
 <?php include_partial('form', array('form' => $form)) ?>
