@@ -1569,11 +1569,11 @@ abstract class BaseTorneoCategoria extends BaseObject  implements Persistent
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'id_torneo_categoria' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(TorneoCategoriaPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getIdTorneoCategoria();
 	}
 
 	/**

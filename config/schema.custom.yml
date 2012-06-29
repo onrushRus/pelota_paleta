@@ -14,3 +14,19 @@ propel:
   
   pedido_producto:
     _attributes: { isCrossRef: true }
+    
+  torneo:
+    nombre: { primaryString: true }
+    
+  categoria:
+    descripcion_categoria: { primaryString: true }
+    
+  persona:
+    nro_doc: { primaryString: true }
+
+  torneo_categoria:
+    id_torneo_categoria: { primaryString: true }
+    torneo_id: { primaryString: true }
+    
+  club:
+    nombre_club: { primaryString: true }

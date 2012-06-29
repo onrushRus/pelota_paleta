@@ -41,6 +41,7 @@ class TorneoTableMap extends TableMap
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('ANIO', 'Anio', 'INTEGER', true, 10, null);
 		$this->addColumn('NOMBRE', 'Nombre', 'VARCHAR', true, 45, null);
+		$this->getColumn('NOMBRE', false)->setPrimaryString(true);
 		$this->addColumn('TIPO_TORNEO', 'TipoTorneo', 'BOOLEAN', true, 1, null);
 		// validators
 	} // initialize()

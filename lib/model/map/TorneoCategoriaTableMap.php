@@ -39,7 +39,9 @@ class TorneoCategoriaTableMap extends TableMap
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID_TORNEO_CATEGORIA', 'IdTorneoCategoria', 'INTEGER', true, 10, null);
+		$this->getColumn('ID_TORNEO_CATEGORIA', false)->setPrimaryString(true);
 		$this->addForeignKey('TORNEO_ID', 'TorneoId', 'INTEGER', 'torneo', 'ID', true, 10, null);
+		$this->getColumn('TORNEO_ID', false)->setPrimaryString(true);
 		$this->addForeignKey('CATEGORIA_ID', 'CategoriaId', 'INTEGER', 'categoria', 'ID', true, 10, null);
 		// validators
 	} // initialize()
