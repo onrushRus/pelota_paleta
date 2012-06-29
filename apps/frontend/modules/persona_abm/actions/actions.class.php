@@ -55,9 +55,13 @@ class persona_abmActions extends sfActions
 
     $Persona = PersonaQuery::create()->findPk($request->getParameter('nro_doc'));
     $this->forward404Unless($Persona, sprintf('Object Persona does not exist (%s).', $request->getParameter('nro_doc')));
-    $Persona->delete();
 
-    $this->redirect('persona_abm/index');
+       try {
+            $Persona->delete();
+            $this->redirect('persona_abm/index');
+        } catch (Exception $e) {
+            return sfView::ERROR;
+        }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)

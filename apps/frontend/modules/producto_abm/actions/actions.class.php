@@ -55,9 +55,14 @@ class producto_abmActions extends sfActions
 
     $Producto = ProductoQuery::create()->findPk($request->getParameter('id'));
     $this->forward404Unless($Producto, sprintf('Object Producto does not exist (%s).', $request->getParameter('id')));
-    $Producto->delete();
-
-    $this->redirect('producto_abm/index');
+    
+   try{
+        $Producto->delete();
+        $this->redirect('producto_abm/index');
+   }  catch (Exception $e) {
+       return sfView::ERROR;
+   }
+       
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)

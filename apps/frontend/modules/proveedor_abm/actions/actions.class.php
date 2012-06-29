@@ -55,9 +55,12 @@ class proveedor_abmActions extends sfActions
 
     $Proveedor = ProveedorQuery::create()->findPk($request->getParameter('id'));
     $this->forward404Unless($Proveedor, sprintf('Object Proveedor does not exist (%s).', $request->getParameter('id')));
-    $Proveedor->delete();
-
-    $this->redirect('proveedor_abm/index');
+       try {
+            $Proveedor->delete();
+            $this->redirect('proveedor_abm/index');
+        } catch (Exception $e) {
+            return sfView::ERROR;
+        }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
