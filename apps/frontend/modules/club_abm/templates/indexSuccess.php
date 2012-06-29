@@ -1,20 +1,26 @@
-<h1>Clubs List</h1>
+<h1>Clubs</h1>
 
-<table>
+<table class="table table-bordered">
+
   <thead>
     <tr>
-      <th>Id</th>
-      <th>Nombre club</th>
+      <th>Identificador</th>
+      <th>Nombre</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($Clubs as $Club): ?>
     <tr>
-      <td><a href="<?php echo url_for('club_abm/edit?id='.$Club->getId()) ?>"><?php echo $Club->getId() ?></a></td>
+      <td><?php echo $Club->getId() ?></td>
       <td><?php echo $Club->getNombreClub() ?></td>
+      <td>
+          <a class="btn btn-warning btn-mini" href="<?php echo url_for('club_abm/edit?id='.$Club->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
+          <?php echo link_to('<i class="icon-trash icon-white"></i>Delete', 'club_abm/delete?id='.$Club->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini")) ?>
+      </td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
 
-  <a href="<?php echo url_for('club_abm/new') ?>">New</a>
+  <a class="btn btn-info" href="<?php echo url_for('club_abm/new') ?>">Nuevo</a>
