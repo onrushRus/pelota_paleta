@@ -1886,11 +1886,11 @@ abstract class BasePersona extends BaseObject  implements Persistent
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'nro_doc' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(PersonaPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getNroDoc();
 	}
 
 	/**

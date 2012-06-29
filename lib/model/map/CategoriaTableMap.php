@@ -40,6 +40,7 @@ class CategoriaTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('DESCRIPCION_CATEGORIA', 'DescripcionCategoria', 'VARCHAR', true, 40, null);
+		$this->getColumn('DESCRIPCION_CATEGORIA', false)->setPrimaryString(true);
 		$this->addColumn('EDAD_MIN', 'EdadMin', 'INTEGER', true, 10, null);
 		$this->addColumn('EDAD_MAX', 'EdadMax', 'INTEGER', true, 10, null);
 		// validators

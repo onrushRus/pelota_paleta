@@ -40,7 +40,6 @@
                   <li><a href="<?php echo url_for('socio_abm/index');?>">Socio ABM</a></li>
                   <li><a href="<?php echo url_for('persona_abm/index');?>">Persona ABM</a></li>
                   <li><a href="<?php echo url_for('proveedor_abm/index');?>">Proveedores ABM</a></li>                
-                  <li><a href="<?php echo url_for('inscripto_abm/index');?>">Inscripción ABM</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -59,6 +58,9 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="<?php echo url_for('club_abm/index');?>">Clubs ABM</a></li>
+                  <li><a href="<?php echo url_for('inscripto_abm/index');?>">Inscripción ABM</a></li>
+                  <li><a href="<?php echo url_for('torneo_abm/index');?>">Torneo ABM</a></li>
+                  <li><a href="<?php echo url_for('resultado_torneo_abm/index');?>">Resultados Torneo</a></li>
                 </ul>
               </li>
               <li class="dropdown">

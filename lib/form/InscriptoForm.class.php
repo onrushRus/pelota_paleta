@@ -11,5 +11,7 @@ class InscriptoForm extends BaseInscriptoForm
 {
   public function configure()
   {
+      $this->widgetSchema['torneo_cat_id']->setOption('query_methods', array('joinWithCategoria'));
+      $this->widgetSchema['torneo_cat_id']->setOption('method', 'getCategoria');
   }
 }

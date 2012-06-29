@@ -40,6 +40,7 @@ class ClubTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('NOMBRE_CLUB', 'NombreClub', 'VARCHAR', true, 45, null);
+		$this->getColumn('NOMBRE_CLUB', false)->setPrimaryString(true);
 		// validators
 	} // initialize()
 
