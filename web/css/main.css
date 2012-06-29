@@ -1,0 +1,15 @@
+form{
+    text-align: left !important;
+   
+}
+input{
+    margin-left: 50px !important;
+}
+
+select{
+    margin-left:  50px !important;
+}
+
+ul.error_list{
+    color: #FF2400;
+}
