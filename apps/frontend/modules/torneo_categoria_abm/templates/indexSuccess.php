@@ -12,8 +12,9 @@
     <?php foreach ($TorneoCategorias as $TorneoCategoria): ?>
     <tr>
       <td><a href="<?php echo url_for('torneo_categoria_abm/edit?id_torneo_categoria='.$TorneoCategoria->getIdTorneoCategoria()) ?>"><?php echo $TorneoCategoria->getIdTorneoCategoria() ?></a></td>
-      <td><?php echo $TorneoCategoria->getTorneoId() ?></td>
-      <td><?php echo $TorneoCategoria->getCategoriaId() ?></td>
+      <td><?php echo $TorneoCategoria->getTorneo() ?></td>
+      <td><?php echo $TorneoCategoria->getCategoria() ?></td>
+      <td><?php echo $TorneoCategoria->getTorncat() ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

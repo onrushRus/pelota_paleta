@@ -14,5 +14,10 @@
  * @package    propel.generator.lib.model
  */
 class TorneoCategoria extends BaseTorneoCategoria {
+    
+public function getTorncat(){
+    $aux='Torneo: '.$this->getTorneo().', Categoria: '.$this->getCategoria();
+    return $aux;
+}
 
 } // TorneoCategoria
