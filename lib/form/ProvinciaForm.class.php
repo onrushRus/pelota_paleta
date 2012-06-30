@@ -11,5 +11,6 @@ class ProvinciaForm extends BaseProvinciaForm
 {
   public function configure()
   {
+	  $this->embedRelation('Localidad');
   }
 }

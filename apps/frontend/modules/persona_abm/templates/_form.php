@@ -8,8 +8,11 @@
   <table>
     <tfoot>
       <tr>
+
         <td colspan="2">
+          <br>&nbsp;<a class="btn" href="<?php echo url_for('provincia_abm/index') ?>">Cargar localidad/provincia</a><br><br>
           &nbsp;<a class="btn" href="<?php echo url_for('persona_abm/index') ?>">Atras</a>
+          
           <input class="btn" type="submit" value="Guardar" />
         </td>
       </tr>
