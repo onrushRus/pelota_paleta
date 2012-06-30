@@ -13,6 +13,9 @@ class ResultadoTorneoForm extends BaseResultadoTorneoForm
   {
       $this->widgetSchema['pelotari_nro_doc']->setOption('query_methods', array('joinWithPersona'));
       $this->widgetSchema['pelotari_nro_doc']->setOption('method', 'getPersona');
+      //$this->widgetSchema['torneo_cat_id']->setOption('query_methods', array('joinWithPersona'));
+      $this->widgetSchema['torneo_cat_id']->setOption('method', 'getTorncat');
+      
       
        $this->widgetSchema->setLabels(array(
           'torneo_cat_id' => 'Torne-Categoria', 

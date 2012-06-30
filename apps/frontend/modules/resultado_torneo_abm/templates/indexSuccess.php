@@ -15,7 +15,7 @@
     <tr>
       <td><?php echo $ResultadoTorneo->getId() ?></td>
       <td><?php echo $ResultadoTorneo->getPuestoId() ?></td>
-      <td><?php echo $ResultadoTorneo->getTorneoCatId() ?></td>
+      <td><?php echo $ResultadoTorneo->getTorneoCategoria()->getTorncat() ?></td>
       <td><?php echo $ResultadoTorneo->getPelotariNroDoc() ?></td>
       <td>
           <a class="btn btn-warning btn-mini"  href="<?php echo url_for('resultado_torneo_abm/edit?id='.$ResultadoTorneo->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
