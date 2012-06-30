@@ -14,7 +14,7 @@ class TorneoForm extends BaseTorneoForm
      // $arreglo= array('1'=>'nacional');
       //$this->widgetSchema['tipo_torneo']= new sfWidgetFormText();
       //$this->validatorSchema['tipo_torneo'] = new sfValidatorInteger();
-      
+      $this->embedRelation('TorneoCategoria');
        $this->widgetSchema->setLabels(array(
            'anio' => 'Año',
        ));

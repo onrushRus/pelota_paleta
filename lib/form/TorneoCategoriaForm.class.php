@@ -11,5 +11,6 @@ class TorneoCategoriaForm extends BaseTorneoCategoriaForm
 {
   public function configure()
   {
+	  //$this->embedRelation('Categoria');
   }
 }
