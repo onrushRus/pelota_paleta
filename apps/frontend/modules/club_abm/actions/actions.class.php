@@ -67,7 +67,7 @@ class club_abmActions extends sfActions
     {
       $Club = $form->save();
 
-      $this->redirect('club_abm/edit?id='.$Club->getId());
+      $this->redirect('club_abm/index');
     }
   }
 }
