@@ -11,5 +11,7 @@ class ClubForm extends BaseClubForm
 {
   public function configure()
   {
+      $this->validatorSchema['nombre_club']->setMessage('required', 'El nombre es Requerido');
+
   }
 }
