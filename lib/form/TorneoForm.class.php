@@ -16,7 +16,7 @@ class TorneoForm extends BaseTorneoForm
       //$this->validatorSchema['tipo_torneo'] = new sfValidatorInteger();
       $this->embedRelation('TorneoCategoria');
        $this->widgetSchema->setLabels(array(
-           'anio' => 'Año',
+           'anio' => 'Año','tipo_torneo' => 'Nacional?',
        ));
   }
 }

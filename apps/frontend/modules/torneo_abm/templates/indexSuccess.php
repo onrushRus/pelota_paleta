@@ -17,7 +17,8 @@
       <td><?php echo $Torneo->getId() ?></td>
       <td><?php echo $Torneo->getAnio() ?></td>
       <td><?php echo $Torneo->getNombre() ?></td>
-      <td><?php echo $Torneo->getTipoTorneo() ?></td>
+      <td><?php if  (!$Torneo->getTipoTorneo()){echo "Torneo local";}
+      else {echo "Torneo nacional/patagonico";}?></td>
       <td>
           <a class="btn btn-warning btn-mini" href="<?php echo url_for('torneo_abm/edit?id='.$Torneo->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
           <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'torneo_abm/delete?id='.$Torneo->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini")) ?>
