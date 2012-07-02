@@ -43,10 +43,13 @@ class PersonaForm extends BasePersonaForm
       $this->validatorSchema['e_mail']->setOption('required', false);
       $this->validatorSchema['e_mail']->setMessage('invalid', 'E-mail inválido (ejemplo@correo.com)');
       
-      $this->validatorSchema['localidad_id']->setOption('required', true);
-      $this->validatorSchema['localidad_id']->setMessage('required', 'Seleccione Localidad');
+      //$this->validatorSchema['localidad_id']->setOption('required', true);
+      //$this->validatorSchema['localidad_id']->setMessage('required', 'Seleccione Localidad');
       //cambios de campos nombre y apellido por el comupuesto
       
+      
+      //$this->widgetSchema['localidad_id']->setOption('query_methods', array('joinWithProvincia','joinWithLocalidad'));
+      $this->widgetSchema['localidad_id']->setOption('method','getProvloc');
       
       
       

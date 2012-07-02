@@ -14,5 +14,8 @@
  * @package    propel.generator.lib.model
  */
 class Localidad extends BaseLocalidad {
-
+public function getProvloc(){
+    $aux='Provincia: '.$this->getProvincia()->getNombreProv().', Localidad: '.$this->getNombreLoc();
+    return $aux;
+}
 } // Localidad
