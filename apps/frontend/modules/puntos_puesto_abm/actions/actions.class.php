@@ -67,7 +67,7 @@ class puntos_puesto_abmActions extends sfActions
     {
       $PuntosPuesto = $form->save();
 
-      $this->redirect('puntos_puesto_abm/edit?id='.$PuntosPuesto->getId());
+      $this->redirect('puntos_puesto_abm/index');
     }
   }
 }

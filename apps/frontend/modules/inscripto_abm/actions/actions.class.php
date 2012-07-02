@@ -67,7 +67,7 @@ class inscripto_abmActions extends sfActions
     {
       $Inscripto = $form->save();
 
-      $this->redirect('inscripto_abm/edit?id='.$Inscripto->getId());
+      $this->redirect('inscripto_abm/index');
     }
   }
 }

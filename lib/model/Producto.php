@@ -14,18 +14,18 @@
  * @package    propel.generator.lib.model
  */
 class Producto extends BaseProducto {
-	
+    
     public function getStockCritico($prod) {
         $p = new Stock();
         $p = StockPeer::retrieveByPK($prod);   //Fijate esta gaby pedaso de trolin JAJA
         if ($p !=null){
             if ($p->getCantidadActual() < $p->getCantidadMinima()) {
-                return "Poco stock solo contamos con ".$p->getCantidadActual()." unidades";
+                return "poco stock";
             } else {
-                return "Stock normal contamos con ".$p->getCantidadActual()." unidades";
+                return "stock normal";
             }
         }else{
-            return "nada cargado";
+            return "Nada Cargado";
         } 
     }
 } // Producto

@@ -67,7 +67,7 @@ class torneo_abmActions extends sfActions
     {
       $Torneo = $form->save();
 
-      $this->redirect('torneo_abm/edit?id='.$Torneo->getId());
+      $this->redirect('torneo_abm/index');
     }
   }
 }
