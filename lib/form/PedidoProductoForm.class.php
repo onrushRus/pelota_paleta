@@ -13,5 +13,7 @@ class PedidoProductoForm extends BasePedidoProductoForm
   {
       $this->widgetSchema['pedido_id']= new sfWidgetFormPropelChoice(array('model' => 'Pedido'));
       $this->widgetSchema['producto_id'] = new sfWidgetFormPropelChoice(array('model' => 'Producto'));
+      
+
   }
 }

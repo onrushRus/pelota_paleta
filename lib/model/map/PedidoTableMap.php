@@ -39,6 +39,7 @@ class PedidoTableMap extends TableMap
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
+		$this->getColumn('ID', false)->setPrimaryString(true);
 		$this->addForeignKey('PROVEEDOR_ID', 'ProveedorId', 'INTEGER', 'proveedor', 'ID', true, 10, null);
 		$this->addColumn('FECHA_PEDIDO', 'FechaPedido', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
 		// validators

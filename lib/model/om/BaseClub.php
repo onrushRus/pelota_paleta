@@ -445,10 +445,10 @@ abstract class BaseClub extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':
+					case '`ID`':						
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`NOMBRE_CLUB`':
+					case '`NOMBRE_CLUB`':						
 						$stmt->bindValue($identifier, $this->nombre_club, PDO::PARAM_STR);
 						break;
 				}

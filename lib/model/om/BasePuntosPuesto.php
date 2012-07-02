@@ -445,10 +445,10 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':
+					case '`ID`':						
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`PUNTOS_POR_PUESTO`':
+					case '`PUNTOS_POR_PUESTO`':						
 						$stmt->bindValue($identifier, $this->puntos_por_puesto, PDO::PARAM_INT);
 						break;
 				}

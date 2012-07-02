@@ -30,3 +30,9 @@ propel:
     
   club:
     nombre_club: { primaryString: true }
+    
+  proveedor:
+    nombre_proveedor: { primaryString: true }
+    
+  pedido:
+    id: { primaryString: true }

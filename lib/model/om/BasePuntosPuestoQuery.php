@@ -118,7 +118,7 @@ abstract class BasePuntosPuestoQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID`, `PUNTOS_POR_PUESTO` FROM `puntos_puesto` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);
+			$stmt = $con->prepare($sql);			
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

@@ -67,7 +67,7 @@ class socio_abmActions extends sfActions
     {
       $Socio = $form->save();
 
-      $this->redirect('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc());
+      $this->redirect('socio_abm/index');
     }
   }
 }

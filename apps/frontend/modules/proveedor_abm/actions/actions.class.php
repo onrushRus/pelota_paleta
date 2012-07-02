@@ -70,7 +70,7 @@ class proveedor_abmActions extends sfActions
     {
       $Proveedor = $form->save();
 
-      $this->redirect('proveedor_abm/edit?id='.$Proveedor->getId());
+      $this->redirect('proveedor_abm/index');
     }
   }
 }

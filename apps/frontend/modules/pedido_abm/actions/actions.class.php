@@ -67,7 +67,7 @@ class pedido_abmActions extends sfActions
     {
       $Pedido = $form->save();
 
-      $this->redirect('pedido_abm/edit?id='.$Pedido->getId());
+      $this->redirect('pedido_abm/index');
     }
   }
 }

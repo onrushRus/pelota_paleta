@@ -40,6 +40,7 @@ class ProveedorTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
 		$this->addColumn('NOMBRE_PROVEEDOR', 'NombreProveedor', 'VARCHAR', true, 45, null);
+		$this->getColumn('NOMBRE_PROVEEDOR', false)->setPrimaryString(true);
 		$this->addColumn('DOM_CALLE', 'DomCalle', 'VARCHAR', false, 45, null);
 		$this->addColumn('DOM_NRO', 'DomNro', 'VARCHAR', false, 10, null);
 		$this->addColumn('DOM_PISO', 'DomPiso', 'VARCHAR', false, 10, null);

@@ -49,7 +49,8 @@
                 <ul class="dropdown-menu">
                   <li><a href="<?php echo url_for('ventas/index');?>">Ventas</a></li>
                   <li><a href="<?php echo url_for('producto_abm/index');?>">Productos ABM</a></li>
-                <li><a href="<?php echo url_for('pedido_abm/index');?>">Pedido ABM</a></li>
+                  <li><a href="<?php echo url_for('pedido_abm/index');?>">Pedido ABM</a></li>
+                  <li><a href="<?php echo url_for('pedido_producto_abm/index');?>">Pedido - Producto</a></li>
                 </ul>
               </li>
               <li class="dropdown">

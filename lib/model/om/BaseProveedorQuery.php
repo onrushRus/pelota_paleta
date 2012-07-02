@@ -138,7 +138,7 @@ abstract class BaseProveedorQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID`, `NOMBRE_PROVEEDOR`, `DOM_CALLE`, `DOM_NRO`, `DOM_PISO`, `DOM_DPTO`, `TELEFONO` FROM `proveedor` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);
+			$stmt = $con->prepare($sql);			
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

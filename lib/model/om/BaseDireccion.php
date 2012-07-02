@@ -646,22 +646,22 @@ abstract class BaseDireccion extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`PERSONA_NRO_DOC`':
+					case '`PERSONA_NRO_DOC`':						
 						$stmt->bindValue($identifier, $this->persona_nro_doc, PDO::PARAM_INT);
 						break;
-					case '`CALLE`':
+					case '`CALLE`':						
 						$stmt->bindValue($identifier, $this->calle, PDO::PARAM_STR);
 						break;
-					case '`NUMERO`':
+					case '`NUMERO`':						
 						$stmt->bindValue($identifier, $this->numero, PDO::PARAM_INT);
 						break;
-					case '`MONOBLOCK_EDIF`':
+					case '`MONOBLOCK_EDIF`':						
 						$stmt->bindValue($identifier, $this->monoblock_edif, PDO::PARAM_STR);
 						break;
-					case '`PISO`':
+					case '`PISO`':						
 						$stmt->bindValue($identifier, $this->piso, PDO::PARAM_STR);
 						break;
-					case '`DPTO`':
+					case '`DPTO`':						
 						$stmt->bindValue($identifier, $this->dpto, PDO::PARAM_STR);
 						break;
 				}

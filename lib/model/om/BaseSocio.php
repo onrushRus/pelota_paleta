@@ -630,10 +630,10 @@ abstract class BaseSocio extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`PERSONA_NRO_DOC`':
+					case '`PERSONA_NRO_DOC`':						
 						$stmt->bindValue($identifier, $this->persona_nro_doc, PDO::PARAM_INT);
 						break;
-					case '`FECHA_ALTA`':
+					case '`FECHA_ALTA`':						
 						$stmt->bindValue($identifier, $this->fecha_alta, PDO::PARAM_STR);
 						break;
 					case '`VITALICIO`':

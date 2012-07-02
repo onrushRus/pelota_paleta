@@ -820,25 +820,25 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`SOCIO_NRO_DOC`':
+					case '`SOCIO_NRO_DOC`':						
 						$stmt->bindValue($identifier, $this->socio_nro_doc, PDO::PARAM_INT);
 						break;
-					case '`TIPO_RESERVA_ID`':
+					case '`TIPO_RESERVA_ID`':						
 						$stmt->bindValue($identifier, $this->tipo_reserva_id, PDO::PARAM_INT);
 						break;
-					case '`DIA_COMIENZO_RESERVA`':
+					case '`DIA_COMIENZO_RESERVA`':						
 						$stmt->bindValue($identifier, $this->dia_comienzo_reserva, PDO::PARAM_STR);
 						break;
-					case '`HORA_COMIENZO_RESERVA`':
+					case '`HORA_COMIENZO_RESERVA`':						
 						$stmt->bindValue($identifier, $this->hora_comienzo_reserva, PDO::PARAM_STR);
 						break;
-					case '`DIA_FIN_RESERVA`':
+					case '`DIA_FIN_RESERVA`':						
 						$stmt->bindValue($identifier, $this->dia_fin_reserva, PDO::PARAM_STR);
 						break;
-					case '`HORA_FIN_RESERVA`':
+					case '`HORA_FIN_RESERVA`':						
 						$stmt->bindValue($identifier, $this->hora_fin_reserva, PDO::PARAM_STR);
 						break;
-					case '`CANTIDAD_TURNOS`':
+					case '`CANTIDAD_TURNOS`':						
 						$stmt->bindValue($identifier, $this->cantidad_turnos, PDO::PARAM_INT);
 						break;
 				}

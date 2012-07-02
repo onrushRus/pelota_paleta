@@ -645,25 +645,25 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':
+					case '`ID`':						
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`NOMBRE_PROVEEDOR`':
+					case '`NOMBRE_PROVEEDOR`':						
 						$stmt->bindValue($identifier, $this->nombre_proveedor, PDO::PARAM_STR);
 						break;
-					case '`DOM_CALLE`':
+					case '`DOM_CALLE`':						
 						$stmt->bindValue($identifier, $this->dom_calle, PDO::PARAM_STR);
 						break;
-					case '`DOM_NRO`':
+					case '`DOM_NRO`':						
 						$stmt->bindValue($identifier, $this->dom_nro, PDO::PARAM_STR);
 						break;
-					case '`DOM_PISO`':
+					case '`DOM_PISO`':						
 						$stmt->bindValue($identifier, $this->dom_piso, PDO::PARAM_STR);
 						break;
-					case '`DOM_DPTO`':
+					case '`DOM_DPTO`':						
 						$stmt->bindValue($identifier, $this->dom_dpto, PDO::PARAM_STR);
 						break;
-					case '`TELEFONO`':
+					case '`TELEFONO`':						
 						$stmt->bindValue($identifier, $this->telefono, PDO::PARAM_STR);
 						break;
 				}
@@ -1309,11 +1309,11 @@ abstract class BaseProveedor extends BaseObject  implements Persistent
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'nombre_proveedor' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(ProveedorPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getNombreProveedor();
 	}
 
 	/**

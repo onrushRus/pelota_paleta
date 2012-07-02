@@ -134,7 +134,7 @@ abstract class BaseResultadoTorneoQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID`, `PUESTO_ID`, `TORNEO_CAT_ID`, `PELOTARI_NRO_DOC` FROM `resultado_torneo` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);
+			$stmt = $con->prepare($sql);			
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

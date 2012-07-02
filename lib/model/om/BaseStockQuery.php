@@ -122,7 +122,7 @@ abstract class BaseStockQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PRODUCTO_ID`, `CANTIDAD_ACTUAL`, `CANTIDAD_MINIMA` FROM `stock` WHERE `PRODUCTO_ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);
+			$stmt = $con->prepare($sql);			
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

@@ -588,13 +588,13 @@ abstract class BasePedido extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':
+					case '`ID`':						
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`PROVEEDOR_ID`':
+					case '`PROVEEDOR_ID`':						
 						$stmt->bindValue($identifier, $this->proveedor_id, PDO::PARAM_INT);
 						break;
-					case '`FECHA_PEDIDO`':
+					case '`FECHA_PEDIDO`':						
 						$stmt->bindValue($identifier, $this->fecha_pedido, PDO::PARAM_STR);
 						break;
 				}
@@ -1448,11 +1448,11 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	/**
 	 * Return the string representation of this object
 	 *
-	 * @return string
+	 * @return string The value of the 'id' column
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(PedidoPeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->getId();
 	}
 
 	/**

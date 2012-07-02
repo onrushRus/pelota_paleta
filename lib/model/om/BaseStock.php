@@ -508,13 +508,13 @@ abstract class BaseStock extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`PRODUCTO_ID`':
+					case '`PRODUCTO_ID`':						
 						$stmt->bindValue($identifier, $this->producto_id, PDO::PARAM_INT);
 						break;
-					case '`CANTIDAD_ACTUAL`':
+					case '`CANTIDAD_ACTUAL`':						
 						$stmt->bindValue($identifier, $this->cantidad_actual, PDO::PARAM_INT);
 						break;
-					case '`CANTIDAD_MINIMA`':
+					case '`CANTIDAD_MINIMA`':						
 						$stmt->bindValue($identifier, $this->cantidad_minima, PDO::PARAM_INT);
 						break;
 				}
