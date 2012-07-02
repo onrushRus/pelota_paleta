@@ -12,8 +12,8 @@
   <tbody>
     <?php foreach ($PedidoProductos as $PedidoProducto): ?>
     <tr>
-      <td><a href="<?php echo url_for('pedido_producto_abm/edit?pedido_id='.$PedidoProducto->getPedidoId().'&producto_id='.$PedidoProducto->getProductoId()) ?>"><?php echo $PedidoProducto->getPedidoId() ?></a></td>
-      <td><a href="<?php echo url_for('pedido_producto_abm/edit?pedido_id='.$PedidoProducto->getPedidoId().'&producto_id='.$PedidoProducto->getProductoId()) ?>"><?php echo $PedidoProducto->getProducto()->getDescripcionProd() ?></a></td>
+      <td><?php echo $PedidoProducto->getPedidoId() ?></td>
+      <td><?php echo $PedidoProducto->getProducto()->getDescripcionProd() ?></td>
       <td><?php echo "$".$PedidoProducto->getProducto()->getPrecio()?></a></td>
     </tr>
     <?php endforeach; ?>

@@ -12,7 +12,11 @@ class pedido_producto_abmActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $var = $request->getParameter('id');
-    $this->PedidoProductos = PedidoProductoQuery::create()->filterByPedidoId($var)->orderByPedidoId()->find();
+    $this->PedidoProductos = PedidoProductoQuery::create();
+        if ($var) {
+            $this->PedidoProductos->filterByPedidoId($var);
+        }
+    $this->PedidoProductos = $this->PedidoProductos->orderByPedidoId()->find();        
   }
 
   public function executeNew(sfWebRequest $request)

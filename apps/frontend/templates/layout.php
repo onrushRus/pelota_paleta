@@ -61,6 +61,7 @@
                   <li><a href="<?php echo url_for('club_abm/index');?>">Clubs ABM</a></li>
                   <li><a href="<?php echo url_for('inscripto_abm/index');?>">Inscripción ABM</a></li>
                   <li><a href="<?php echo url_for('torneo_abm/index');?>">Torneo ABM</a></li>
+                  <li><a href="<?php echo url_for('puntos_puesto_abm/index');?>">Puestos ABM</a></li>
                   <li><a href="<?php echo url_for('resultado_torneo_abm/index');?>">Resultados Torneo</a></li>
                 </ul>
               </li>
