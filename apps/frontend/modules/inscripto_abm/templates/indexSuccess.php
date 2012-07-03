@@ -2,7 +2,7 @@
 <h1>Inscriptos</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Identificador</th>
       <th>Nro documento</th>

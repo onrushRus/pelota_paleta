@@ -1,7 +1,7 @@
 <h1>Rankings List</h1>
 
 <table>
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Pelotari nro doc</th>
       <th>Tipo ranking</th>

@@ -2,7 +2,7 @@
 <h1 class="alert-info">Reservas de Hoy</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Nombre Socio</th>  
       <th>Socio DNI</th>

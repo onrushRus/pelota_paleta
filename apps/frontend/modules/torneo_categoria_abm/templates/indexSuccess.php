@@ -1,7 +1,7 @@
 <h1>TorneoCategorias List</h1>
 
 <table>
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Id torneo categoria</th>
       <th>Torneo</th>
