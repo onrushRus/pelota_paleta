@@ -22,6 +22,9 @@ class InscriptoForm extends BaseInscriptoForm
 
     return $this;
   }*/
+      $this->widgetSchema['persona_nro_doc']= new sfWidgetFormInputText();
+      $this->validatorSchema['persona_nro_doc'] = new sfValidatorInteger();
+      
       $this->widgetSchema['torneo_cat_id']->setOption('query_methods', array('joinWithCategoria','joinWithTorneo'));
       $this->widgetSchema['torneo_cat_id']->setOption('method','getTorncat');
       
