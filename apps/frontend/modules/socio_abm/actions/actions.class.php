@@ -18,16 +18,18 @@ class socio_abmActions extends sfActions
   {
     $this->form = new SocioForm();
   }
-
+/*agregar try - catch*/
   public function executeCreate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST));
-
-    $this->form = new SocioForm();
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('new');
+   
+        try {
+            $this->form = new SocioForm();
+            $this->processForm($request, $this->form);
+            $this->setTemplate('new');
+        } catch (Exception $e) {
+            return sfView::ERROR;
+        }
   }
 
   public function executeEdit(sfWebRequest $request)
@@ -42,11 +44,13 @@ class socio_abmActions extends sfActions
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
     $Socio = SocioQuery::create()->findPk($request->getParameter('persona_nro_doc'));
     $this->forward404Unless($Socio, sprintf('Object Socio does not exist (%s).', $request->getParameter('persona_nro_doc')));
-    $this->form = new SocioForm($Socio);
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('edit');
+        try {
+            $this->form = new SocioForm($Socio);
+            $this->processForm($request, $this->form);
+            $this->setTemplate('edit');
+        } catch (Exception $e) {
+            return sfView::ERROR;
+        }
   }
 
   public function executeDelete(sfWebRequest $request)
