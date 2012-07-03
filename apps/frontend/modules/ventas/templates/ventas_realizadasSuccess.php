@@ -13,7 +13,7 @@
             <?php
             $aux = 0;$aux2 = 0;
             foreach ($lista_prod as $id => $item):
-                if (isset($item['compra'])):
+                if (isset($item['cant'])):
                     $prod = ProductoQuery::create()->findPk($id); 
                     $aux = $item['cant'] * $prod->getPrecio(); 
                     $aux2 = $aux + $aux2;  ?>

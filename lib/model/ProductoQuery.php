@@ -15,4 +15,7 @@
  */
 class ProductoQuery extends BaseProductoQuery {
 
+    public function filtrarPorProducto(){
+        //return $this->filterByDescripcionProd($descripcionProd);
+    }
 } // ProductoQuery

@@ -19,13 +19,18 @@ class ventasActions extends sfActions
   {
     $prod = ProductoQuery::create();
     if($request->isMethod(sfWebRequest::POST)){
-        $codProd = $request->getParameter('codigo_producto');
+        $codProd = $request->getParameter('cod_prod');
+        $marcaProd = $request->getParameter('marca_prod');
+        $descripProd = $request->getParameter('descrip_prod');
         if(!empty($codProd)){            
             $prod->filterByPrimaryKey($codProd);
-        }else{
-          //  $cons->orderById(Criteria::DESC)
-            //     ->limit(10);
-        }        
+        }      
+        if (!empty($marcaProd)){
+            $prod->filterByMarca($marcaProd.'%', Criteria::LIKE);
+        }
+        if (!empty($descripProd)){
+            $prod->filterByDescripcionProd('%'.$descripProd.'%', Criteria::LIKE);
+        }  
     }else{    
       //  $cons->orderById(Criteria::DESC)
       //       ->limit(10);
