@@ -173,6 +173,12 @@ INSERT INTO `pelota_paleta`.`pedido` (`id`, `proveedor_id`, `fecha_pedido`) VALU
  (NULL, '2', CURRENT_TIMESTAMP);
 
 
+/*
+INSERT INTO `pelota_paleta`.`pedido_producto` (`pedido_id`, `producto_id`) VALUES 
+(NULL, '1', CURRENT_TIMESTAMP),
+(NULL, '2', CURRENT_TIMESTAMP); */
+
+
 
 
 INSERT INTO `pelota_paleta`.`puntos_puesto` (`id`, `puesto`, `puntos_por_puesto`) VALUES 
