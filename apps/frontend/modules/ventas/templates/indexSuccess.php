@@ -44,7 +44,7 @@
                 <?php endforeach; ?>
               </tbody>
             </table>
-            <input class="btn-inverse" type="submit" value="Vender"></input>
+            <input class="btn-inverse" type="submit" value="Vender">
         </form>
     </fieldset>
    </fieldset>
