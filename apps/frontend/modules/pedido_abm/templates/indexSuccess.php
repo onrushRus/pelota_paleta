@@ -16,7 +16,7 @@
     <tr>
       <td><?php echo $Pedido->getId() ?></td>
       <td><?php echo $Pedido->getProveedor()->getNombreProveedor() ?></td>
-      <td><?php echo $Pedido->getFechaPedido() ?></td>
+      <td><?php echo $Pedido->getFechaPedido('d-m-Y (H:m:s)') ?></td>
       <td>
           <a class="btn btn-success btn-mini" href="<?php echo url_for('pedido_producto_abm/index?id='.$Pedido->getId()) ?>"><i class="icon-pencil icon-white"></i>Descripción</a>
       </td>

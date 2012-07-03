@@ -17,7 +17,7 @@
     <tr>
       <td><?php echo $Socio->getPersonaNroDoc()?></td>
       <td><?php echo $Socio->getPersona()->getNomApellido()?></td>
-      <td><?php echo $Socio->getFechaAlta() ?></td>
+      <td><?php echo $Socio->getFechaAlta('d-m-Y') ?></td>
       <td><i class="icon-<?php echo $Socio->getIconoVitalicio() ?>"></i></td>
       <td><i class="icon-<?php echo $Socio->getIconoActivo() ?>"></i></td>
       <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('socio_abm/edit?persona_nro_doc='.$Socio->getPersonaNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Modificar</a>

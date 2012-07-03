@@ -16,7 +16,7 @@
     <tr>
       <td><?php echo $Persona->getNomApellido() ?></td>
       <td><?php echo $Persona->getNroDoc() ?></td>
-      <td><?php echo $Persona->getFechaNacimiento() ?></td>
+      <td><?php echo $Persona->getFechaNacimiento('d-m-Y') ?></td>
       <td><?php echo $Persona->getEMail() ?></td>
       <td><?php echo $Persona->getLocalidad() ?></td>
       <td><a class="btn btn-warning btn-mini" href="<?php echo url_for('persona_abm/edit?nro_doc='.$Persona->getNroDoc()) ?>"><i class="icon-pencil icon-white"></i> Modificar</a>
