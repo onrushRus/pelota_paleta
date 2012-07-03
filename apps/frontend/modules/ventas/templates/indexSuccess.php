@@ -6,8 +6,8 @@
         <form name="busqueda" method="POST" action="<?php echo url_for('ventas/index'); ?>">
             <ul class="unstyled">
                 <li><label>Por código: </label><input type="text" value="" name="cod_prod"></li>
-                <li><label>Por marca: </label><input type="text" value="" name="marca_prod"></li>
                 <li><label>Por descripción: </label><input type="text" value="" name="descrip_prod"></li>
+                <li><label>Por marca: </label><input type="text" value="" name="marca_prod"></li>
                 <li><input class="btn-inverse" type="submit" value="Buscar"></li>
             </ul>
         </form>
