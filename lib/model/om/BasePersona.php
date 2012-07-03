@@ -44,6 +44,12 @@ abstract class BasePersona extends BaseObject  implements Persistent
 	protected $nom_apellido;
 
 	/**
+	 * The value for the apellido field.
+	 * @var        string
+	 */
+	protected $apellido;
+
+	/**
 	 * The value for the fecha_nacimiento field.
 	 * @var        string
 	 */
@@ -166,6 +172,16 @@ abstract class BasePersona extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [apellido] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getApellido()
+	{
+		return $this->apellido;
+	}
+
+	/**
 	 * Get the [optionally formatted] temporal [fecha_nacimiento] column value.
 	 * 
 	 *
@@ -262,6 +278,26 @@ abstract class BasePersona extends BaseObject  implements Persistent
 
 		return $this;
 	} // setNomApellido()
+
+	/**
+	 * Set the value of [apellido] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Persona The current object (for fluent API support)
+	 */
+	public function setApellido($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->apellido !== $v) {
+			$this->apellido = $v;
+			$this->modifiedColumns[] = PersonaPeer::APELLIDO;
+		}
+
+		return $this;
+	} // setApellido()
 
 	/**
 	 * Sets the value of [fecha_nacimiento] column to a normalized version of the date/time value specified.
@@ -367,9 +403,10 @@ abstract class BasePersona extends BaseObject  implements Persistent
 
 			$this->nro_doc = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->nom_apellido = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->fecha_nacimiento = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->e_mail = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->localidad_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+			$this->apellido = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->fecha_nacimiento = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->e_mail = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->localidad_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -378,7 +415,7 @@ abstract class BasePersona extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 5; // 5 = PersonaPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 6; // 6 = PersonaPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Persona object", $e);
@@ -710,6 +747,9 @@ abstract class BasePersona extends BaseObject  implements Persistent
 		if ($this->isColumnModified(PersonaPeer::NOM_APELLIDO)) {
 			$modifiedColumns[':p' . $index++]  = '`NOM_APELLIDO`';
 		}
+		if ($this->isColumnModified(PersonaPeer::APELLIDO)) {
+			$modifiedColumns[':p' . $index++]  = '`APELLIDO`';
+		}
 		if ($this->isColumnModified(PersonaPeer::FECHA_NACIMIENTO)) {
 			$modifiedColumns[':p' . $index++]  = '`FECHA_NACIMIENTO`';
 		}
@@ -735,6 +775,9 @@ abstract class BasePersona extends BaseObject  implements Persistent
 						break;
 					case '`NOM_APELLIDO`':
 						$stmt->bindValue($identifier, $this->nom_apellido, PDO::PARAM_STR);
+						break;
+					case '`APELLIDO`':
+						$stmt->bindValue($identifier, $this->apellido, PDO::PARAM_STR);
 						break;
 					case '`FECHA_NACIMIENTO`':
 						$stmt->bindValue($identifier, $this->fecha_nacimiento, PDO::PARAM_STR);
@@ -917,12 +960,15 @@ abstract class BasePersona extends BaseObject  implements Persistent
 				return $this->getNomApellido();
 				break;
 			case 2:
-				return $this->getFechaNacimiento();
+				return $this->getApellido();
 				break;
 			case 3:
-				return $this->getEMail();
+				return $this->getFechaNacimiento();
 				break;
 			case 4:
+				return $this->getEMail();
+				break;
+			case 5:
 				return $this->getLocalidadId();
 				break;
 			default:
@@ -956,9 +1002,10 @@ abstract class BasePersona extends BaseObject  implements Persistent
 		$result = array(
 			$keys[0] => $this->getNroDoc(),
 			$keys[1] => $this->getNomApellido(),
-			$keys[2] => $this->getFechaNacimiento(),
-			$keys[3] => $this->getEMail(),
-			$keys[4] => $this->getLocalidadId(),
+			$keys[2] => $this->getApellido(),
+			$keys[3] => $this->getFechaNacimiento(),
+			$keys[4] => $this->getEMail(),
+			$keys[5] => $this->getLocalidadId(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aLocalidad) {
@@ -1014,12 +1061,15 @@ abstract class BasePersona extends BaseObject  implements Persistent
 				$this->setNomApellido($value);
 				break;
 			case 2:
-				$this->setFechaNacimiento($value);
+				$this->setApellido($value);
 				break;
 			case 3:
-				$this->setEMail($value);
+				$this->setFechaNacimiento($value);
 				break;
 			case 4:
+				$this->setEMail($value);
+				break;
+			case 5:
 				$this->setLocalidadId($value);
 				break;
 		} // switch()
@@ -1048,9 +1098,10 @@ abstract class BasePersona extends BaseObject  implements Persistent
 
 		if (array_key_exists($keys[0], $arr)) $this->setNroDoc($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setNomApellido($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setFechaNacimiento($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setEMail($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setLocalidadId($arr[$keys[4]]);
+		if (array_key_exists($keys[2], $arr)) $this->setApellido($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setFechaNacimiento($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setEMail($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setLocalidadId($arr[$keys[5]]);
 	}
 
 	/**
@@ -1064,6 +1115,7 @@ abstract class BasePersona extends BaseObject  implements Persistent
 
 		if ($this->isColumnModified(PersonaPeer::NRO_DOC)) $criteria->add(PersonaPeer::NRO_DOC, $this->nro_doc);
 		if ($this->isColumnModified(PersonaPeer::NOM_APELLIDO)) $criteria->add(PersonaPeer::NOM_APELLIDO, $this->nom_apellido);
+		if ($this->isColumnModified(PersonaPeer::APELLIDO)) $criteria->add(PersonaPeer::APELLIDO, $this->apellido);
 		if ($this->isColumnModified(PersonaPeer::FECHA_NACIMIENTO)) $criteria->add(PersonaPeer::FECHA_NACIMIENTO, $this->fecha_nacimiento);
 		if ($this->isColumnModified(PersonaPeer::E_MAIL)) $criteria->add(PersonaPeer::E_MAIL, $this->e_mail);
 		if ($this->isColumnModified(PersonaPeer::LOCALIDAD_ID)) $criteria->add(PersonaPeer::LOCALIDAD_ID, $this->localidad_id);
@@ -1130,6 +1182,7 @@ abstract class BasePersona extends BaseObject  implements Persistent
 	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
 		$copyObj->setNomApellido($this->getNomApellido());
+		$copyObj->setApellido($this->getApellido());
 		$copyObj->setFechaNacimiento($this->getFechaNacimiento());
 		$copyObj->setEMail($this->getEMail());
 		$copyObj->setLocalidadId($this->getLocalidadId());
@@ -1820,6 +1873,7 @@ abstract class BasePersona extends BaseObject  implements Persistent
 	{
 		$this->nro_doc = null;
 		$this->nom_apellido = null;
+		$this->apellido = null;
 		$this->fecha_nacimiento = null;
 		$this->e_mail = null;
 		$this->localidad_id = null;

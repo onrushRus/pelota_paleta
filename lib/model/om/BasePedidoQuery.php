@@ -9,10 +9,12 @@
  * @method     PedidoQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     PedidoQuery orderByProveedorId($order = Criteria::ASC) Order by the proveedor_id column
  * @method     PedidoQuery orderByFechaPedido($order = Criteria::ASC) Order by the fecha_pedido column
+ * @method     PedidoQuery orderByEstado($order = Criteria::ASC) Order by the estado column
  *
  * @method     PedidoQuery groupById() Group by the id column
  * @method     PedidoQuery groupByProveedorId() Group by the proveedor_id column
  * @method     PedidoQuery groupByFechaPedido() Group by the fecha_pedido column
+ * @method     PedidoQuery groupByEstado() Group by the estado column
  *
  * @method     PedidoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     PedidoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -32,10 +34,12 @@
  * @method     Pedido findOneById(int $id) Return the first Pedido filtered by the id column
  * @method     Pedido findOneByProveedorId(int $proveedor_id) Return the first Pedido filtered by the proveedor_id column
  * @method     Pedido findOneByFechaPedido(string $fecha_pedido) Return the first Pedido filtered by the fecha_pedido column
+ * @method     Pedido findOneByEstado(boolean $estado) Return the first Pedido filtered by the estado column
  *
  * @method     array findById(int $id) Return Pedido objects filtered by the id column
  * @method     array findByProveedorId(int $proveedor_id) Return Pedido objects filtered by the proveedor_id column
  * @method     array findByFechaPedido(string $fecha_pedido) Return Pedido objects filtered by the fecha_pedido column
+ * @method     array findByEstado(boolean $estado) Return Pedido objects filtered by the estado column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -124,7 +128,7 @@ abstract class BasePedidoQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `PROVEEDOR_ID`, `FECHA_PEDIDO` FROM `pedido` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `PROVEEDOR_ID`, `FECHA_PEDIDO`, `ESTADO` FROM `pedido` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -317,6 +321,32 @@ abstract class BasePedidoQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(PedidoPeer::FECHA_PEDIDO, $fechaPedido, $comparison);
+	}
+
+	/**
+	 * Filter the query on the estado column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByEstado(true); // WHERE estado = true
+	 * $query->filterByEstado('yes'); // WHERE estado = true
+	 * </code>
+	 *
+	 * @param     boolean|string $estado The value to use as filter.
+	 *              Non-boolean arguments are converted using the following rules:
+	 *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    PedidoQuery The current query, for fluid interface
+	 */
+	public function filterByEstado($estado = null, $comparison = null)
+	{
+		if (is_string($estado)) {
+			$estado = in_array(strtolower($estado), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+		}
+		return $this->addUsingAlias(PedidoPeer::ESTADO, $estado, $comparison);
 	}
 
 	/**

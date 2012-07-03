@@ -8,12 +8,14 @@
  *
  * @method     PersonaQuery orderByNroDoc($order = Criteria::ASC) Order by the nro_doc column
  * @method     PersonaQuery orderByNomApellido($order = Criteria::ASC) Order by the nom_apellido column
+ * @method     PersonaQuery orderByApellido($order = Criteria::ASC) Order by the apellido column
  * @method     PersonaQuery orderByFechaNacimiento($order = Criteria::ASC) Order by the fecha_nacimiento column
  * @method     PersonaQuery orderByEMail($order = Criteria::ASC) Order by the e_mail column
  * @method     PersonaQuery orderByLocalidadId($order = Criteria::ASC) Order by the localidad_id column
  *
  * @method     PersonaQuery groupByNroDoc() Group by the nro_doc column
  * @method     PersonaQuery groupByNomApellido() Group by the nom_apellido column
+ * @method     PersonaQuery groupByApellido() Group by the apellido column
  * @method     PersonaQuery groupByFechaNacimiento() Group by the fecha_nacimiento column
  * @method     PersonaQuery groupByEMail() Group by the e_mail column
  * @method     PersonaQuery groupByLocalidadId() Group by the localidad_id column
@@ -47,12 +49,14 @@
  *
  * @method     Persona findOneByNroDoc(int $nro_doc) Return the first Persona filtered by the nro_doc column
  * @method     Persona findOneByNomApellido(string $nom_apellido) Return the first Persona filtered by the nom_apellido column
+ * @method     Persona findOneByApellido(string $apellido) Return the first Persona filtered by the apellido column
  * @method     Persona findOneByFechaNacimiento(string $fecha_nacimiento) Return the first Persona filtered by the fecha_nacimiento column
  * @method     Persona findOneByEMail(string $e_mail) Return the first Persona filtered by the e_mail column
  * @method     Persona findOneByLocalidadId(int $localidad_id) Return the first Persona filtered by the localidad_id column
  *
  * @method     array findByNroDoc(int $nro_doc) Return Persona objects filtered by the nro_doc column
  * @method     array findByNomApellido(string $nom_apellido) Return Persona objects filtered by the nom_apellido column
+ * @method     array findByApellido(string $apellido) Return Persona objects filtered by the apellido column
  * @method     array findByFechaNacimiento(string $fecha_nacimiento) Return Persona objects filtered by the fecha_nacimiento column
  * @method     array findByEMail(string $e_mail) Return Persona objects filtered by the e_mail column
  * @method     array findByLocalidadId(int $localidad_id) Return Persona objects filtered by the localidad_id column
@@ -144,7 +148,7 @@ abstract class BasePersonaQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `NRO_DOC`, `NOM_APELLIDO`, `FECHA_NACIMIENTO`, `E_MAIL`, `LOCALIDAD_ID` FROM `persona` WHERE `NRO_DOC` = :p0';
+		$sql = 'SELECT `NRO_DOC`, `NOM_APELLIDO`, `APELLIDO`, `FECHA_NACIMIENTO`, `E_MAIL`, `LOCALIDAD_ID` FROM `persona` WHERE `NRO_DOC` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -281,6 +285,34 @@ abstract class BasePersonaQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(PersonaPeer::NOM_APELLIDO, $nomApellido, $comparison);
+	}
+
+	/**
+	 * Filter the query on the apellido column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByApellido('fooValue');   // WHERE apellido = 'fooValue'
+	 * $query->filterByApellido('%fooValue%'); // WHERE apellido LIKE '%fooValue%'
+	 * </code>
+	 *
+	 * @param     string $apellido The value to use as filter.
+	 *              Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    PersonaQuery The current query, for fluid interface
+	 */
+	public function filterByApellido($apellido = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($apellido)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $apellido)) {
+				$apellido = str_replace('*', '%', $apellido);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(PersonaPeer::APELLIDO, $apellido, $comparison);
 	}
 
 	/**

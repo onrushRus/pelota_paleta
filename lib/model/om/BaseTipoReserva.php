@@ -49,6 +49,12 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 	protected $tiempo_reserva;
 
 	/**
+	 * The value for the coste field.
+	 * @var        string
+	 */
+	protected $coste;
+
+	/**
 	 * @var        array Reserva[] Collection to store aggregation of Reserva objects.
 	 */
 	protected $collReservas;
@@ -101,6 +107,16 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 	public function getTiempoReserva()
 	{
 		return $this->tiempo_reserva;
+	}
+
+	/**
+	 * Get the [coste] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getCoste()
+	{
+		return $this->coste;
 	}
 
 	/**
@@ -164,6 +180,26 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 	} // setTiempoReserva()
 
 	/**
+	 * Set the value of [coste] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     TipoReserva The current object (for fluent API support)
+	 */
+	public function setCoste($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->coste !== $v) {
+			$this->coste = $v;
+			$this->modifiedColumns[] = TipoReservaPeer::COSTE;
+		}
+
+		return $this;
+	} // setCoste()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -198,6 +234,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->descirpcion_reserva = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->tiempo_reserva = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->coste = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -206,7 +243,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 3; // 3 = TipoReservaPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 4; // 4 = TipoReservaPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating TipoReserva object", $e);
@@ -474,6 +511,9 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 		if ($this->isColumnModified(TipoReservaPeer::TIEMPO_RESERVA)) {
 			$modifiedColumns[':p' . $index++]  = '`TIEMPO_RESERVA`';
 		}
+		if ($this->isColumnModified(TipoReservaPeer::COSTE)) {
+			$modifiedColumns[':p' . $index++]  = '`COSTE`';
+		}
 
 		$sql = sprintf(
 			'INSERT INTO `tipo_reserva` (%s) VALUES (%s)',
@@ -493,6 +533,9 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 						break;
 					case '`TIEMPO_RESERVA`':
 						$stmt->bindValue($identifier, $this->tiempo_reserva, PDO::PARAM_STR);
+						break;
+					case '`COSTE`':
+						$stmt->bindValue($identifier, $this->coste, PDO::PARAM_STR);
 						break;
 				}
 			}
@@ -641,6 +684,9 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 			case 2:
 				return $this->getTiempoReserva();
 				break;
+			case 3:
+				return $this->getCoste();
+				break;
 			default:
 				return null;
 				break;
@@ -673,6 +719,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getDescirpcionReserva(),
 			$keys[2] => $this->getTiempoReserva(),
+			$keys[3] => $this->getCoste(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->collReservas) {
@@ -718,6 +765,9 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 			case 2:
 				$this->setTiempoReserva($value);
 				break;
+			case 3:
+				$this->setCoste($value);
+				break;
 		} // switch()
 	}
 
@@ -745,6 +795,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setDescirpcionReserva($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setTiempoReserva($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setCoste($arr[$keys[3]]);
 	}
 
 	/**
@@ -759,6 +810,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 		if ($this->isColumnModified(TipoReservaPeer::ID)) $criteria->add(TipoReservaPeer::ID, $this->id);
 		if ($this->isColumnModified(TipoReservaPeer::DESCIRPCION_RESERVA)) $criteria->add(TipoReservaPeer::DESCIRPCION_RESERVA, $this->descirpcion_reserva);
 		if ($this->isColumnModified(TipoReservaPeer::TIEMPO_RESERVA)) $criteria->add(TipoReservaPeer::TIEMPO_RESERVA, $this->tiempo_reserva);
+		if ($this->isColumnModified(TipoReservaPeer::COSTE)) $criteria->add(TipoReservaPeer::COSTE, $this->coste);
 
 		return $criteria;
 	}
@@ -823,6 +875,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 	{
 		$copyObj->setDescirpcionReserva($this->getDescirpcionReserva());
 		$copyObj->setTiempoReserva($this->getTiempoReserva());
+		$copyObj->setCoste($this->getCoste());
 
 		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1082,6 +1135,7 @@ abstract class BaseTipoReserva extends BaseObject  implements Persistent
 		$this->id = null;
 		$this->descirpcion_reserva = null;
 		$this->tiempo_reserva = null;
+		$this->coste = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

@@ -78,6 +78,13 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 	protected $cantidad_turnos;
 
 	/**
+	 * The value for the estado field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $estado;
+
+	/**
 	 * @var        Socio
 	 */
 	protected $aSocio;
@@ -114,6 +121,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		$this->dia_comienzo_reserva = NULL;
 		$this->hora_comienzo_reserva = '00:00:00';
 		$this->cantidad_turnos = 1;
+		$this->estado = false;
 	}
 
 	/**
@@ -299,6 +307,16 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [estado] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getEstado()
+	{
+		return $this->estado;
+	}
+
+	/**
 	 * Set the value of [socio_nro_doc] column.
 	 * 
 	 * @param      int $v new value
@@ -459,6 +477,34 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 	} // setCantidadTurnos()
 
 	/**
+	 * Sets the value of the [estado] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     Reserva The current object (for fluent API support)
+	 */
+	public function setEstado($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->estado !== $v) {
+			$this->estado = $v;
+			$this->modifiedColumns[] = ReservaPeer::ESTADO;
+		}
+
+		return $this;
+	} // setEstado()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -485,6 +531,10 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			}
 
 			if ($this->cantidad_turnos !== 1) {
+				return false;
+			}
+
+			if ($this->estado !== false) {
 				return false;
 			}
 
@@ -517,6 +567,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			$this->dia_fin_reserva = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->hora_fin_reserva = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->cantidad_turnos = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->estado = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -525,7 +576,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 7; // 7 = ReservaPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 8; // 8 = ReservaPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Reserva object", $e);
@@ -809,6 +860,9 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		if ($this->isColumnModified(ReservaPeer::CANTIDAD_TURNOS)) {
 			$modifiedColumns[':p' . $index++]  = '`CANTIDAD_TURNOS`';
 		}
+		if ($this->isColumnModified(ReservaPeer::ESTADO)) {
+			$modifiedColumns[':p' . $index++]  = '`ESTADO`';
+		}
 
 		$sql = sprintf(
 			'INSERT INTO `reserva` (%s) VALUES (%s)',
@@ -840,6 +894,9 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 						break;
 					case '`CANTIDAD_TURNOS`':
 						$stmt->bindValue($identifier, $this->cantidad_turnos, PDO::PARAM_INT);
+						break;
+					case '`ESTADO`':
+						$stmt->bindValue($identifier, (int) $this->estado, PDO::PARAM_INT);
 						break;
 				}
 			}
@@ -1003,6 +1060,9 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			case 6:
 				return $this->getCantidadTurnos();
 				break;
+			case 7:
+				return $this->getEstado();
+				break;
 			default:
 				return null;
 				break;
@@ -1039,6 +1099,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			$keys[4] => $this->getDiaFinReserva(),
 			$keys[5] => $this->getHoraFinReserva(),
 			$keys[6] => $this->getCantidadTurnos(),
+			$keys[7] => $this->getEstado(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aSocio) {
@@ -1099,6 +1160,9 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 			case 6:
 				$this->setCantidadTurnos($value);
 				break;
+			case 7:
+				$this->setEstado($value);
+				break;
 		} // switch()
 	}
 
@@ -1130,6 +1194,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		if (array_key_exists($keys[4], $arr)) $this->setDiaFinReserva($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setHoraFinReserva($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setCantidadTurnos($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setEstado($arr[$keys[7]]);
 	}
 
 	/**
@@ -1148,6 +1213,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		if ($this->isColumnModified(ReservaPeer::DIA_FIN_RESERVA)) $criteria->add(ReservaPeer::DIA_FIN_RESERVA, $this->dia_fin_reserva);
 		if ($this->isColumnModified(ReservaPeer::HORA_FIN_RESERVA)) $criteria->add(ReservaPeer::HORA_FIN_RESERVA, $this->hora_fin_reserva);
 		if ($this->isColumnModified(ReservaPeer::CANTIDAD_TURNOS)) $criteria->add(ReservaPeer::CANTIDAD_TURNOS, $this->cantidad_turnos);
+		if ($this->isColumnModified(ReservaPeer::ESTADO)) $criteria->add(ReservaPeer::ESTADO, $this->estado);
 
 		return $criteria;
 	}
@@ -1230,6 +1296,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		$copyObj->setDiaFinReserva($this->getDiaFinReserva());
 		$copyObj->setHoraFinReserva($this->getHoraFinReserva());
 		$copyObj->setCantidadTurnos($this->getCantidadTurnos());
+		$copyObj->setEstado($this->getEstado());
 
 		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1395,6 +1462,7 @@ abstract class BaseReserva extends BaseObject  implements Persistent
 		$this->dia_fin_reserva = null;
 		$this->hora_fin_reserva = null;
 		$this->cantidad_turnos = null;
+		$this->estado = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

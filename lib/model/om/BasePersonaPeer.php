@@ -23,19 +23,22 @@ abstract class BasePersonaPeer {
 	const TM_CLASS = 'PersonaTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 5;
+	const NUM_COLUMNS = 6;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 5;
+	const NUM_HYDRATE_COLUMNS = 6;
 
 	/** the column name for the NRO_DOC field */
 	const NRO_DOC = 'persona.NRO_DOC';
 
 	/** the column name for the NOM_APELLIDO field */
 	const NOM_APELLIDO = 'persona.NOM_APELLIDO';
+
+	/** the column name for the APELLIDO field */
+	const APELLIDO = 'persona.APELLIDO';
 
 	/** the column name for the FECHA_NACIMIENTO field */
 	const FECHA_NACIMIENTO = 'persona.FECHA_NACIMIENTO';
@@ -65,12 +68,12 @@ abstract class BasePersonaPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('NroDoc', 'NomApellido', 'FechaNacimiento', 'EMail', 'LocalidadId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('nroDoc', 'nomApellido', 'fechaNacimiento', 'eMail', 'localidadId', ),
-		BasePeer::TYPE_COLNAME => array (self::NRO_DOC, self::NOM_APELLIDO, self::FECHA_NACIMIENTO, self::E_MAIL, self::LOCALIDAD_ID, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('NRO_DOC', 'NOM_APELLIDO', 'FECHA_NACIMIENTO', 'E_MAIL', 'LOCALIDAD_ID', ),
-		BasePeer::TYPE_FIELDNAME => array ('nro_doc', 'nom_apellido', 'fecha_nacimiento', 'e_mail', 'localidad_id', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('NroDoc', 'NomApellido', 'Apellido', 'FechaNacimiento', 'EMail', 'LocalidadId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('nroDoc', 'nomApellido', 'apellido', 'fechaNacimiento', 'eMail', 'localidadId', ),
+		BasePeer::TYPE_COLNAME => array (self::NRO_DOC, self::NOM_APELLIDO, self::APELLIDO, self::FECHA_NACIMIENTO, self::E_MAIL, self::LOCALIDAD_ID, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('NRO_DOC', 'NOM_APELLIDO', 'APELLIDO', 'FECHA_NACIMIENTO', 'E_MAIL', 'LOCALIDAD_ID', ),
+		BasePeer::TYPE_FIELDNAME => array ('nro_doc', 'nom_apellido', 'apellido', 'fecha_nacimiento', 'e_mail', 'localidad_id', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -80,12 +83,12 @@ abstract class BasePersonaPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('NroDoc' => 0, 'NomApellido' => 1, 'FechaNacimiento' => 2, 'EMail' => 3, 'LocalidadId' => 4, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('nroDoc' => 0, 'nomApellido' => 1, 'fechaNacimiento' => 2, 'eMail' => 3, 'localidadId' => 4, ),
-		BasePeer::TYPE_COLNAME => array (self::NRO_DOC => 0, self::NOM_APELLIDO => 1, self::FECHA_NACIMIENTO => 2, self::E_MAIL => 3, self::LOCALIDAD_ID => 4, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('NRO_DOC' => 0, 'NOM_APELLIDO' => 1, 'FECHA_NACIMIENTO' => 2, 'E_MAIL' => 3, 'LOCALIDAD_ID' => 4, ),
-		BasePeer::TYPE_FIELDNAME => array ('nro_doc' => 0, 'nom_apellido' => 1, 'fecha_nacimiento' => 2, 'e_mail' => 3, 'localidad_id' => 4, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('NroDoc' => 0, 'NomApellido' => 1, 'Apellido' => 2, 'FechaNacimiento' => 3, 'EMail' => 4, 'LocalidadId' => 5, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('nroDoc' => 0, 'nomApellido' => 1, 'apellido' => 2, 'fechaNacimiento' => 3, 'eMail' => 4, 'localidadId' => 5, ),
+		BasePeer::TYPE_COLNAME => array (self::NRO_DOC => 0, self::NOM_APELLIDO => 1, self::APELLIDO => 2, self::FECHA_NACIMIENTO => 3, self::E_MAIL => 4, self::LOCALIDAD_ID => 5, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('NRO_DOC' => 0, 'NOM_APELLIDO' => 1, 'APELLIDO' => 2, 'FECHA_NACIMIENTO' => 3, 'E_MAIL' => 4, 'LOCALIDAD_ID' => 5, ),
+		BasePeer::TYPE_FIELDNAME => array ('nro_doc' => 0, 'nom_apellido' => 1, 'apellido' => 2, 'fecha_nacimiento' => 3, 'e_mail' => 4, 'localidad_id' => 5, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -159,12 +162,14 @@ abstract class BasePersonaPeer {
 		if (null === $alias) {
 			$criteria->addSelectColumn(PersonaPeer::NRO_DOC);
 			$criteria->addSelectColumn(PersonaPeer::NOM_APELLIDO);
+			$criteria->addSelectColumn(PersonaPeer::APELLIDO);
 			$criteria->addSelectColumn(PersonaPeer::FECHA_NACIMIENTO);
 			$criteria->addSelectColumn(PersonaPeer::E_MAIL);
 			$criteria->addSelectColumn(PersonaPeer::LOCALIDAD_ID);
 		} else {
 			$criteria->addSelectColumn($alias . '.NRO_DOC');
 			$criteria->addSelectColumn($alias . '.NOM_APELLIDO');
+			$criteria->addSelectColumn($alias . '.APELLIDO');
 			$criteria->addSelectColumn($alias . '.FECHA_NACIMIENTO');
 			$criteria->addSelectColumn($alias . '.E_MAIL');
 			$criteria->addSelectColumn($alias . '.LOCALIDAD_ID');
