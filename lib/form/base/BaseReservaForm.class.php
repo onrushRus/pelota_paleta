@@ -21,6 +21,7 @@ abstract class BaseReservaForm extends BaseFormPropel
       'dia_fin_reserva'       => new sfWidgetFormDate(),
       'hora_fin_reserva'      => new sfWidgetFormTime(),
       'cantidad_turnos'       => new sfWidgetFormInputText(),
+      'estado'                => new sfWidgetFormInputCheckbox(),
     ));
 
     $this->setValidators(array(
@@ -31,6 +32,7 @@ abstract class BaseReservaForm extends BaseFormPropel
       'dia_fin_reserva'       => new sfValidatorDate(array('required' => false)),
       'hora_fin_reserva'      => new sfValidatorTime(array('required' => false)),
       'cantidad_turnos'       => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
+      'estado'                => new sfValidatorBoolean(),
     ));
 
     $this->widgetSchema->setNameFormat('reserva[%s]');

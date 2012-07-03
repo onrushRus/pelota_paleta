@@ -42,6 +42,7 @@ class TipoReservaTableMap extends TableMap
 		$this->addColumn('DESCIRPCION_RESERVA', 'DescirpcionReserva', 'VARCHAR', true, 45, null);
 		$this->getColumn('DESCIRPCION_RESERVA', false)->setPrimaryString(true);
 		$this->addColumn('TIEMPO_RESERVA', 'TiempoReserva', 'DECIMAL', true, null, null);
+		$this->addColumn('COSTE', 'Coste', 'DECIMAL', true, null, null);
 		// validators
 	} // initialize()
 

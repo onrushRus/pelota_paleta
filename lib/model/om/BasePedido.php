@@ -50,6 +50,13 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	protected $fecha_pedido;
 
 	/**
+	 * The value for the estado field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $estado;
+
+	/**
 	 * @var        Proveedor
 	 */
 	protected $aProveedor;
@@ -98,6 +105,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	 */
 	public function applyDefaultValues()
 	{
+		$this->estado = false;
 	}
 
 	/**
@@ -169,6 +177,16 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [estado] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getEstado()
+	{
+		return $this->estado;
+	}
+
+	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
@@ -235,6 +253,34 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	} // setFechaPedido()
 
 	/**
+	 * Sets the value of the [estado] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     Pedido The current object (for fluent API support)
+	 */
+	public function setEstado($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->estado !== $v) {
+			$this->estado = $v;
+			$this->modifiedColumns[] = PedidoPeer::ESTADO;
+		}
+
+		return $this;
+	} // setEstado()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -244,6 +290,10 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	 */
 	public function hasOnlyDefaultValues()
 	{
+			if ($this->estado !== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -269,6 +319,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->proveedor_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->fecha_pedido = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->estado = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -277,7 +328,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 3; // 3 = PedidoPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 4; // 4 = PedidoPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Pedido object", $e);
@@ -577,6 +628,9 @@ abstract class BasePedido extends BaseObject  implements Persistent
 		if ($this->isColumnModified(PedidoPeer::FECHA_PEDIDO)) {
 			$modifiedColumns[':p' . $index++]  = '`FECHA_PEDIDO`';
 		}
+		if ($this->isColumnModified(PedidoPeer::ESTADO)) {
+			$modifiedColumns[':p' . $index++]  = '`ESTADO`';
+		}
 
 		$sql = sprintf(
 			'INSERT INTO `pedido` (%s) VALUES (%s)',
@@ -596,6 +650,9 @@ abstract class BasePedido extends BaseObject  implements Persistent
 						break;
 					case '`FECHA_PEDIDO`':
 						$stmt->bindValue($identifier, $this->fecha_pedido, PDO::PARAM_STR);
+						break;
+					case '`ESTADO`':
+						$stmt->bindValue($identifier, (int) $this->estado, PDO::PARAM_INT);
 						break;
 				}
 			}
@@ -756,6 +813,9 @@ abstract class BasePedido extends BaseObject  implements Persistent
 			case 2:
 				return $this->getFechaPedido();
 				break;
+			case 3:
+				return $this->getEstado();
+				break;
 			default:
 				return null;
 				break;
@@ -788,6 +848,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getProveedorId(),
 			$keys[2] => $this->getFechaPedido(),
+			$keys[3] => $this->getEstado(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aProveedor) {
@@ -836,6 +897,9 @@ abstract class BasePedido extends BaseObject  implements Persistent
 			case 2:
 				$this->setFechaPedido($value);
 				break;
+			case 3:
+				$this->setEstado($value);
+				break;
 		} // switch()
 	}
 
@@ -863,6 +927,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setProveedorId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setFechaPedido($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setEstado($arr[$keys[3]]);
 	}
 
 	/**
@@ -877,6 +942,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 		if ($this->isColumnModified(PedidoPeer::ID)) $criteria->add(PedidoPeer::ID, $this->id);
 		if ($this->isColumnModified(PedidoPeer::PROVEEDOR_ID)) $criteria->add(PedidoPeer::PROVEEDOR_ID, $this->proveedor_id);
 		if ($this->isColumnModified(PedidoPeer::FECHA_PEDIDO)) $criteria->add(PedidoPeer::FECHA_PEDIDO, $this->fecha_pedido);
+		if ($this->isColumnModified(PedidoPeer::ESTADO)) $criteria->add(PedidoPeer::ESTADO, $this->estado);
 
 		return $criteria;
 	}
@@ -941,6 +1007,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 	{
 		$copyObj->setProveedorId($this->getProveedorId());
 		$copyObj->setFechaPedido($this->getFechaPedido());
+		$copyObj->setEstado($this->getEstado());
 
 		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1401,6 +1468,7 @@ abstract class BasePedido extends BaseObject  implements Persistent
 		$this->id = null;
 		$this->proveedor_id = null;
 		$this->fecha_pedido = null;
+		$this->estado = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

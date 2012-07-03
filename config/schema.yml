@@ -42,6 +42,7 @@ propel:
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     proveedor_id: { phpName: ProveedorId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: proveedor, foreignReference: id }
     fecha_pedido: { phpName: FechaPedido, type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    estado: { phpName: Estado, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     _indexes: { fk_pedido_proveedor1: [proveedor_id] }
   pedido_producto:
     _attributes: { phpName: PedidoProducto, idMethod: native }
@@ -52,6 +53,7 @@ propel:
     _attributes: { phpName: Persona, idMethod: native }
     nro_doc: { phpName: NroDoc, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, defaultValue: '0' }
     nom_apellido: { phpName: NomApellido, type: VARCHAR, size: '45', required: true }
+    apellido: { phpName: Apellido, type: VARCHAR, size: '45', required: true }
     fecha_nacimiento: { phpName: FechaNacimiento, type: DATE, required: true }
     e_mail: { phpName: EMail, type: VARCHAR, size: '30', required: false }
     localidad_id: { phpName: LocalidadId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: localidad, foreignReference: id }
@@ -97,6 +99,7 @@ propel:
     dia_fin_reserva: { phpName: DiaFinReserva, type: DATE, required: false }
     hora_fin_reserva: { phpName: HoraFinReserva, type: TIME, required: false }
     cantidad_turnos: { phpName: CantidadTurnos, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, defaultValue: '1' }
+    estado: { phpName: Estado, type: BOOLEAN, size: '1', required: true, defaultValue: false }
     _indexes: { fk_reserva_socio: [socio_nro_doc], fk_reserva_tipo_reserva: [tipo_reserva_id] }
   resultado_torneo:
     _attributes: { phpName: ResultadoTorneo, idMethod: native }
@@ -128,6 +131,7 @@ propel:
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     descirpcion_reserva: { phpName: DescirpcionReserva, type: VARCHAR, size: '45', required: true }
     tiempo_reserva: { phpName: TiempoReserva, type: DECIMAL, scale: '0', required: true }
+    coste: { phpName: Coste, type: DECIMAL, scale: '0', sqlType: 'decimal(10,0) unsigned', required: true }
   torneo:
     _attributes: { phpName: Torneo, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }

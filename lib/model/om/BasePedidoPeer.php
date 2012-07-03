@@ -23,13 +23,13 @@ abstract class BasePedidoPeer {
 	const TM_CLASS = 'PedidoTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 3;
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'pedido.ID';
@@ -39,6 +39,9 @@ abstract class BasePedidoPeer {
 
 	/** the column name for the FECHA_PEDIDO field */
 	const FECHA_PEDIDO = 'pedido.FECHA_PEDIDO';
+
+	/** the column name for the ESTADO field */
+	const ESTADO = 'pedido.ESTADO';
 
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
@@ -59,12 +62,12 @@ abstract class BasePedidoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'ProveedorId', 'FechaPedido', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'proveedorId', 'fechaPedido', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PROVEEDOR_ID, self::FECHA_PEDIDO, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PROVEEDOR_ID', 'FECHA_PEDIDO', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'proveedor_id', 'fecha_pedido', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'ProveedorId', 'FechaPedido', 'Estado', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'proveedorId', 'fechaPedido', 'estado', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PROVEEDOR_ID, self::FECHA_PEDIDO, self::ESTADO, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PROVEEDOR_ID', 'FECHA_PEDIDO', 'ESTADO', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'proveedor_id', 'fecha_pedido', 'estado', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -74,12 +77,12 @@ abstract class BasePedidoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProveedorId' => 1, 'FechaPedido' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'proveedorId' => 1, 'fechaPedido' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PROVEEDOR_ID => 1, self::FECHA_PEDIDO => 2, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PROVEEDOR_ID' => 1, 'FECHA_PEDIDO' => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'proveedor_id' => 1, 'fecha_pedido' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProveedorId' => 1, 'FechaPedido' => 2, 'Estado' => 3, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'proveedorId' => 1, 'fechaPedido' => 2, 'estado' => 3, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PROVEEDOR_ID => 1, self::FECHA_PEDIDO => 2, self::ESTADO => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PROVEEDOR_ID' => 1, 'FECHA_PEDIDO' => 2, 'ESTADO' => 3, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'proveedor_id' => 1, 'fecha_pedido' => 2, 'estado' => 3, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -154,10 +157,12 @@ abstract class BasePedidoPeer {
 			$criteria->addSelectColumn(PedidoPeer::ID);
 			$criteria->addSelectColumn(PedidoPeer::PROVEEDOR_ID);
 			$criteria->addSelectColumn(PedidoPeer::FECHA_PEDIDO);
+			$criteria->addSelectColumn(PedidoPeer::ESTADO);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.PROVEEDOR_ID');
 			$criteria->addSelectColumn($alias . '.FECHA_PEDIDO');
+			$criteria->addSelectColumn($alias . '.ESTADO');
 		}
 	}
 

@@ -45,6 +45,7 @@ class ReservaTableMap extends TableMap
 		$this->addColumn('DIA_FIN_RESERVA', 'DiaFinReserva', 'DATE', false, null, null);
 		$this->addColumn('HORA_FIN_RESERVA', 'HoraFinReserva', 'TIME', false, null, null);
 		$this->addColumn('CANTIDAD_TURNOS', 'CantidadTurnos', 'INTEGER', true, 10, 1);
+		$this->addColumn('ESTADO', 'Estado', 'BOOLEAN', true, 1, false);
 		// validators
 	} // initialize()
 

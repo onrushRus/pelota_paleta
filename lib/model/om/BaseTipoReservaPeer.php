@@ -23,13 +23,13 @@ abstract class BaseTipoReservaPeer {
 	const TM_CLASS = 'TipoReservaTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 3;
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'tipo_reserva.ID';
@@ -39,6 +39,9 @@ abstract class BaseTipoReservaPeer {
 
 	/** the column name for the TIEMPO_RESERVA field */
 	const TIEMPO_RESERVA = 'tipo_reserva.TIEMPO_RESERVA';
+
+	/** the column name for the COSTE field */
+	const COSTE = 'tipo_reserva.COSTE';
 
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
@@ -59,12 +62,12 @@ abstract class BaseTipoReservaPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'DescirpcionReserva', 'TiempoReserva', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'descirpcionReserva', 'tiempoReserva', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::DESCIRPCION_RESERVA, self::TIEMPO_RESERVA, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DESCIRPCION_RESERVA', 'TIEMPO_RESERVA', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'descirpcion_reserva', 'tiempo_reserva', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'DescirpcionReserva', 'TiempoReserva', 'Coste', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'descirpcionReserva', 'tiempoReserva', 'coste', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::DESCIRPCION_RESERVA, self::TIEMPO_RESERVA, self::COSTE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DESCIRPCION_RESERVA', 'TIEMPO_RESERVA', 'COSTE', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'descirpcion_reserva', 'tiempo_reserva', 'coste', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -74,12 +77,12 @@ abstract class BaseTipoReservaPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DescirpcionReserva' => 1, 'TiempoReserva' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'descirpcionReserva' => 1, 'tiempoReserva' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DESCIRPCION_RESERVA => 1, self::TIEMPO_RESERVA => 2, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DESCIRPCION_RESERVA' => 1, 'TIEMPO_RESERVA' => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'descirpcion_reserva' => 1, 'tiempo_reserva' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DescirpcionReserva' => 1, 'TiempoReserva' => 2, 'Coste' => 3, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'descirpcionReserva' => 1, 'tiempoReserva' => 2, 'coste' => 3, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DESCIRPCION_RESERVA => 1, self::TIEMPO_RESERVA => 2, self::COSTE => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DESCIRPCION_RESERVA' => 1, 'TIEMPO_RESERVA' => 2, 'COSTE' => 3, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'descirpcion_reserva' => 1, 'tiempo_reserva' => 2, 'coste' => 3, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -154,10 +157,12 @@ abstract class BaseTipoReservaPeer {
 			$criteria->addSelectColumn(TipoReservaPeer::ID);
 			$criteria->addSelectColumn(TipoReservaPeer::DESCIRPCION_RESERVA);
 			$criteria->addSelectColumn(TipoReservaPeer::TIEMPO_RESERVA);
+			$criteria->addSelectColumn(TipoReservaPeer::COSTE);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.DESCIRPCION_RESERVA');
 			$criteria->addSelectColumn($alias . '.TIEMPO_RESERVA');
+			$criteria->addSelectColumn($alias . '.COSTE');
 		}
 	}
 

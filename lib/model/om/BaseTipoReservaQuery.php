@@ -9,10 +9,12 @@
  * @method     TipoReservaQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     TipoReservaQuery orderByDescirpcionReserva($order = Criteria::ASC) Order by the descirpcion_reserva column
  * @method     TipoReservaQuery orderByTiempoReserva($order = Criteria::ASC) Order by the tiempo_reserva column
+ * @method     TipoReservaQuery orderByCoste($order = Criteria::ASC) Order by the coste column
  *
  * @method     TipoReservaQuery groupById() Group by the id column
  * @method     TipoReservaQuery groupByDescirpcionReserva() Group by the descirpcion_reserva column
  * @method     TipoReservaQuery groupByTiempoReserva() Group by the tiempo_reserva column
+ * @method     TipoReservaQuery groupByCoste() Group by the coste column
  *
  * @method     TipoReservaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     TipoReservaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -28,10 +30,12 @@
  * @method     TipoReserva findOneById(int $id) Return the first TipoReserva filtered by the id column
  * @method     TipoReserva findOneByDescirpcionReserva(string $descirpcion_reserva) Return the first TipoReserva filtered by the descirpcion_reserva column
  * @method     TipoReserva findOneByTiempoReserva(string $tiempo_reserva) Return the first TipoReserva filtered by the tiempo_reserva column
+ * @method     TipoReserva findOneByCoste(string $coste) Return the first TipoReserva filtered by the coste column
  *
  * @method     array findById(int $id) Return TipoReserva objects filtered by the id column
  * @method     array findByDescirpcionReserva(string $descirpcion_reserva) Return TipoReserva objects filtered by the descirpcion_reserva column
  * @method     array findByTiempoReserva(string $tiempo_reserva) Return TipoReserva objects filtered by the tiempo_reserva column
+ * @method     array findByCoste(string $coste) Return TipoReserva objects filtered by the coste column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -120,7 +124,7 @@ abstract class BaseTipoReservaQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `DESCIRPCION_RESERVA`, `TIEMPO_RESERVA` FROM `tipo_reserva` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `DESCIRPCION_RESERVA`, `TIEMPO_RESERVA`, `COSTE` FROM `tipo_reserva` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -297,6 +301,46 @@ abstract class BaseTipoReservaQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(TipoReservaPeer::TIEMPO_RESERVA, $tiempoReserva, $comparison);
+	}
+
+	/**
+	 * Filter the query on the coste column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCoste(1234); // WHERE coste = 1234
+	 * $query->filterByCoste(array(12, 34)); // WHERE coste IN (12, 34)
+	 * $query->filterByCoste(array('min' => 12)); // WHERE coste > 12
+	 * </code>
+	 *
+	 * @param     mixed $coste The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    TipoReservaQuery The current query, for fluid interface
+	 */
+	public function filterByCoste($coste = null, $comparison = null)
+	{
+		if (is_array($coste)) {
+			$useMinMax = false;
+			if (isset($coste['min'])) {
+				$this->addUsingAlias(TipoReservaPeer::COSTE, $coste['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($coste['max'])) {
+				$this->addUsingAlias(TipoReservaPeer::COSTE, $coste['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(TipoReservaPeer::COSTE, $coste, $comparison);
 	}
 
 	/**

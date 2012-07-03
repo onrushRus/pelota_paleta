@@ -23,13 +23,13 @@ abstract class BaseReservaPeer {
 	const TM_CLASS = 'ReservaTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 7;
+	const NUM_COLUMNS = 8;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 7;
+	const NUM_HYDRATE_COLUMNS = 8;
 
 	/** the column name for the SOCIO_NRO_DOC field */
 	const SOCIO_NRO_DOC = 'reserva.SOCIO_NRO_DOC';
@@ -52,6 +52,9 @@ abstract class BaseReservaPeer {
 	/** the column name for the CANTIDAD_TURNOS field */
 	const CANTIDAD_TURNOS = 'reserva.CANTIDAD_TURNOS';
 
+	/** the column name for the ESTADO field */
+	const ESTADO = 'reserva.ESTADO';
+
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -71,12 +74,12 @@ abstract class BaseReservaPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('SocioNroDoc', 'TipoReservaId', 'DiaComienzoReserva', 'HoraComienzoReserva', 'DiaFinReserva', 'HoraFinReserva', 'CantidadTurnos', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('socioNroDoc', 'tipoReservaId', 'diaComienzoReserva', 'horaComienzoReserva', 'diaFinReserva', 'horaFinReserva', 'cantidadTurnos', ),
-		BasePeer::TYPE_COLNAME => array (self::SOCIO_NRO_DOC, self::TIPO_RESERVA_ID, self::DIA_COMIENZO_RESERVA, self::HORA_COMIENZO_RESERVA, self::DIA_FIN_RESERVA, self::HORA_FIN_RESERVA, self::CANTIDAD_TURNOS, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SOCIO_NRO_DOC', 'TIPO_RESERVA_ID', 'DIA_COMIENZO_RESERVA', 'HORA_COMIENZO_RESERVA', 'DIA_FIN_RESERVA', 'HORA_FIN_RESERVA', 'CANTIDAD_TURNOS', ),
-		BasePeer::TYPE_FIELDNAME => array ('socio_nro_doc', 'tipo_reserva_id', 'dia_comienzo_reserva', 'hora_comienzo_reserva', 'dia_fin_reserva', 'hora_fin_reserva', 'cantidad_turnos', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('SocioNroDoc', 'TipoReservaId', 'DiaComienzoReserva', 'HoraComienzoReserva', 'DiaFinReserva', 'HoraFinReserva', 'CantidadTurnos', 'Estado', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('socioNroDoc', 'tipoReservaId', 'diaComienzoReserva', 'horaComienzoReserva', 'diaFinReserva', 'horaFinReserva', 'cantidadTurnos', 'estado', ),
+		BasePeer::TYPE_COLNAME => array (self::SOCIO_NRO_DOC, self::TIPO_RESERVA_ID, self::DIA_COMIENZO_RESERVA, self::HORA_COMIENZO_RESERVA, self::DIA_FIN_RESERVA, self::HORA_FIN_RESERVA, self::CANTIDAD_TURNOS, self::ESTADO, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SOCIO_NRO_DOC', 'TIPO_RESERVA_ID', 'DIA_COMIENZO_RESERVA', 'HORA_COMIENZO_RESERVA', 'DIA_FIN_RESERVA', 'HORA_FIN_RESERVA', 'CANTIDAD_TURNOS', 'ESTADO', ),
+		BasePeer::TYPE_FIELDNAME => array ('socio_nro_doc', 'tipo_reserva_id', 'dia_comienzo_reserva', 'hora_comienzo_reserva', 'dia_fin_reserva', 'hora_fin_reserva', 'cantidad_turnos', 'estado', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -86,12 +89,12 @@ abstract class BaseReservaPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('SocioNroDoc' => 0, 'TipoReservaId' => 1, 'DiaComienzoReserva' => 2, 'HoraComienzoReserva' => 3, 'DiaFinReserva' => 4, 'HoraFinReserva' => 5, 'CantidadTurnos' => 6, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('socioNroDoc' => 0, 'tipoReservaId' => 1, 'diaComienzoReserva' => 2, 'horaComienzoReserva' => 3, 'diaFinReserva' => 4, 'horaFinReserva' => 5, 'cantidadTurnos' => 6, ),
-		BasePeer::TYPE_COLNAME => array (self::SOCIO_NRO_DOC => 0, self::TIPO_RESERVA_ID => 1, self::DIA_COMIENZO_RESERVA => 2, self::HORA_COMIENZO_RESERVA => 3, self::DIA_FIN_RESERVA => 4, self::HORA_FIN_RESERVA => 5, self::CANTIDAD_TURNOS => 6, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SOCIO_NRO_DOC' => 0, 'TIPO_RESERVA_ID' => 1, 'DIA_COMIENZO_RESERVA' => 2, 'HORA_COMIENZO_RESERVA' => 3, 'DIA_FIN_RESERVA' => 4, 'HORA_FIN_RESERVA' => 5, 'CANTIDAD_TURNOS' => 6, ),
-		BasePeer::TYPE_FIELDNAME => array ('socio_nro_doc' => 0, 'tipo_reserva_id' => 1, 'dia_comienzo_reserva' => 2, 'hora_comienzo_reserva' => 3, 'dia_fin_reserva' => 4, 'hora_fin_reserva' => 5, 'cantidad_turnos' => 6, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('SocioNroDoc' => 0, 'TipoReservaId' => 1, 'DiaComienzoReserva' => 2, 'HoraComienzoReserva' => 3, 'DiaFinReserva' => 4, 'HoraFinReserva' => 5, 'CantidadTurnos' => 6, 'Estado' => 7, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('socioNroDoc' => 0, 'tipoReservaId' => 1, 'diaComienzoReserva' => 2, 'horaComienzoReserva' => 3, 'diaFinReserva' => 4, 'horaFinReserva' => 5, 'cantidadTurnos' => 6, 'estado' => 7, ),
+		BasePeer::TYPE_COLNAME => array (self::SOCIO_NRO_DOC => 0, self::TIPO_RESERVA_ID => 1, self::DIA_COMIENZO_RESERVA => 2, self::HORA_COMIENZO_RESERVA => 3, self::DIA_FIN_RESERVA => 4, self::HORA_FIN_RESERVA => 5, self::CANTIDAD_TURNOS => 6, self::ESTADO => 7, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SOCIO_NRO_DOC' => 0, 'TIPO_RESERVA_ID' => 1, 'DIA_COMIENZO_RESERVA' => 2, 'HORA_COMIENZO_RESERVA' => 3, 'DIA_FIN_RESERVA' => 4, 'HORA_FIN_RESERVA' => 5, 'CANTIDAD_TURNOS' => 6, 'ESTADO' => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('socio_nro_doc' => 0, 'tipo_reserva_id' => 1, 'dia_comienzo_reserva' => 2, 'hora_comienzo_reserva' => 3, 'dia_fin_reserva' => 4, 'hora_fin_reserva' => 5, 'cantidad_turnos' => 6, 'estado' => 7, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -170,6 +173,7 @@ abstract class BaseReservaPeer {
 			$criteria->addSelectColumn(ReservaPeer::DIA_FIN_RESERVA);
 			$criteria->addSelectColumn(ReservaPeer::HORA_FIN_RESERVA);
 			$criteria->addSelectColumn(ReservaPeer::CANTIDAD_TURNOS);
+			$criteria->addSelectColumn(ReservaPeer::ESTADO);
 		} else {
 			$criteria->addSelectColumn($alias . '.SOCIO_NRO_DOC');
 			$criteria->addSelectColumn($alias . '.TIPO_RESERVA_ID');
@@ -178,6 +182,7 @@ abstract class BaseReservaPeer {
 			$criteria->addSelectColumn($alias . '.DIA_FIN_RESERVA');
 			$criteria->addSelectColumn($alias . '.HORA_FIN_RESERVA');
 			$criteria->addSelectColumn($alias . '.CANTIDAD_TURNOS');
+			$criteria->addSelectColumn($alias . '.ESTADO');
 		}
 	}
 

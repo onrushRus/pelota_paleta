@@ -13,6 +13,7 @@
  * @method     ReservaQuery orderByDiaFinReserva($order = Criteria::ASC) Order by the dia_fin_reserva column
  * @method     ReservaQuery orderByHoraFinReserva($order = Criteria::ASC) Order by the hora_fin_reserva column
  * @method     ReservaQuery orderByCantidadTurnos($order = Criteria::ASC) Order by the cantidad_turnos column
+ * @method     ReservaQuery orderByEstado($order = Criteria::ASC) Order by the estado column
  *
  * @method     ReservaQuery groupBySocioNroDoc() Group by the socio_nro_doc column
  * @method     ReservaQuery groupByTipoReservaId() Group by the tipo_reserva_id column
@@ -21,6 +22,7 @@
  * @method     ReservaQuery groupByDiaFinReserva() Group by the dia_fin_reserva column
  * @method     ReservaQuery groupByHoraFinReserva() Group by the hora_fin_reserva column
  * @method     ReservaQuery groupByCantidadTurnos() Group by the cantidad_turnos column
+ * @method     ReservaQuery groupByEstado() Group by the estado column
  *
  * @method     ReservaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ReservaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -44,6 +46,7 @@
  * @method     Reserva findOneByDiaFinReserva(string $dia_fin_reserva) Return the first Reserva filtered by the dia_fin_reserva column
  * @method     Reserva findOneByHoraFinReserva(string $hora_fin_reserva) Return the first Reserva filtered by the hora_fin_reserva column
  * @method     Reserva findOneByCantidadTurnos(int $cantidad_turnos) Return the first Reserva filtered by the cantidad_turnos column
+ * @method     Reserva findOneByEstado(boolean $estado) Return the first Reserva filtered by the estado column
  *
  * @method     array findBySocioNroDoc(int $socio_nro_doc) Return Reserva objects filtered by the socio_nro_doc column
  * @method     array findByTipoReservaId(int $tipo_reserva_id) Return Reserva objects filtered by the tipo_reserva_id column
@@ -52,6 +55,7 @@
  * @method     array findByDiaFinReserva(string $dia_fin_reserva) Return Reserva objects filtered by the dia_fin_reserva column
  * @method     array findByHoraFinReserva(string $hora_fin_reserva) Return Reserva objects filtered by the hora_fin_reserva column
  * @method     array findByCantidadTurnos(int $cantidad_turnos) Return Reserva objects filtered by the cantidad_turnos column
+ * @method     array findByEstado(boolean $estado) Return Reserva objects filtered by the estado column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -140,7 +144,7 @@ abstract class BaseReservaQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `SOCIO_NRO_DOC`, `TIPO_RESERVA_ID`, `DIA_COMIENZO_RESERVA`, `HORA_COMIENZO_RESERVA`, `DIA_FIN_RESERVA`, `HORA_FIN_RESERVA`, `CANTIDAD_TURNOS` FROM `reserva` WHERE `SOCIO_NRO_DOC` = :p0 AND `TIPO_RESERVA_ID` = :p1 AND `DIA_COMIENZO_RESERVA` = :p2 AND `HORA_COMIENZO_RESERVA` = :p3';
+		$sql = 'SELECT `SOCIO_NRO_DOC`, `TIPO_RESERVA_ID`, `DIA_COMIENZO_RESERVA`, `HORA_COMIENZO_RESERVA`, `DIA_FIN_RESERVA`, `HORA_FIN_RESERVA`, `CANTIDAD_TURNOS`, `ESTADO` FROM `reserva` WHERE `SOCIO_NRO_DOC` = :p0 AND `TIPO_RESERVA_ID` = :p1 AND `DIA_COMIENZO_RESERVA` = :p2 AND `HORA_COMIENZO_RESERVA` = :p3';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -509,6 +513,32 @@ abstract class BaseReservaQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(ReservaPeer::CANTIDAD_TURNOS, $cantidadTurnos, $comparison);
+	}
+
+	/**
+	 * Filter the query on the estado column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByEstado(true); // WHERE estado = true
+	 * $query->filterByEstado('yes'); // WHERE estado = true
+	 * </code>
+	 *
+	 * @param     boolean|string $estado The value to use as filter.
+	 *              Non-boolean arguments are converted using the following rules:
+	 *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ReservaQuery The current query, for fluid interface
+	 */
+	public function filterByEstado($estado = null, $comparison = null)
+	{
+		if (is_string($estado)) {
+			$estado = in_array(strtolower($estado), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+		}
+		return $this->addUsingAlias(ReservaPeer::ESTADO, $estado, $comparison);
 	}
 
 	/**

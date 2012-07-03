@@ -41,6 +41,7 @@ class PersonaTableMap extends TableMap
 		$this->addPrimaryKey('NRO_DOC', 'NroDoc', 'INTEGER', true, 10, 0);
 		$this->getColumn('NRO_DOC', false)->setPrimaryString(true);
 		$this->addColumn('NOM_APELLIDO', 'NomApellido', 'VARCHAR', true, 45, null);
+		$this->addColumn('APELLIDO', 'Apellido', 'VARCHAR', true, 45, null);
 		$this->addColumn('FECHA_NACIMIENTO', 'FechaNacimiento', 'DATE', true, null, null);
 		$this->addColumn('E_MAIL', 'EMail', 'VARCHAR', false, 30, null);
 		$this->addForeignKey('LOCALIDAD_ID', 'LocalidadId', 'INTEGER', 'localidad', 'ID', true, 10, null);

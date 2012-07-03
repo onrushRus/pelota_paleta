@@ -17,12 +17,14 @@ abstract class BaseTipoReservaForm extends BaseFormPropel
       'id'                  => new sfWidgetFormInputHidden(),
       'descirpcion_reserva' => new sfWidgetFormInputText(),
       'tiempo_reserva'      => new sfWidgetFormInputText(),
+      'coste'               => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
       'id'                  => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'descirpcion_reserva' => new sfValidatorString(array('max_length' => 45)),
       'tiempo_reserva'      => new sfValidatorNumber(),
+      'coste'               => new sfValidatorNumber(),
     ));
 
     $this->widgetSchema->setNameFormat('tipo_reserva[%s]');

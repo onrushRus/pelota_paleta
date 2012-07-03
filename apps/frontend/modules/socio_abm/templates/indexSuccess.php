@@ -5,7 +5,8 @@
   <thead style="background: #7FDDCA">
     <tr>
       <th>Nro documento</th>
-      <th>Nombre - Apellido</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
       <th>Fecha alta</th>
       <th>Vitalicio</th>
       <th>Activo</th>
@@ -17,6 +18,7 @@
     <tr>
       <td><?php echo $Socio->getPersonaNroDoc()?></td>
       <td><?php echo $Socio->getPersona()->getNomApellido()?></td>
+      <td><?php echo $Socio->getPersona()->getApellido()?></td>
       <td><?php echo $Socio->getFechaAlta('d-m-Y') ?></td>
       <td><i class="icon-<?php echo $Socio->getIconoVitalicio() ?>"></i></td>
       <td><i class="icon-<?php echo $Socio->getIconoActivo() ?>"></i></td>
