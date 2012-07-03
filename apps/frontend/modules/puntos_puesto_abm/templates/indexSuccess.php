@@ -1,17 +1,19 @@
+<? /* @var $PuntosPuesto PuntosPuesto*/?>
 <h1>PuntosPuestos List</h1>
 
 <table class="table table-bordered">
   <thead>
     <tr>
       <th>Id</th>
-      <th>Puntos por puesto</th>
+      <th>Puesto</th>
+      <th>Puntos</th>
       <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($PuntosPuestos as $PuntosPuesto): ?>
     <tr>
-      <td><a href="<?php echo url_for('puntos_puesto_abm/edit?id='.$PuntosPuesto->getId()) ?>"><?php echo $PuntosPuesto->getId() ?></a></td>
+      <td><?php echo $PuntosPuesto->getId() ?></td>
       <td><?php echo $PuntosPuesto->getPuesto() ?></td>
       <td><?php echo $PuntosPuesto->getPuntosPorPuesto() ?></td>
       <td>
