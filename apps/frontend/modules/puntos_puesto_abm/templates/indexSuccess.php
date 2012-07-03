@@ -1,5 +1,5 @@
 <? /* @var $PuntosPuesto PuntosPuesto*/?>
-<h1>PuntosPuestos List</h1>
+<h1>Puntos por Puestos</h1>
 
 <table class="table table-bordered">
   <thead>
