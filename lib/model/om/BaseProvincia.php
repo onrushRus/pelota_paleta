@@ -445,10 +445,10 @@ abstract class BaseProvincia extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`NOMBRE_PROV`':						
+					case '`NOMBRE_PROV`':
 						$stmt->bindValue($identifier, $this->nombre_prov, PDO::PARAM_STR);
 						break;
 				}

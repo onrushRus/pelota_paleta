@@ -130,7 +130,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID`, `DESCRIPCION_CATEGORIA`, `EDAD_MIN`, `EDAD_MAX` FROM `categoria` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

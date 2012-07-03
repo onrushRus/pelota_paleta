@@ -130,9 +130,9 @@ abstract class BaseRankingQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PELOTARI_NRO_DOC`, `TIPO_RANKING`, `CATEGORIA_ID`, `PELOTARI_PUNTOS` FROM `ranking` WHERE `PELOTARI_NRO_DOC` = :p0 AND `TIPO_RANKING` = :p1 AND `CATEGORIA_ID` = :p2';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-			$stmt->bindValue(':p1', (int) $key[1], PDO::PARAM_INT);			
+			$stmt->bindValue(':p1', (int) $key[1], PDO::PARAM_INT);
 			$stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

@@ -686,19 +686,19 @@ abstract class BaseInscripto extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`PERSONA_NRO_DOC`':						
+					case '`PERSONA_NRO_DOC`':
 						$stmt->bindValue($identifier, $this->persona_nro_doc, PDO::PARAM_INT);
 						break;
-					case '`TORNEO_CAT_ID`':						
+					case '`TORNEO_CAT_ID`':
 						$stmt->bindValue($identifier, $this->torneo_cat_id, PDO::PARAM_INT);
 						break;
-					case '`NRO_EQUIPO`':						
+					case '`NRO_EQUIPO`':
 						$stmt->bindValue($identifier, $this->nro_equipo, PDO::PARAM_INT);
 						break;
-					case '`CLUB_REPRESENTADO`':						
+					case '`CLUB_REPRESENTADO`':
 						$stmt->bindValue($identifier, $this->club_representado, PDO::PARAM_INT);
 						break;
 				}

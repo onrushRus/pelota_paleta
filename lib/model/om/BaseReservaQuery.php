@@ -142,10 +142,10 @@ abstract class BaseReservaQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `SOCIO_NRO_DOC`, `TIPO_RESERVA_ID`, `DIA_COMIENZO_RESERVA`, `HORA_COMIENZO_RESERVA`, `DIA_FIN_RESERVA`, `HORA_FIN_RESERVA`, `CANTIDAD_TURNOS` FROM `reserva` WHERE `SOCIO_NRO_DOC` = :p0 AND `TIPO_RESERVA_ID` = :p1 AND `DIA_COMIENZO_RESERVA` = :p2 AND `HORA_COMIENZO_RESERVA` = :p3';
 		try {
-			$stmt = $con->prepare($sql);			
-			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);			
-			$stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);			
-			$stmt->bindValue(':p2', $key[2], PDO::PARAM_STR);			
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+			$stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+			$stmt->bindValue(':p2', $key[2], PDO::PARAM_STR);
 			$stmt->bindValue(':p3', $key[3], PDO::PARAM_STR);
 			$stmt->execute();
 		} catch (Exception $e) {

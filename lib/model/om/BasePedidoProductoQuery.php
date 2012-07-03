@@ -122,8 +122,8 @@ abstract class BasePedidoProductoQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PEDIDO_ID`, `PRODUCTO_ID` FROM `pedido_producto` WHERE `PEDIDO_ID` = :p0 AND `PRODUCTO_ID` = :p1';
 		try {
-			$stmt = $con->prepare($sql);			
-			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);			
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
 			$stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

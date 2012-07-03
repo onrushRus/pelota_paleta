@@ -7,9 +7,11 @@
  * 
  *
  * @method     PuntosPuestoQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     PuntosPuestoQuery orderByPuesto($order = Criteria::ASC) Order by the puesto column
  * @method     PuntosPuestoQuery orderByPuntosPorPuesto($order = Criteria::ASC) Order by the puntos_por_puesto column
  *
  * @method     PuntosPuestoQuery groupById() Group by the id column
+ * @method     PuntosPuestoQuery groupByPuesto() Group by the puesto column
  * @method     PuntosPuestoQuery groupByPuntosPorPuesto() Group by the puntos_por_puesto column
  *
  * @method     PuntosPuestoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -24,9 +26,11 @@
  * @method     PuntosPuesto findOneOrCreate(PropelPDO $con = null) Return the first PuntosPuesto matching the query, or a new PuntosPuesto object populated from the query conditions when no match is found
  *
  * @method     PuntosPuesto findOneById(int $id) Return the first PuntosPuesto filtered by the id column
+ * @method     PuntosPuesto findOneByPuesto(int $puesto) Return the first PuntosPuesto filtered by the puesto column
  * @method     PuntosPuesto findOneByPuntosPorPuesto(int $puntos_por_puesto) Return the first PuntosPuesto filtered by the puntos_por_puesto column
  *
  * @method     array findById(int $id) Return PuntosPuesto objects filtered by the id column
+ * @method     array findByPuesto(int $puesto) Return PuntosPuesto objects filtered by the puesto column
  * @method     array findByPuntosPorPuesto(int $puntos_por_puesto) Return PuntosPuesto objects filtered by the puntos_por_puesto column
  *
  * @package    propel.generator.lib.model.om
@@ -116,9 +120,9 @@ abstract class BasePuntosPuestoQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `PUNTOS_POR_PUESTO` FROM `puntos_puesto` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `PUESTO`, `PUNTOS_POR_PUESTO` FROM `puntos_puesto` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {
@@ -225,6 +229,46 @@ abstract class BasePuntosPuestoQuery extends ModelCriteria
 			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(PuntosPuestoPeer::ID, $id, $comparison);
+	}
+
+	/**
+	 * Filter the query on the puesto column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByPuesto(1234); // WHERE puesto = 1234
+	 * $query->filterByPuesto(array(12, 34)); // WHERE puesto IN (12, 34)
+	 * $query->filterByPuesto(array('min' => 12)); // WHERE puesto > 12
+	 * </code>
+	 *
+	 * @param     mixed $puesto The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    PuntosPuestoQuery The current query, for fluid interface
+	 */
+	public function filterByPuesto($puesto = null, $comparison = null)
+	{
+		if (is_array($puesto)) {
+			$useMinMax = false;
+			if (isset($puesto['min'])) {
+				$this->addUsingAlias(PuntosPuestoPeer::PUESTO, $puesto['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($puesto['max'])) {
+				$this->addUsingAlias(PuntosPuestoPeer::PUESTO, $puesto['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(PuntosPuestoPeer::PUESTO, $puesto, $comparison);
 	}
 
 	/**

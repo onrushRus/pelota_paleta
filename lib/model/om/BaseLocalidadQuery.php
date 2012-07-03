@@ -130,7 +130,7 @@ abstract class BaseLocalidadQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID`, `NOMBRE_LOC`, `COD_POSTAL`, `PROVINCIA_ID` FROM `localidad` WHERE `ID` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

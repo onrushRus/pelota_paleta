@@ -130,7 +130,7 @@ abstract class BaseSocioQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PERSONA_NRO_DOC`, `FECHA_ALTA`, `VITALICIO`, `ACTIVO` FROM `socio` WHERE `PERSONA_NRO_DOC` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

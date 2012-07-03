@@ -462,10 +462,10 @@ abstract class BaseTelefono extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`PERSONA_NRO_DOC`':						
+					case '`PERSONA_NRO_DOC`':
 						$stmt->bindValue($identifier, $this->persona_nro_doc, PDO::PARAM_INT);
 						break;
-					case '`TELEFONO_NRO`':						
+					case '`TELEFONO_NRO`':
 						$stmt->bindValue($identifier, $this->telefono_nro, PDO::PARAM_STR);
 						break;
 				}

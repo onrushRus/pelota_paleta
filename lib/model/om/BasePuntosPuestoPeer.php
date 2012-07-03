@@ -23,16 +23,19 @@ abstract class BasePuntosPuestoPeer {
 	const TM_CLASS = 'PuntosPuestoTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 2;
+	const NUM_COLUMNS = 3;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 2;
+	const NUM_HYDRATE_COLUMNS = 3;
 
 	/** the column name for the ID field */
 	const ID = 'puntos_puesto.ID';
+
+	/** the column name for the PUESTO field */
+	const PUESTO = 'puntos_puesto.PUESTO';
 
 	/** the column name for the PUNTOS_POR_PUESTO field */
 	const PUNTOS_POR_PUESTO = 'puntos_puesto.PUNTOS_POR_PUESTO';
@@ -56,12 +59,12 @@ abstract class BasePuntosPuestoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PuntosPorPuesto', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'puntosPorPuesto', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PUNTOS_POR_PUESTO, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUNTOS_POR_PUESTO', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'puntos_por_puesto', ),
-		BasePeer::TYPE_NUM => array (0, 1, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Puesto', 'PuntosPorPuesto', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'puesto', 'puntosPorPuesto', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PUESTO, self::PUNTOS_POR_PUESTO, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUESTO', 'PUNTOS_POR_PUESTO', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'puesto', 'puntos_por_puesto', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -71,12 +74,12 @@ abstract class BasePuntosPuestoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PuntosPorPuesto' => 1, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'puntosPorPuesto' => 1, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PUNTOS_POR_PUESTO => 1, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUNTOS_POR_PUESTO' => 1, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'puntos_por_puesto' => 1, ),
-		BasePeer::TYPE_NUM => array (0, 1, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Puesto' => 1, 'PuntosPorPuesto' => 2, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'puesto' => 1, 'puntosPorPuesto' => 2, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PUESTO => 1, self::PUNTOS_POR_PUESTO => 2, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUESTO' => 1, 'PUNTOS_POR_PUESTO' => 2, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'puesto' => 1, 'puntos_por_puesto' => 2, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
 	/**
@@ -149,9 +152,11 @@ abstract class BasePuntosPuestoPeer {
 	{
 		if (null === $alias) {
 			$criteria->addSelectColumn(PuntosPuestoPeer::ID);
+			$criteria->addSelectColumn(PuntosPuestoPeer::PUESTO);
 			$criteria->addSelectColumn(PuntosPuestoPeer::PUNTOS_POR_PUESTO);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.PUESTO');
 			$criteria->addSelectColumn($alias . '.PUNTOS_POR_PUESTO');
 		}
 	}
@@ -752,7 +757,7 @@ abstract class BasePuntosPuestoPeer {
 	 */
 	static public function getUniqueColumnNames()
 	{
-	  return array();
+	  return array(array('puesto'));
 	}
 
 	// symfony_behaviors behavior

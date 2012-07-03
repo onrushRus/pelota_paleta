@@ -118,8 +118,8 @@ abstract class BaseTelefonoQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PERSONA_NRO_DOC`, `TELEFONO_NRO` FROM `telefono` WHERE `PERSONA_NRO_DOC` = :p0 AND `TELEFONO_NRO` = :p1';
 		try {
-			$stmt = $con->prepare($sql);			
-			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);			
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
 			$stmt->bindValue(':p1', $key[1], PDO::PARAM_STR);
 			$stmt->execute();
 		} catch (Exception $e) {

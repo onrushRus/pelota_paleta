@@ -146,7 +146,7 @@ abstract class BasePersonaQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `NRO_DOC`, `NOM_APELLIDO`, `FECHA_NACIMIENTO`, `E_MAIL`, `LOCALIDAD_ID` FROM `persona` WHERE `NRO_DOC` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

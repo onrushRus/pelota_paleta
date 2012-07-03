@@ -576,16 +576,16 @@ abstract class BaseRanking extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`PELOTARI_NRO_DOC`':						
+					case '`PELOTARI_NRO_DOC`':
 						$stmt->bindValue($identifier, $this->pelotari_nro_doc, PDO::PARAM_INT);
 						break;
 					case '`TIPO_RANKING`':
 						$stmt->bindValue($identifier, (int) $this->tipo_ranking, PDO::PARAM_INT);
 						break;
-					case '`CATEGORIA_ID`':						
+					case '`CATEGORIA_ID`':
 						$stmt->bindValue($identifier, $this->categoria_id, PDO::PARAM_INT);
 						break;
-					case '`PELOTARI_PUNTOS`':						
+					case '`PELOTARI_PUNTOS`':
 						$stmt->bindValue($identifier, $this->pelotari_puntos, PDO::PARAM_INT);
 						break;
 				}

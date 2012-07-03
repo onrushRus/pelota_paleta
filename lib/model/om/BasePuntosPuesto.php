@@ -37,6 +37,12 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 	protected $id;
 
 	/**
+	 * The value for the puesto field.
+	 * @var        int
+	 */
+	protected $puesto;
+
+	/**
 	 * The value for the puntos_por_puesto field.
 	 * @var        int
 	 */
@@ -78,6 +84,16 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [puesto] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getPuesto()
+	{
+		return $this->puesto;
+	}
+
+	/**
 	 * Get the [puntos_por_puesto] column value.
 	 * 
 	 * @return     int
@@ -106,6 +122,26 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 
 		return $this;
 	} // setId()
+
+	/**
+	 * Set the value of [puesto] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     PuntosPuesto The current object (for fluent API support)
+	 */
+	public function setPuesto($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->puesto !== $v) {
+			$this->puesto = $v;
+			$this->modifiedColumns[] = PuntosPuestoPeer::PUESTO;
+		}
+
+		return $this;
+	} // setPuesto()
 
 	/**
 	 * Set the value of [puntos_por_puesto] column.
@@ -160,7 +196,8 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->puntos_por_puesto = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->puesto = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->puntos_por_puesto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -169,7 +206,7 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 2; // 2 = PuntosPuestoPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 3; // 3 = PuntosPuestoPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating PuntosPuesto object", $e);
@@ -431,6 +468,9 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 		if ($this->isColumnModified(PuntosPuestoPeer::ID)) {
 			$modifiedColumns[':p' . $index++]  = '`ID`';
 		}
+		if ($this->isColumnModified(PuntosPuestoPeer::PUESTO)) {
+			$modifiedColumns[':p' . $index++]  = '`PUESTO`';
+		}
 		if ($this->isColumnModified(PuntosPuestoPeer::PUNTOS_POR_PUESTO)) {
 			$modifiedColumns[':p' . $index++]  = '`PUNTOS_POR_PUESTO`';
 		}
@@ -445,10 +485,13 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`PUNTOS_POR_PUESTO`':						
+					case '`PUESTO`':
+						$stmt->bindValue($identifier, $this->puesto, PDO::PARAM_INT);
+						break;
+					case '`PUNTOS_POR_PUESTO`':
 						$stmt->bindValue($identifier, $this->puntos_por_puesto, PDO::PARAM_INT);
 						break;
 				}
@@ -593,6 +636,9 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 				return $this->getId();
 				break;
 			case 1:
+				return $this->getPuesto();
+				break;
+			case 2:
 				return $this->getPuntosPorPuesto();
 				break;
 			default:
@@ -625,7 +671,8 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 		$keys = PuntosPuestoPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getPuntosPorPuesto(),
+			$keys[1] => $this->getPuesto(),
+			$keys[2] => $this->getPuntosPorPuesto(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->collResultadoTorneos) {
@@ -666,6 +713,9 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 				$this->setId($value);
 				break;
 			case 1:
+				$this->setPuesto($value);
+				break;
+			case 2:
 				$this->setPuntosPorPuesto($value);
 				break;
 		} // switch()
@@ -693,7 +743,8 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 		$keys = PuntosPuestoPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setPuntosPorPuesto($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setPuesto($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setPuntosPorPuesto($arr[$keys[2]]);
 	}
 
 	/**
@@ -706,6 +757,7 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 		$criteria = new Criteria(PuntosPuestoPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(PuntosPuestoPeer::ID)) $criteria->add(PuntosPuestoPeer::ID, $this->id);
+		if ($this->isColumnModified(PuntosPuestoPeer::PUESTO)) $criteria->add(PuntosPuestoPeer::PUESTO, $this->puesto);
 		if ($this->isColumnModified(PuntosPuestoPeer::PUNTOS_POR_PUESTO)) $criteria->add(PuntosPuestoPeer::PUNTOS_POR_PUESTO, $this->puntos_por_puesto);
 
 		return $criteria;
@@ -769,6 +821,7 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 	 */
 	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
+		$copyObj->setPuesto($this->getPuesto());
 		$copyObj->setPuntosPorPuesto($this->getPuntosPorPuesto());
 
 		if ($deepCopy && !$this->startCopy) {
@@ -1052,6 +1105,7 @@ abstract class BasePuntosPuesto extends BaseObject  implements Persistent
 	public function clear()
 	{
 		$this->id = null;
+		$this->puesto = null;
 		$this->puntos_por_puesto = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;

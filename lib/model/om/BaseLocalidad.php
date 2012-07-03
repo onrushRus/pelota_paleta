@@ -550,16 +550,16 @@ abstract class BaseLocalidad extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`NOMBRE_LOC`':						
+					case '`NOMBRE_LOC`':
 						$stmt->bindValue($identifier, $this->nombre_loc, PDO::PARAM_STR);
 						break;
-					case '`COD_POSTAL`':						
+					case '`COD_POSTAL`':
 						$stmt->bindValue($identifier, $this->cod_postal, PDO::PARAM_STR);
 						break;
-					case '`PROVINCIA_ID`':						
+					case '`PROVINCIA_ID`':
 						$stmt->bindValue($identifier, $this->provincia_id, PDO::PARAM_INT);
 						break;
 				}

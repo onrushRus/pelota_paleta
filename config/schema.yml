@@ -79,6 +79,7 @@ propel:
   puntos_puesto:
     _attributes: { phpName: PuntosPuesto, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    puesto: { phpName: Puesto, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, index: unique }
     puntos_por_puesto: { phpName: PuntosPorPuesto, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
   ranking:
     _attributes: { phpName: Ranking, idMethod: native }

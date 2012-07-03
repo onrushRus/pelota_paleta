@@ -620,19 +620,19 @@ abstract class BaseProducto extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`DESCRIPCION_PROD`':						
+					case '`DESCRIPCION_PROD`':
 						$stmt->bindValue($identifier, $this->descripcion_prod, PDO::PARAM_STR);
 						break;
-					case '`MARCA`':						
+					case '`MARCA`':
 						$stmt->bindValue($identifier, $this->marca, PDO::PARAM_STR);
 						break;
-					case '`PRESENTACION`':						
+					case '`PRESENTACION`':
 						$stmt->bindValue($identifier, $this->presentacion, PDO::PARAM_STR);
 						break;
-					case '`PRECIO`':						
+					case '`PRECIO`':
 						$stmt->bindValue($identifier, $this->precio, PDO::PARAM_STR);
 						break;
 				}

@@ -12,6 +12,7 @@
     <?php foreach ($PuntosPuestos as $PuntosPuesto): ?>
     <tr>
       <td><a href="<?php echo url_for('puntos_puesto_abm/edit?id='.$PuntosPuesto->getId()) ?>"><?php echo $PuntosPuesto->getId() ?></a></td>
+      <td><?php echo $PuntosPuesto->getPuesto() ?></td>
       <td><?php echo $PuntosPuesto->getPuntosPorPuesto() ?></td>
       <td>
           <a class="btn btn-warning btn-mini" href="<?php echo url_for('puntos_puesto_abm/edit?id='.$PuntosPuesto->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>

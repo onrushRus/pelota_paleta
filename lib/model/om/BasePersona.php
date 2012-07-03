@@ -730,19 +730,19 @@ abstract class BasePersona extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`NRO_DOC`':						
+					case '`NRO_DOC`':
 						$stmt->bindValue($identifier, $this->nro_doc, PDO::PARAM_INT);
 						break;
-					case '`NOM_APELLIDO`':						
+					case '`NOM_APELLIDO`':
 						$stmt->bindValue($identifier, $this->nom_apellido, PDO::PARAM_STR);
 						break;
-					case '`FECHA_NACIMIENTO`':						
+					case '`FECHA_NACIMIENTO`':
 						$stmt->bindValue($identifier, $this->fecha_nacimiento, PDO::PARAM_STR);
 						break;
-					case '`E_MAIL`':						
+					case '`E_MAIL`':
 						$stmt->bindValue($identifier, $this->e_mail, PDO::PARAM_STR);
 						break;
-					case '`LOCALIDAD_ID`':						
+					case '`LOCALIDAD_ID`':
 						$stmt->bindValue($identifier, $this->localidad_id, PDO::PARAM_INT);
 						break;
 				}

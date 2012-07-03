@@ -134,9 +134,9 @@ abstract class BaseDireccionQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `PERSONA_NRO_DOC`, `CALLE`, `NUMERO`, `MONOBLOCK_EDIF`, `PISO`, `DPTO` FROM `direccion` WHERE `PERSONA_NRO_DOC` = :p0 AND `CALLE` = :p1 AND `NUMERO` = :p2';
 		try {
-			$stmt = $con->prepare($sql);			
-			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);			
-			$stmt->bindValue(':p1', $key[1], PDO::PARAM_STR);			
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+			$stmt->bindValue(':p1', $key[1], PDO::PARAM_STR);
 			$stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {

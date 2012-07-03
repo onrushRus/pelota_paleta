@@ -39,6 +39,7 @@ class PuntosPuestoTableMap extends TableMap
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, 10, null);
+		$this->addColumn('PUESTO', 'Puesto', 'INTEGER', true, 10, null);
 		$this->addColumn('PUNTOS_POR_PUESTO', 'PuntosPorPuesto', 'INTEGER', true, 10, null);
 		// validators
 	} // initialize()

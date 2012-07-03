@@ -560,13 +560,13 @@ abstract class BaseTorneoCategoria extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID_TORNEO_CATEGORIA`':						
+					case '`ID_TORNEO_CATEGORIA`':
 						$stmt->bindValue($identifier, $this->id_torneo_categoria, PDO::PARAM_INT);
 						break;
-					case '`TORNEO_ID`':						
+					case '`TORNEO_ID`':
 						$stmt->bindValue($identifier, $this->torneo_id, PDO::PARAM_INT);
 						break;
-					case '`CATEGORIA_ID`':						
+					case '`CATEGORIA_ID`':
 						$stmt->bindValue($identifier, $this->categoria_id, PDO::PARAM_INT);
 						break;
 				}

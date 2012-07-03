@@ -555,16 +555,16 @@ abstract class BaseCategoria extends BaseObject  implements Persistent
 			$stmt = $con->prepare($sql);
 			foreach ($modifiedColumns as $identifier => $columnName) {
 				switch ($columnName) {
-					case '`ID`':						
+					case '`ID`':
 						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 						break;
-					case '`DESCRIPCION_CATEGORIA`':						
+					case '`DESCRIPCION_CATEGORIA`':
 						$stmt->bindValue($identifier, $this->descripcion_categoria, PDO::PARAM_STR);
 						break;
-					case '`EDAD_MIN`':						
+					case '`EDAD_MIN`':
 						$stmt->bindValue($identifier, $this->edad_min, PDO::PARAM_INT);
 						break;
-					case '`EDAD_MAX`':						
+					case '`EDAD_MAX`':
 						$stmt->bindValue($identifier, $this->edad_max, PDO::PARAM_INT);
 						break;
 				}

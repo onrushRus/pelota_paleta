@@ -134,7 +134,7 @@ abstract class BaseTorneoCategoriaQuery extends ModelCriteria
 	{
 		$sql = 'SELECT `ID_TORNEO_CATEGORIA`, `TORNEO_ID`, `CATEGORIA_ID` FROM `torneo_categoria` WHERE `ID_TORNEO_CATEGORIA` = :p0';
 		try {
-			$stmt = $con->prepare($sql);			
+			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
 			$stmt->execute();
 		} catch (Exception $e) {
