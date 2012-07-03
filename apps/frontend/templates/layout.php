@@ -71,18 +71,6 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="<?php echo url_for('reserva_abm/index');?>">Reservas ABM</a></li>
-                  <li><a href="#">Abona reserva</a></li>
-                  <li><a href="#">Cancela reserva</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Gestión Cuotas<b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Operacion 1..</a></li>
-                  <li><a href="#">Operacion 2..</a></li>
-                  <li><a href="#">Operacion 3..</a></li>
                 </ul>
               </li>
             </ul>

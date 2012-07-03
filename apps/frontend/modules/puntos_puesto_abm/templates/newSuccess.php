@@ -1,3 +1,3 @@
-<h1>New PuntosPuesto</h1>
+<h1>Nueva Puntuacion-Puesto</h1>
 
 <?php include_partial('form', array('form' => $form)) ?>
