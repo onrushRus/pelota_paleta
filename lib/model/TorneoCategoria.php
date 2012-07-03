@@ -16,7 +16,7 @@
 class TorneoCategoria extends BaseTorneoCategoria {
     
 public function getTorncat(){
-    $aux='Torneo: '.$this->getTorneo().', Categoria: '.$this->getCategoria();
+    $aux=$this->getCategoria().' Torneo: ('.$this->getTorneo().') ';
     return $aux;
 }
 

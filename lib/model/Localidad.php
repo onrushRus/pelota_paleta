@@ -15,7 +15,7 @@
  */
 class Localidad extends BaseLocalidad {
 public function getProvloc(){
-    $aux='Provincia: '.$this->getProvincia()->getNombreProv().', Localidad: '.$this->getNombreLoc();
+    $aux=$this->getNombreLoc().' ('.$this->getProvincia()->getNombreProv().')';
     return $aux;
 }
 } // Localidad
