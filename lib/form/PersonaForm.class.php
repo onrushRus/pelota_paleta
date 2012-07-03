@@ -22,12 +22,19 @@ class PersonaForm extends BasePersonaForm
       $this->validatorSchema['nro_doc']->setMessage('max', 'Nro de documento muy largo');
       
       
-      $this->validatorSchema['nom_apellido']->setMessage('required', 'Nobre y apellido son Requeridos');
-      $this->validatorSchema['nom_apellido']->setMessage('invalid', 'Nobre y apellido debe tener letras');
-      $this->validatorSchema['nom_apellido']->setOption('min_length', '7');
-      $this->validatorSchema['nom_apellido']->setMessage('min_length', 'Nobre y apellido muy cortos');
+      $this->validatorSchema['nom_apellido']->setMessage('required', 'Nombre es Requerido');
+      $this->validatorSchema['nom_apellido']->setMessage('invalid', 'Nombre debe tener letras');
+      $this->validatorSchema['nom_apellido']->setOption('min_length', '3');
+      $this->validatorSchema['nom_apellido']->setMessage('min_length', 'Nombre muy corto');
       $this->validatorSchema['nom_apellido']->setOption('max_length', '45');
-      $this->validatorSchema['nom_apellido']->setMessage('max_length', 'Nobre y apellido muy largos');
+      $this->validatorSchema['nom_apellido']->setMessage('max_length', 'Nombre muy largo');
+      
+      $this->validatorSchema['apellido']->setMessage('required', 'Apellido es Requerido');
+      $this->validatorSchema['apellido']->setMessage('invalid', 'Apellido debe tener letras');
+      $this->validatorSchema['apellido']->setOption('min_length', '3');
+      $this->validatorSchema['apellido']->setMessage('min_length', 'Apellido muy corto');
+      $this->validatorSchema['apellido']->setOption('max_length', '45');
+      $this->validatorSchema['apellido']->setMessage('max_length', 'Apellido muy largo');
       
       $anios = range(date('Y') - 80, date('Y') - 18);
       $this->widgetSchema['fecha_nacimiento'] = new sfWidgetFormInputText();
