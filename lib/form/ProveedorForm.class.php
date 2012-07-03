@@ -21,7 +21,10 @@ class ProveedorForm extends BaseProveedorForm
       
       $this->validatorSchema['nombre_proveedor']->setMessage('required', 'Proveedor es Requerido');
       
-      $this->validatorSchema['dom_calle']->setMessage('invalid', 'Nro de documento debe ser un entero');
+      $this->validatorSchema['dom_calle']->setOption('min_length', '3');
+      $this->validatorSchema['dom_calle']->setMessage('min_length', 'Nombre de Calle muy coto');
+      $this->validatorSchema['dom_calle']->setOption('max_length', '25');
+      $this->validatorSchema['dom_calle']->setMessage('max_length', 'Nombre de Calle muy largo');
       
       $this->validatorSchema['dom_nro'] = new sfValidatorInteger();
       $this->validatorSchema['dom_nro']->setMessage('invalid', 'Nro de domicilio debe ser un entero');
@@ -46,9 +49,9 @@ class ProveedorForm extends BaseProveedorForm
       
       $this->validatorSchema['telefono'] = new sfValidatorInteger();
       $this->validatorSchema['telefono']->setMessage('invalid', 'Telefono debe ser numérico');
-      $this->validatorSchema['telefono']->setOption('min', '6');
+      $this->validatorSchema['telefono']->setOption('min', '10000000');
       $this->validatorSchema['telefono']->setMessage('min', 'Telefono muy corto');
-      $this->validatorSchema['telefono']->setOption('max', '10');
+      $this->validatorSchema['telefono']->setOption('max', '999999999');
       $this->validatorSchema['telefono']->setMessage('max', 'Telefono muy largo');
       
   }
