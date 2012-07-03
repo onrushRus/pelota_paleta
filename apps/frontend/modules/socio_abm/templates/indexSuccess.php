@@ -2,7 +2,7 @@
 <h1>Socios</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Nro documento</th>
       <th>Nombre - Apellido</th>

@@ -1,7 +1,7 @@
 <h1>Localidads List</h1>
 
 <table>
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Id</th>
       <th>Nombre loc</th>

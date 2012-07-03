@@ -17,7 +17,7 @@
     <fieldset><legend>Productos</legend>
         <form name="busqueda" method="POST" action="<?php echo url_for('ventas/ventas_realizadas'); ?>">
             <table class="table table-bordered">
-              <thead>
+              <thead style="background: #7FDDCA">
                 <tr>
                   <th>Código</th>
                   <th>Descripción</th>

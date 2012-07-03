@@ -2,7 +2,7 @@
 <h1>Pedidos - Productos</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Pedido</th>
       <th>Producto</th>

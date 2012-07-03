@@ -2,7 +2,7 @@
 <h1>Puntos por Puestos</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Id</th>
       <th>Puesto</th>

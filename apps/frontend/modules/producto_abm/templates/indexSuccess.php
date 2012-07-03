@@ -2,7 +2,7 @@
 <h1>Productos</h1>
 
 <table class="table table-bordered">
-  <thead>
+    <thead style="background: #7FDDCA">
     <tr>
       <th>Id</th>
       <th>Descripcion producto</th>
@@ -11,7 +11,6 @@
       <th>Precio</th>
       <th>Stock</th>
       <th>Acciones</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>

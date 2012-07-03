@@ -1,7 +1,7 @@
 <h1>Proveedores</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Id</th>
       <th>Nombre proveedor</th>

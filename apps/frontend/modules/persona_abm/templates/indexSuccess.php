@@ -1,7 +1,7 @@
 <h1>Personas</h1>
 
 <table class="table table-bordered">
-  <thead>
+  <thead style="background: #7FDDCA">
     <tr>
       <th>Nombre - Apellido</th>
       <th>Nro documento</th>
