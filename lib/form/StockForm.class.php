@@ -18,11 +18,13 @@ class StockForm extends BaseStockForm
 //	   pero esta mal pq no sabes q nuevo codigo va a tener');
 	 //$this->widgetSchema['producto_id']= new sfWidgetFormPropelChoice(array('model' => 'Producto', 'add_empty' => false));
       
+      $this->validatorSchema['cantidad_minima']->setMessage('required', 'La cantidad minima es requerida');
       $this->validatorSchema['cantidad_minima']->setOption('min', 0);
       $this->validatorSchema['cantidad_minima']->setMessage('min', 'La cantidad deve ser mayor a 0');
       $this->validatorSchema['cantidad_minima']->setOption('max', 1000);
       $this->validatorSchema['cantidad_minima']->setMessage('max', 'La cantidad deve ser menor a 500');
       
+      $this->validatorSchema['cantidad_actual']->setMessage('required', 'La cantidad actual es requerida');
       $this->validatorSchema['cantidad_actual']->setOption('min', 0);
       $this->validatorSchema['cantidad_actual']->setMessage('min', 'La cantidad deve ser mayor a 0');
       $this->validatorSchema['cantidad_actual']->setOption('max', 1000);

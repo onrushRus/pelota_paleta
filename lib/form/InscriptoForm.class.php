@@ -28,11 +28,13 @@ class InscriptoForm extends BaseInscriptoForm
       $this->widgetSchema['torneo_cat_id']->setOption('query_methods', array('joinWithCategoria','joinWithTorneo'));
       $this->widgetSchema['torneo_cat_id']->setOption('method','getTorncat');
       
+      $this->validatorSchema['persona_nro_doc']->setMessage('required', 'Nro de documento es requerido');
       $this->validatorSchema['persona_nro_doc']->setMessage('invalid', 'Nro de documento no valido');
       
       $this->validatorSchema['torneo_cat_id']->setMessage('invalid', 'Ya esta inscripto en esta categoria');
       
       $this->validatorSchema['nro_equipo'] = new sfValidatorInteger();
+      $this->validatorSchema['nro_equipo']->setMessage('required', 'Nro equipo requerido');
       $this->validatorSchema['nro_equipo']->setOption('min', 0);
       $this->validatorSchema['nro_equipo']->setMessage('min', 'Nro de equipo debe ser positivo');
       $this->validatorSchema['nro_equipo']->setOption('max', 100);
