@@ -1,3 +1,4 @@
+<? /* @var $ResultadoTorneo ResultadoTorneo*/?>
 <h1>Resultado de Torneos</h1>
 
 <table class="table table-bordered">
@@ -16,7 +17,7 @@
       <td><?php echo $ResultadoTorneo->getId() ?></td>
       <td><?php echo $ResultadoTorneo->getPuestoId() ?></td>
       <td><?php echo $ResultadoTorneo->getTorneoCategoria()->getTorncat() ?></td>
-      <td><?php echo $ResultadoTorneo->getPelotariNroDoc() ?></td>
+      <td><?php echo $ResultadoTorneo->getPelotariNroDoc().' / '.$ResultadoTorneo->getInscripto()->getPersona()->getNomApellido().' '.$ResultadoTorneo->getInscripto()->getPersona()->getApellido()  ?></td>
       <td>
           <a class="btn btn-warning btn-mini"  href="<?php echo url_for('resultado_torneo_abm/edit?id='.$ResultadoTorneo->getId()) ?>"><i class="icon-pencil icon-white"></i>Modificar</a>
           <?php echo link_to('<i class="icon-trash icon-white"></i>Eliminar', 'resultado_torneo_abm/delete?id='.$ResultadoTorneo->getId(), array('method' => 'delete', 'confirm' => 'Esta seguro de eliminar?', 'class'=>"btn btn-danger btn-mini" )) ?>

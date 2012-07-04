@@ -12,6 +12,8 @@ class resultado_torneo_abmActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $this->ResultadoTorneos = ResultadoTorneoQuery::create()->find();
+    //$this->ResultadoTorneos = new Criteria();
+    //$this->ResultadoTorneos->addJoin(PersonaPeer::NRO_DOC, ResultadoTorneoPeer::PELOTARI_NRO_DOC , Criteria::INNER_JOIN );
   }
 
   public function executeNew(sfWebRequest $request)

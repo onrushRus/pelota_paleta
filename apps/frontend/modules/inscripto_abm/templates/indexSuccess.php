@@ -5,7 +5,7 @@
   <thead style="background: #7FDDCA">
     <tr>
       <th>Identificador</th>
-      <th>Nro documento</th>
+      <th>Nro documento / Nombre y Apellido</th>
       <th>Torneo-Categoria</th>
       <th>Nro equipo</th>
       <th>Club representado</th>
@@ -16,7 +16,7 @@
     <?php foreach ($Inscriptos as $Inscripto): ?>
     <tr>
       <td><?php echo $Inscripto->getId() ?></td>
-      <td><?php echo $Inscripto->getPersonaNroDoc() ?></td>
+      <td><?php echo $Inscripto->getPersonaNroDoc().' / '.$Inscripto->getPersona()->getNomApellido().' '.$Inscripto->getPersona()->getApellido() ?></td>
       <td><?php echo $Inscripto->getTorneoCategoria()->getTorncat() ?></td>
       <td><?php echo $Inscripto->getNroEquipo() ?></td>
       <td><?php echo $Inscripto->getClub()->getNombreClub() ?></td>
