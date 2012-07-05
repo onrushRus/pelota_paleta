@@ -13,9 +13,9 @@
         </form>
     </fieldset>
 
-<?php if ( ((int)$sf_request->getParameter('cod_prod') || $sf_request->getParameter('descrip_prod') || $sf_request->getParameter('marca_prod') ) &&  (count($Productos) > 0) ): ?>
+<?php if ( /*((int)$sf_request->getParameter('cod_prod') || $sf_request->getParameter('descrip_prod') || $sf_request->getParameter('marca_prod') ) && */ (count($Productos) > 0) ): ?>
     <fieldset><legend>Productos</legend>
-        <form name="busqueda" method="POST" action="<?php echo url_for('ventas/carrito'); ?>">
+        <form name="busqueda" method="POST" action="<?php echo url_for('ventas/ventas_realizadas'); ?>">
             <table class="table table-bordered">
               <thead style="background: #7FDDCA">
                 <tr>
@@ -29,7 +29,7 @@
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($Productos as $prod): ?>
+                <?php foreach ($Productos->getResults() as $prod): ?>
                 <tr>
                     <td><?php echo $prod->getId() ?></td>
                     <td><?php echo $prod->getDescripcionProd() ?></td>
@@ -46,29 +46,27 @@
             </table>
             
             
-            <?php /*
-                echo $Productos->getNbResults()." elementos encontrados. Mostrando resultados desde ".$Productos->getFirstIndice()." hasta ".$Productos->getLastIndice()."<br>";
-                if ($Productos->haveToPaginate()){
-                    echo link_to('&laquo;', 'ventas/index?pag='.$Productos->getFirstPage());
-                    echo link_to('&lt;', 'ventas/index?pag='.$Productos->getPreviousPage());
-                    $links = $Productos->getLinks();
-                    foreach ($links as $page):
-                        echo ($page == $Productos->getPage()) ? $page : link_to($page, 'ventas/index?pag='.$page);
-                        if ($page != $Productos->getCurrentMaxLink()): ?>
-                            /
-                        <?php endif;?> 
-                    <?php endforeach; 
-                    echo link_to('&gt;','ventas/index?pag='.$Productos->getNextPage());
-                    echo link_to('&raquo;','ventas/index?pag='.$Productos->getLastPage());
-               } */
-           ?>
+            <?php echo $Productos->getNbResults()." elementos encontrados. Mostrando resultados desde ".$Productos->getFirstIndice()." hasta ".$Productos->getLastIndice()."<br>";?>
+    <?php if ($Productos->haveToPaginate()):?>
+            <?php echo link_to('&laquo;','ventas/index?pag='.$Productos->getFirstPage())?>
+            <?php echo link_to('&lt;','ventas/index?pag='.$Productos->getPreviousPage())?>
+            <?php $links = $Productos->getLinks();
+                foreach ($links as $page): ?>
+                    <?php echo ($page == $Productos->getPage()) ? $page : link_to($page, 'ventas/index?pag='.$page) ?>
+                    <?php if ($page != $Productos->getCurrentMaxLink()): ?> / <?php endif ?>
+            <?php endforeach ?>
+            <?php echo link_to('&gt;','ventas/index?pag='.$Productos->getNextPage()) ?>
+            <?php echo link_to('&raquo;','ventas/index?pag='.$Productos->getLastPage()) ?>
+    <?php endif ?>
             
             
             
-            <input class="btn-inverse" type="submit" value="Agregar a Carrito">
+             <!--<a class="btn btn-info" href="<?php //echo url_for('ventas/ventas_realizadas') ?>">Agregar al Carrito</a> -->
+            <input class="btn-inverse" type="submit" value="Agregar al carrito">
         </form>
     </fieldset>
    </fieldset>
+<a href="<?php echo url_for('principal/index');?>">Home</a>
 <?php else:?>
 <div class="alert alert-info">No hay registros</div>
 <?php endif ?>

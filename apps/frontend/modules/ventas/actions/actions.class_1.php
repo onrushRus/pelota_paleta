@@ -17,8 +17,8 @@ class ventasActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    $prod = ProductoQuery::create();
-    
+  //  $prod = ProductoQuery::create();
+    /*
     if($request->isMethod(sfWebRequest::POST)){
         $codProd = $request->getParameter('cod_prod');
         $descripProd = $request->getParameter('descrip_prod');
@@ -36,8 +36,9 @@ class ventasActions extends sfActions
       //  $cons->orderById(Criteria::DESC)
       //       ->limit(10);
     }     
+     * 
+     */     
     
-    /*
      if($request->isMethod(sfWebRequest::POST)){
         //$this->codProd = $request->getParameter('cod_prod');
          
@@ -51,38 +52,35 @@ class ventasActions extends sfActions
         $paginacion->init();
         $this->Productos = $paginacion;
      }
-    */
     
-     $this->Productos = $prod->find();
+    
+    //$this->Productos = $prod->find();
   }
   
   public function executeVentas_realizadas(sfWebRequest $request)
-  {        
+  {   
       if($request->isMethod(sfWebRequest::POST)){
-          $prod_vendidos = $this->getUser()->getListado();
-          
-        foreach($prod_vendidos as $id => $item){
-                  
-                  $stock = StockQuery::create()->findPk($id);
-                  $stock->setCantidadActual($stock->getCantidadActual() - $item['cant']);
-                  $stock->save();                  
-          }
-          
-      }     
-  }
-  
-  public function executeCarrito(sfWebRequest $request)
-  {
-       if($request->isMethod(sfWebRequest::POST)){
           //tomo los productos vendidos
           $this->lista_prod = $request->getParameter("prod", array());
         //  $this->lista_prod = $this->getUser()->getListado();
         foreach($this->lista_prod as $id => $item){
               if($item['cant'] > 0){
-                  $this->getUser()->addProducto($id,$item['cant']);                                  
+                  $this->getUser()->addProducto($id,$item['cant']);
+                  
+                  $stock = StockQuery::create()->findPk($id);
+                  $stock->setCantidadActual($stock->getCantidadActual() - $item['cant']);
+                  $stock->save();
+                  
               }
           }
           
-      } 
+      }else{
+         // $this->redirect("http://localhost/pelota_paleta/frontend_dev.php/ventas/carrito");
+      }      
+  }
+  
+  public function executeCarrito(sfWebRequest $request)
+  {
+      
   }
 }

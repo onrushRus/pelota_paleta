@@ -32,3 +32,11 @@
         <tr><td><a class="btn btn-success" href="<?php echo url_for('ventas/index') ?>">Imprimir Ticket</a> </td></tr>        
     </form>
 </div>
+
+
+<table width="40%">
+    <tr>
+        <td><a class="btn btn-info" href="<?php echo url_for('ventas/index') ?>">Agregar más producto al carrito</a></td>
+        <td><a class="btn btn-success" href="<?php echo url_for('ventas/ventas_realizadas') ?>">Terminar Venta</a></td>
+    </tr>
+</table>
