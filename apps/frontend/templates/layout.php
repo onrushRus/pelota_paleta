@@ -29,7 +29,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Pelota Paleta</a>
+          <a class="brand" href="<?php echo url_for('principal/index');?>">Pelota Paleta</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="dropdown">

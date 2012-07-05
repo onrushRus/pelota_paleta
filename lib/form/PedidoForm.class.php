@@ -15,6 +15,12 @@ class PedidoForm extends BasePedidoForm
       
       $this->validatorSchema['fecha_pedido']->setOption("required", false);
       unset($this['pedido_producto_list']);
+      
+      $this->widgetSchema->setLabels(array(
+
+              'estado' => 'Pedido activo?',
+          ));
+      
       $this->embedRelation('PedidoProducto');
   }
 }

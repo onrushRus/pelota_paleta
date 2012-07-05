@@ -17,8 +17,9 @@ class ReservaForm extends BaseReservaForm
 	  $this->widgetSchema['tipo_reserva_id']= new sfWidgetFormPropelChoice(array('model' => 'Tiporeserva', 'add_empty' => false));
 	  $this->widgetSchema['dia_comienzo_reserva']= new sfWidgetFormInputText();
 	  $this->widgetSchema['dia_fin_reserva']= new sfWidgetFormInputText();
-	  $this->widgetSchema['hora_comienzo_reserva']= new sfWidgetFormTime();
-	  
+	  $this->widgetSchema['hora_comienzo_reserva']= new sfWidgetFormInputText();
+	  $this->widgetSchema['hora_fin_reserva']= new sfWidgetFormInputText();
+          
 	  $this->validatorSchema['dia_comienzo_reserva']= new sfValidatorDate(array('required' => true));
 	  $this->validatorSchema['hora_comienzo_reserva']= new sfValidatorTime(array('required' => true));
           $this->validatorSchema['dia_fin_reserva']= new sfValidatorDate(array('required' => true));
@@ -37,6 +38,7 @@ class ReservaForm extends BaseReservaForm
           $this->widgetSchema->setLabels(array(
               'socio_nro_doc' => 'Nro Documento', 
               'pelotari_nro_doc' => 'Nro documentado participante', 
+              'estado' => 'Reserva activa?',
           ));
           
   }
